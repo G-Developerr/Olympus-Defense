@@ -108,8 +108,9 @@
     <button id="start" class="play">Έναρξη κύματος</button>
     <button id="speed" class="play">x1</button>
     <button id="pause" class="play">Παύση</button>
-    <button id="chBtn0" class="wonly">Κεφάλαιο 1</button>
-    <button id="chBtn1" class="wonly">Κεφάλαιο 2</button>
+    <button id="chPrev" class="wonly" aria-label="Προηγούμενο κεφάλαιο">◀</button>
+    <button id="chBtn" class="wonly" disabled style="opacity:1"></button>
+    <button id="chNext" class="wonly" aria-label="Επόμενο κεφάλαιο">▶</button>
     <button id="resetSave" class="wonly">Νέα εκστρατεία</button>
     <button id="fs">Πλήρης οθόνη</button>
   </div>
@@ -184,10 +185,66 @@ const LEVELS=[
    theme:{bg:'#1e1418',s1:'#180f13',s2:'#2a1a20',edge:'#0c0709',fill:'#4a2e2e',dash:'#6a3e3e',deco:'lava'},
    path:[[-30,80],[880,80],[880,540],[80,540],[80,200],[760,200],[760,420],[220,420],[220,310],[560,310]]}
 ];
+{
+  const MX=pts=>pts.map(([x,y])=>[960-x,y]), MY=pts=>pts.map(([x,y])=>[x,600-y]);
+  const P=i=>LEVELS[i].path, T=(bg,s1,s2,edge,fill,dash,deco,water)=>({bg,s1,s2,edge,fill,dash,deco,water:!!water});
+  LEVELS.push(
+  /* ---------- ΚΕΦΑΛΑΙΟ 3: ΟΙ ΑΡΓΟΝΑΥΤΕΣ ---------- */
+  {ch:2, name:'Ιωλκός', desc:'Το λιμάνι όπου ναυπηγείται η Αργώ. Τέσσερις μακριές στροφές.', waves:14, hp:1.35, node:[120,470],
+   theme:T('#7f9a55','#76904d','#8aa55f','#8f7a4d','#e2cf9c','#c9b47e','olive'),
+   path:[[-30,300],[140,300],[140,90],[340,90],[340,510],[540,510],[540,90],[740,90],[740,510],[900,510]]},
+  {ch:2, name:'Λήμνος', desc:'Το ηφαιστειακό νησί του Ηφαίστου. Σπείρα ανάμεσα σε λάβα.', waves:14, hp:1.38, node:[270,300],
+   theme:T('#5e4e44','#56473e','#6a584c','#2e2420','#9a7f6a','#846b58','lava'), path:MX(P(4))},
+  {ch:2, name:'Συμπληγάδες Πέτρες', desc:'Οι βράχοι που συγκρούονται. Τα τέρατα έρχονται από τη θάλασσα, από κάτω.', waves:15, hp:1.42, node:[450,430],
+   theme:T('#23668f','#1f5c82','#3f86b0','#7a6a50','#c8b890','#a89870','whirl',1),
+   path:[[480,630],[480,470],[850,470],[850,110],[110,110],[110,470],[300,470],[300,280],[640,280]]},
+  {ch:2, name:'Θράκη των Αρπυιών', desc:'Σκοτεινό δάσος γεμάτο Άρπυιες.', waves:16, hp:1.45, node:[560,210],
+   theme:T('#3f5a3a','#385234','#4a6844','#2a2418','#a89878','#8a7a5c','pine'), path:MY(P(0))},
+  {ch:2, name:'Κολχίδα', desc:'Η χώρα του Χρυσόμαλλου Δέρατος. Μακρύς δρόμος με πολλές παγίδες.', waves:16, hp:1.44, node:[720,390],
+   theme:T('#8a7a40','#807038','#96864a','#5a4a20','#e6d49a','#c8b47a','apple'),
+   path:[[-30,540],[250,540],[250,380],[90,380],[90,90],[870,90],[870,540],[600,540],[600,300],[400,300]]},
+  {ch:2, name:'Ο Δράκος της Κολχίδας', desc:'Ο άγρυπνος δράκος φυλάει το Δέρας και καίει τους θεούς σου με φωτιά!', waves:18, hp:1.52, node:[840,175],
+   theme:T('#2e2a24','#28241f','#36312a','#14110e','#6a5a44','#857258','lava'), path:MX(P(11))},
+  /* ---------- ΚΕΦΑΛΑΙΟ 4: ΟΙ ΑΘΛΟΙ ΤΟΥ ΗΡΑΚΛΗ ---------- */
+  {ch:3, name:'Νεμέα', desc:'Ο πρώτος άθλος. Ξερή πεδιάδα με αρχαία ερείπια.', waves:15, hp:1.62, node:[130,300],
+   theme:T('#b3a060','#a89558','#bfae6c','#7a6538','#ecdcb0','#cdb77f','ruins'),
+   path:[[990,300],[800,300],[800,80],[160,80],[160,520],[800,520],[800,420],[420,420],[420,250]]},
+  {ch:3, name:'Βάλτος της Λέρνης', desc:'Ο βάλτος της Ύδρας. Λάσπη, καλάμια και πολλά κεφάλια.', waves:16, hp:1.66, node:[290,470],
+   theme:T('#4a5a3a','#435234','#546645','#2e3420','#8f8a64','#76724f','swamp'), path:MY(P(1))},
+  {ch:3, name:'Στυμφαλίδες Λίμνη', desc:'Η λίμνη με τα σιδερένια πουλιά. Τα τέρατα μπαίνουν από πάνω.', waves:16, hp:1.7, node:[430,280],
+   theme:T('#2f7a86','#2a6f7a','#4f9aa6','#8a7a5a','#d6c89c','#b8a87c','isle',1),
+   path:[[300,-30],[300,160],[80,160],[80,470],[460,470],[460,160],[660,160],[660,470],[880,470],[880,250]]},
+  {ch:3, name:'Κερύνεια', desc:'Το δάσος της χρυσοκέρατης ελαφίνας της Άρτεμης.', waves:17, hp:1.74, node:[590,460],
+   theme:T('#5a7a3a','#527034','#668646','#6a5a3a','#d8c690','#bca870','pine'), path:MX(P(9))},
+  {ch:3, name:'Ο Ταύρος της Κρήτης', desc:'Μια αρένα από κόκκινο χώμα. Ορμάνε από δεξιά.', waves:18, hp:1.78, node:[710,250],
+   theme:T('#a0704a','#966844','#ab7a52','#5a3a24','#dcb88a','#bf9a6a','war'),
+   path:[[990,120],[640,120],[640,300],[880,300],[880,520],[320,520],[320,300],[80,300],[80,110],[420,110]]},
+  {ch:3, name:'Το Βουνό του Άτλαντα', desc:'Στην κορυφή του κόσμου σε περιμένει ο άτρωτος Λέων της Νεμέας.', waves:20, hp:1.82, node:[850,420],
+   theme:T('#d6dfe8','#c8d2dc','#e8eef3','#7e8994','#aab4be','#98a3ae','snow'), path:MX(P(5))},
+  /* ---------- ΚΕΦΑΛΑΙΟ 5: Η ΤΙΤΑΝΟΜΑΧΙΑ ---------- */
+  {ch:4, name:'Όρος Όθρυς', desc:'Το φρούριο των Τιτάνων. Σκοτεινοί βράχοι παντού.', waves:16, hp:1.9, node:[130,470],
+   theme:T('#4a4a52','#43434a','#55555e','#222226','#8a8a94','#74747e','rock'), path:MX(P(3))},
+  {ch:4, name:'Καμένη Θεσσαλία', desc:'Η πεδιάδα που κάηκε στη μάχη θεών και Τιτάνων.', waves:17, hp:1.95, node:[280,290],
+   theme:T('#6a6a3a','#606034','#767646','#3a3420','#b8aa7c','#9a8e64','war'), path:MY(P(6))},
+  {ch:4, name:'Το Σιδηρουργείο των Κυκλώπων', desc:'Εδώ σφυρηλατήθηκαν οι κεραυνοί του Δία.', waves:18, hp:2.0, node:[440,450],
+   theme:T('#2a1a14','#241610','#34201a','#0e0806','#5a3a2e','#7a4e3e','lava'), path:MX(P(10))},
+  {ch:4, name:'Οι Εκατόγχειρες', desc:'Οι γίγαντες με τα εκατό χέρια. Μαγεμένο, μωβ πεδίο μάχης.', waves:18, hp:2.05, node:[610,300],
+   theme:T('#3e3450','#372e48','#483c5c','#1e1828','#8a7aa0','#72648a','magic'), path:MY(MX(P(7)))},
+  {ch:4, name:'Η Ουράνια Πύλη', desc:'Μάχη πάνω στα σύννεφα, μπροστά στην πύλη του ουρανού.', waves:20, hp:2.1, node:[790,460],
+   theme:T('#9fb4d6','#94aacd','#b4c6e2','#6a7ea0','#eef2fa','#c8d2e6','cloud'), path:MX(MY(P(8)))},
+  {ch:4, name:'Ο Θρόνος του Κρόνου', desc:'Η τελική μάχη. 25 κύματα και ο ίδιος ο Κρόνος, που καλεί στρατό από Άρπυιες.', waves:25, hp:1.86, node:[830,185],
+   theme:T('#1c1424','#17101e','#241a2e','#08050b','#3e2c4a','#5e4670','lava'), path:MY(P(11))}
+  );
+}
 const CHAPTERS=[
-  {name:'Κεφάλαιο 1', title:'ΚΕΦΑΛΑΙΟ 1 · Η ΕΚΣΤΡΑΤΕΙΑ ΤΟΥ ΟΛΥΜΠΟΥ', sea:'#2f6f96'},
-  {name:'Κεφάλαιο 2', title:'ΚΕΦΑΛΑΙΟ 2 · Η ΟΔΥΣΣΕΙΑ', sea:'#24587a'}
+  {name:'Κεφάλαιο 1', sub:'Η Εκστρατεία του Ολύμπου', title:'ΚΕΦΑΛΑΙΟ 1 · Η ΕΚΣΤΡΑΤΕΙΑ ΤΟΥ ΟΛΥΜΠΟΥ', sea:'#2f6f96', trail:'rgba(90,60,25,.85)', done:'ΚΑΤΕΚΤΗΣΕΣ ΤΟΝ ΟΛΥΜΠΟ!', boss:'η Λερναία Ύδρα'},
+  {name:'Κεφάλαιο 2', sub:'Η Οδύσσεια', title:'ΚΕΦΑΛΑΙΟ 2 · Η ΟΔΥΣΣΕΙΑ', sea:'#24587a', trail:'rgba(255,255,255,.6)', ship:true, done:'Η ΟΔΥΣΣΕΙΑ ΟΛΟΚΛΗΡΩΘΗΚΕ!', boss:'ο Κέρβερος', bossKey:'cerberus', intro:'Κένταυροι, Μέδουσες και ο Κέρβερος'},
+  {name:'Κεφάλαιο 3', sub:'Οι Αργοναύτες', title:'ΚΕΦΑΛΑΙΟ 3 · ΟΙ ΑΡΓΟΝΑΥΤΕΣ', sea:'#1f6a78', trail:'rgba(255,255,255,.6)', ship:true, done:'ΤΟ ΧΡΥΣΟΜΑΛΛΟ ΔΕΡΑΣ ΕΙΝΑΙ ΔΙΚΟ ΣΟΥ!', boss:'ο Δράκος της Κολχίδας', bossKey:'dragon', intro:'ο Δράκος της Κολχίδας που καίει τους θεούς σου'},
+  {name:'Κεφάλαιο 4', sub:'Οι Άθλοι του Ηρακλή', title:'ΚΕΦΑΛΑΙΟ 4 · ΟΙ ΑΘΛΟΙ ΤΟΥ ΗΡΑΚΛΗ', sea:'#3a6a8a', trail:'rgba(90,60,25,.85)', done:'ΟΙ ΑΘΛΟΙ ΟΛΟΚΛΗΡΩΘΗΚΑΝ!', boss:'ο Λέων της Νεμέας', bossKey:'lion', intro:'ο σχεδόν άτρωτος Λέων της Νεμέας'},
+  {name:'Κεφάλαιο 5', sub:'Η Τιτανομαχία', title:'ΚΕΦΑΛΑΙΟ 5 · Η ΤΙΤΑΝΟΜΑΧΙΑ', sea:'#1a1530', trail:'rgba(255,230,160,.7)', done:'ΝΙΚΗΣΕΣ ΤΟΥΣ ΤΙΤΑΝΕΣ!', boss:'ο Κρόνος', bossKey:'kronos', intro:'ο Κρόνος, ο βασιλιάς των Τιτάνων'}
 ];
+const BOSS_IN={cerberus:'Ο ΚΕΡΒΕΡΟΣ ΞΥΠΝΗΣΕ!', dragon:'Ο ΔΡΑΚΟΣ ΤΗΣ ΚΟΛΧΙΔΑΣ!', lion:'Ο ΛΕΩΝ ΤΗΣ ΝΕΜΕΑΣ!', kronos:'Ο ΚΡΟΝΟΣ ΚΑΤΕΒΑΙΝΕΙ!'};
+const BOSS_DOWN={hydra:'Η Ύδρα νικήθηκε!', cerberus:'Ο Κέρβερος νικήθηκε!', dragon:'Ο Δράκος νικήθηκε!', lion:'Ο Λέων νικήθηκε!', kronos:'Ο ΚΡΟΝΟΣ ΕΠΕΣΕ!'};
 const chOf = i => LEVELS[i].ch||0;
 const chLevels = ch => LEVELS.map((L,i)=>i).filter(i=>chOf(i)===ch);
 const lvlNum = i => `${chOf(i)+1}-${chLevels(chOf(i)).indexOf(i)+1}`;
@@ -216,6 +273,9 @@ const ENEMIES={
   centaur: {hp:110, speed:72, reward:12,  armor:0},
   medusa:  {hp:150, speed:40, reward:18,  armor:0},
   cerberus:{hp:2000,speed:28, reward:250, armor:3, boss:true},
+  dragon:  {hp:2600,speed:30, reward:300, armor:2,  boss:true},
+  lion:    {hp:2300,speed:30, reward:300, armor:14, boss:true},
+  kronos:  {hp:4200,speed:22, reward:450, armor:4,  boss:true},
   hydra:   {hp:1100,speed:24, reward:150, armor:0, regen:0.012, boss:true}
 };
 const AURA=110;
@@ -325,7 +385,7 @@ function newGame(){
   avail={}; ORDER.forEach(ty=>avail[ty]=cl>=TYPES[ty].unlock);
   availP={}; PORDER.forEach(k=>{ availP[k]=cl>=POWERS[k].unlock; pcd[k]=0; });
   casting=null; timers=[]; decals=[]; shake=0; flash=0; gateFlash=0;
-  gold=D.gold; lives=maxLives=D.lives; wave=0;
+  gold=D.gold+(LEVELS[levelIdx].ch||0)*60; lives=maxLives=D.lives; wave=0;
   towers=[]; enemies=[]; bullets=[]; effects=[]; spawnQ=[]; spawnT=0;
   placing=null; selected=null; over=false; won=false; waveActive=false; banner=null; nextT=null; paidWave=0;
   buildButtons();
@@ -338,36 +398,49 @@ function startWave(){
   if(eb>0){ gold+=eb; const [x,y]=wcPos(); effects.push({k:'txt', x, y:y-34, life:1.4, max:1.4, txt:'+'+eb+' ΧΡΥΣΟΣ', c:'242,201,76', size:17}); }
   nextT=null;
   wave++; waveActive=true; spawnQ=[]; spawnT=0;
-  const n=6+wave*2, tf=L.talosFrom||6;
+  const n=6+wave*2, tf=L.talosFrom||(L.ch>=2?3:6);
   for(let i=0;i<n;i++){
     const r=Math.random(); let ty;
     if(wave>=tf && r<0.10+wave*0.01) ty='talos';
     else if(wave>=3 && r<0.28+wave*0.02) ty='minotaur';
     else if(r<0.62) ty='harpy';
     else ty='cyclops';
-    if(L.ch===1){ const r2=Math.random(); if(ty==='harpy' && r2<.45) ty='centaur'; else if((ty==='cyclops'||ty==='minotaur') && wave>=3 && r2<.3) ty='medusa'; }
+    if(L.ch>=1){ const r2=Math.random(); if(ty==='harpy' && r2<.45) ty='centaur'; else if((ty==='cyclops'||ty==='minotaur') && wave>=3 && r2<.3) ty='medusa'; }
     spawnQ.push(ty);
   }
-  if(L.ch===1 && wave===L.waves){ spawnQ.push('cerberus'); showBanner('Ο ΚΕΡΒΕΡΟΣ ΞΥΠΝΗΣΕ!'); }
-  else if(wave%5===0 || wave===L.waves){ spawnQ.push('hydra'); showBanner('Η ΛΕΡΝΑΙΑ ΥΔΡΑ ΕΡΧΕΤΑΙ!'); }
+  const bk=CHAPTERS[L.ch||0].bossKey;
+  if(bk && wave===L.waves){ spawnQ.push(bk); showBanner(BOSS_IN[bk]); }
+  else if(wave%5===0 || wave===L.waves){
+    if(L.ch>=2 && wave%10===0){ spawnQ.push('cerberus'); showBanner(BOSS_IN.cerberus); }
+    else { spawnQ.push('hydra'); showBanner('Η ΛΕΡΝΑΙΑ ΥΔΡΑ ΕΡΧΕΤΑΙ!'); }
+  }
   msg(`Κύμα ${wave}/${L.waves}: ${spawnQ.length} τέρατα έρχονται!` + (eb?` Γρήγορο κάλεσμα: +${eb} χρυσός`:''));
 }
 function spawn(ty){
   gateFlash=0.4;
   const E=ENEMIES[ty], D=DIFFS[diffKey], k=D.hp*LEVELS[levelIdx].hp*(1+0.28*(wave-1));
   enemies.push({ty, x:GATE[0], y:GATE[1], wp:1, frozen:0, curse:0, gaze:2+Math.random()*2, hp:E.hp*k, max:E.hp*k, speed:E.speed*D.spd,
-    reward:Math.max(1,Math.round(E.reward*D.rew)), armor:E.armor, regen:E.regen||0, boss:!!E.boss,
+    reward:Math.max(1,Math.round(E.reward*D.rew*(0.4+0.6*LEVELS[levelIdx].hp))), armor:E.armor, regen:E.regen||0, boss:!!E.boss,
     slow:0, burn:0, burnDps:0, prog:0, dead:false, ph:Math.random()*6});
 }
 function moveEnemy(e,dt){
-  const sp=e.frozen>0?0:e.speed*(e.slow>0?0.5:1)*(e.ty==='cerberus'&&e.hp<e.max*.5?1.6:1);
+  const sp=e.frozen>0?0:e.speed*(e.slow>0?0.5:1)*((e.ty==='cerberus'||e.ty==='kronos')&&e.hp<e.max*.5?1.5:1);
   e.slow-=dt; if(e.frozen>0) e.frozen-=dt; if(e.curse>0) e.curse-=dt;
-  if(e.ty==='medusa' && !(e.frozen>0)){
+  if((e.ty==='medusa'||e.ty==='dragon') && !(e.frozen>0)){
+    const drg=e.ty==='dragon', RG=drg?160:130;
     e.gaze-=dt;
     if(e.gaze<=0){
-      const tw=towers.filter(o=>!(o.stone>0) && Math.hypot(o.x-e.x,o.y-e.y)<=130).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0];
-      e.gaze=tw?4.5:0.5;
-      if(tw){ tw.stone=2.2; effects.push({k:'gaze', x1:e.x, y1:e.y-10, x2:tw.x, y2:tw.y-14, life:.5, max:.5}); }
+      const tw=towers.filter(o=>!(o.stone>0) && Math.hypot(o.x-e.x,o.y-e.y)<=RG).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0];
+      e.gaze=tw?(drg?4:4.5):0.5;
+      if(tw){ tw.stone=drg?2.5:2.2; tw.stoneKind=drg?'fire':'stone'; effects.push({k:'gaze', x1:e.x, y1:e.y-(drg?28:10), x2:tw.x, y2:tw.y-14, life:.5, max:.5, fire:drg}); }
+    }
+  }
+  if(e.ty==='kronos' && !(e.frozen>0)){
+    e.summon=(e.summon===undefined?5:e.summon)-dt;
+    if(e.summon<=0){
+      e.summon=7;
+      for(let q=0;q<3;q++){ spawn('harpy'); const m=enemies[enemies.length-1]; m.x=e.x+(Math.random()-.5)*30; m.y=e.y+(Math.random()-.5)*20; m.wp=e.wp; m.prog=e.prog; }
+      effects.push({k:'ring', x:e.x, y:e.y, r:60, life:.5, max:.5, c:'190,120,255'});
     }
   }
   if(e.burn>0){ e.burn-=dt; hurt(e,e.burnDps*dt,true); }
@@ -388,7 +461,7 @@ function hurt(e,d,pierce){
   if(e.hp<=0){
     e.dead=true; gold+=e.reward;
     effects.push({k:'puff', x:e.x, y:e.y, life:0.7, max:0.7, txt:'+'+e.reward, big:e.boss});
-    if(e.boss) showBanner(e.ty==='cerberus'?'Ο Κέρβερος νικήθηκε!':'Η Ύδρα νικήθηκε!');
+    if(e.boss) showBanner(BOSS_DOWN[e.ty]||'Boss νικήθηκε!');
   }
 }
 function updateTower(tw,dt){
@@ -593,6 +666,31 @@ function drawDeco(x,y,r,v){
       ctx.fillStyle='#8a2a1f'; ctx.beginPath(); ctx.ellipse(x+sx,y+r*.2,r*.7,r*.45,0,0,Math.PI*2); ctx.fill();
       ctx.strokeStyle='#c9a24a'; ctx.lineWidth=2; ctx.stroke();
       ctx.fillStyle='#c9a24a'; ctx.beginPath(); ctx.arc(x+sx,y+r*.2,r*.15,0,Math.PI*2); ctx.fill();
+      break;
+    }
+    case 'pine':
+      if(v<.6){
+        ctx.fillStyle='#4a3a2a'; ctx.fillRect(x-2,y+r*.4,4,r*.6);
+        ctx.fillStyle='#2f4a34'; ctx.beginPath(); ctx.moveTo(x,y-r*1.5); ctx.lineTo(x+r,y+r*.5); ctx.lineTo(x-r,y+r*.5); ctx.closePath(); ctx.fill();
+        ctx.fillStyle='#3d5e42'; ctx.beginPath(); ctx.moveTo(x,y-r*1.5); ctx.lineTo(x+r*.55,y-r*.2); ctx.lineTo(x-r*.55,y-r*.2); ctx.closePath(); ctx.fill();
+      } else {
+        ctx.fillStyle='#5e6358'; ctx.beginPath(); ctx.ellipse(x,y,r,r*.7,0,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#6f8a4a'; ctx.beginPath(); ctx.ellipse(x-r*.2,y-r*.35,r*.6,r*.3,0,0,Math.PI*2); ctx.fill();
+      } break;
+    case 'swamp':
+      if(v<.5){
+        ctx.fillStyle='rgba(40,70,60,.8)'; ctx.beginPath(); ctx.ellipse(x,y+r*.4,r*1.3,r*.5,0,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle='#6a7a3a'; ctx.lineWidth=2;
+        [-.5,0,.45].forEach((dx,i)=>{ ctx.beginPath(); ctx.moveTo(x+dx*r,y+r*.4); ctx.lineTo(x+dx*r+Math.sin(t*1.5+i+v*9)*2,y-r*(.9+i*.2)); ctx.stroke();
+          ctx.fillStyle='#6a4a2a'; ctx.fillRect(x+dx*r-1.5+Math.sin(t*1.5+i+v*9)*2,y-r*(.9+i*.2),3,6); });
+      } else {
+        ctx.fillStyle='#34584c'; ctx.beginPath(); ctx.ellipse(x,y,r*1.4,r*.7,0,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#6a9a4a'; [[-.5,-.1],[.3,.15],[.6,-.25]].forEach(([a,c])=>{ ctx.beginPath(); ctx.arc(x+a*r,y+c*r,r*.28,0.3,Math.PI*2); ctx.lineTo(x+a*r,y+c*r); ctx.fill(); });
+      } break;
+    case 'cloud': {
+      const dx=Math.sin(t*.4+v*10)*4;
+      ctx.fillStyle='rgba(255,255,255,.85)';
+      [[-.8,0,.6],[0,-.3,.8],[.8,0,.6],[.3,.2,.6],[-.3,.2,.6]].forEach(([a,c,rr])=>{ ctx.beginPath(); ctx.arc(x+dx+a*r,y+c*r,rr*r,0,Math.PI*2); ctx.fill(); });
       break;
     }
     case 'snow':
@@ -902,6 +1000,50 @@ function drawEnemy(e){
       if(rage){ ctx.fillStyle=`rgba(255,120,30,${.6+.4*Math.sin(t*12+i)})`; ctx.beginPath(); ctx.arc(0,13+Math.abs(Math.sin(t*6+i))*4,1.8,0,Math.PI*2); ctx.fill(); }
       ctx.restore();
     });
+  } else if(e.ty==='dragon'){
+    const fl=Math.sin(t*6+e.ph);
+    ctx.translate(0,-4+fl*2);
+    ctx.fillStyle='#7a1f1a'; ctx.strokeStyle='#4a0f0c'; ctx.lineWidth=1.5;
+    [-1,1].forEach(s2=>{ ctx.save(); ctx.scale(s2,1); ctx.rotate(-0.1+fl*0.35);
+      ctx.beginPath(); ctx.moveTo(6,-4); ctx.lineTo(42,-28); ctx.lineTo(35,-9); ctx.lineTo(46,-5); ctx.lineTo(31,4); ctx.lineTo(37,13); ctx.lineTo(8,8); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); });
+    ctx.strokeStyle='#a8322a'; ctx.lineWidth=6; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(0,10); ctx.quadraticCurveTo(-14,26,-28+fl*4,20); ctx.stroke();
+    ctx.fillStyle='#a8322a'; ctx.beginPath(); ctx.ellipse(0,4,16,13,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#e0a050'; ctx.beginPath(); ctx.ellipse(0,8,9,8,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#a8322a'; ctx.lineWidth=8; ctx.beginPath(); ctx.moveTo(0,-4); ctx.quadraticCurveTo(5,-16,0,-24); ctx.stroke();
+    ctx.fillStyle='#f0e0c0'; [[-5,-1],[5,1]].forEach(([hx,sg])=>{ ctx.beginPath(); ctx.moveTo(hx-2,-32); ctx.lineTo(hx+sg*6,-44); ctx.lineTo(hx+2,-31); ctx.fill(); });
+    ctx.fillStyle='#b83a30'; ctx.beginPath(); ctx.ellipse(0,-28,9,7,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#8a2520'; ctx.beginPath(); ctx.ellipse(0,-22,6,4,0,0,Math.PI*2); ctx.fill();
+    ctx.save(); ctx.shadowColor='#ffd23a'; ctx.shadowBlur=8; ctx.fillStyle='#ffd23a'; ctx.beginPath(); ctx.arc(-4,-30,1.8,0,Math.PI*2); ctx.arc(4,-30,1.8,0,Math.PI*2); ctx.fill(); ctx.restore();
+    if(e.gaze<0.8){ ctx.fillStyle=`rgba(255,${120+Math.random()*100|0},30,.9)`; ctx.beginPath(); ctx.arc(0,-18,3+Math.random()*2,0,Math.PI*2); ctx.fill(); }
+  } else if(e.ty==='lion'){
+    ctx.translate(0,Math.abs(b)*-1.5);
+    ctx.fillStyle='#b8862e'; [-16,-7,7,16].forEach((lx,i)=>ctx.fillRect(lx-3,12,6,10+Math.sin(t*12+i*1.7)*2));
+    ctx.strokeStyle='#b8862e'; ctx.lineWidth=3; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(-22,6); ctx.quadraticCurveTo(-32,0,-32,-8+b*3); ctx.stroke();
+    ctx.fillStyle='#6a3a14'; ctx.beginPath(); ctx.arc(-32,-9+b*3,3.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#d9a441'; ctx.beginPath(); ctx.ellipse(0,8,24,13,0,0,Math.PI*2); ctx.fill();
+    ctx.save(); ctx.shadowColor='#fff2b0'; ctx.shadowBlur=6+4*Math.sin(t*4);
+    ctx.fillStyle='#8a4a1a'; ctx.beginPath();
+    for(let i=0;i<24;i++){ const a=i*Math.PI/12, rr=i%2?15:20; ctx.lineTo(Math.cos(a)*rr, -10+Math.sin(a)*rr); }
+    ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.fillStyle='#e8b554'; ctx.beginPath(); ctx.arc(0,-9,10.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#f3d08a'; ctx.beginPath(); ctx.ellipse(0,-5,6,4.5,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#3a2410'; ctx.beginPath(); ctx.moveTo(-2.5,-8); ctx.lineTo(2.5,-8); ctx.lineTo(0,-5.5); ctx.fill();
+    ctx.fillStyle='#2a1a0a'; ctx.beginPath(); ctx.arc(-4,-12,1.6,0,Math.PI*2); ctx.arc(4,-12,1.6,0,Math.PI*2); ctx.fill();
+  } else if(e.ty==='kronos'){
+    const rage=e.hp<e.max*.5;
+    ctx.translate(0,Math.abs(b)*-1); ctx.scale(1.15,1.15);
+    ctx.save(); if(rage){ ctx.shadowColor='#b030ff'; ctx.shadowBlur=24; }
+    ctx.fillStyle='#2a2238'; ctx.beginPath(); ctx.moveTo(-20,20); ctx.lineTo(20,20); ctx.lineTo(13,-12); ctx.lineTo(-13,-12); ctx.closePath(); ctx.fill(); ctx.restore();
+    ctx.strokeStyle='#e8c46a'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(-16,12); ctx.lineTo(16,12); ctx.stroke();
+    ctx.fillStyle='#8a9ab0'; ctx.beginPath(); ctx.arc(-17,-4,4.5,0,Math.PI*2); ctx.arc(17,-7,4.5,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#5a3a1f'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.moveTo(18,-6); ctx.lineTo(22,-36); ctx.stroke();
+    ctx.strokeStyle='#e8c46a'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(12,-36,10,-0.1*Math.PI,0.75*Math.PI,true); ctx.stroke();
+    ctx.fillStyle='#8a9ab0'; ctx.beginPath(); ctx.arc(0,-22,11,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#e8e8ee'; ctx.beginPath(); ctx.moveTo(-10,-20); ctx.quadraticCurveTo(-8,2,0,6); ctx.quadraticCurveTo(8,2,10,-20); ctx.quadraticCurveTo(0,-12,-10,-20); ctx.fill();
+    ctx.fillStyle='#e8c46a'; [-7,0,7].forEach(dx=>{ ctx.beginPath(); ctx.moveTo(dx-3.5,-31); ctx.lineTo(dx,-40); ctx.lineTo(dx+3.5,-31); ctx.fill(); });
+    ctx.fillRect(-10,-32,20,3);
+    ctx.save(); ctx.shadowColor=rage?'#ff2a2a':'#b030ff'; ctx.shadowBlur=10; ctx.fillStyle=rage?'#ff4a3a':'#d08aff';
+    ctx.beginPath(); ctx.arc(-4,-24,2,0,Math.PI*2); ctx.arc(4,-24,2,0,Math.PI*2); ctx.fill(); ctx.restore();
   }
   if(e.curse>0){ ctx.fillStyle=`rgba(150,90,220,${.22+.12*Math.sin(t*6)})`; ctx.beginPath(); ctx.ellipse(0,0,e.boss?30:18,e.boss?24:16,0,0,Math.PI*2); ctx.fill(); }
   if(e.frozen>0){ const s=e.boss?34:20; ctx.fillStyle='rgba(170,225,255,.45)'; ctx.strokeStyle='rgba(230,248,255,.95)'; ctx.lineWidth=1.5;
@@ -959,7 +1101,7 @@ function drawFx(){
       ctx.fillStyle=`rgba(232,196,106,${p})`; ctx.font=`bold ${f.big?20:14}px Georgia`; ctx.textAlign='center';
       ctx.fillText(f.txt,f.x,f.y-20-(1-p)*20);
     } else if(f.k==='gaze'){
-      ctx.save(); ctx.shadowColor='#d8ff5a'; ctx.shadowBlur=10; ctx.strokeStyle=`rgba(200,255,120,${p})`; ctx.lineWidth=3;
+      ctx.save(); ctx.shadowColor=f.fire?'#ff6a1f':'#d8ff5a'; ctx.shadowBlur=10; ctx.strokeStyle=f.fire?`rgba(255,140,40,${p})`:`rgba(200,255,120,${p})`; ctx.lineWidth=f.fire?8:3;
       ctx.beginPath(); ctx.moveTo(f.x1,f.y1); ctx.lineTo(f.x2,f.y2); ctx.stroke(); ctx.restore();
     } else if(f.k==='meteor'){
       const q=1-p, mx=f.x+260*p, my=f.y-460*p;
@@ -1009,6 +1151,12 @@ function drawWaveCall(){
   ctx.fillStyle= first ? '#f3e6c4' : '#f2c94c'; ctx.textAlign='center'; ctx.fillText(label,x,y+41);
 }
 function drawStone(tw){
+  if(tw.stoneKind==='fire'){
+    ctx.save(); ctx.globalAlpha=Math.min(1,tw.stone*2); ctx.shadowColor='#ff6a1f'; ctx.shadowBlur=14;
+    for(let i=0;i<5;i++){ const fx=tw.x-12+i*6, h=14+Math.sin(t*14+i*1.7)*5; ctx.fillStyle=i%2?'#ff5a1f':'#ffb347';
+      ctx.beginPath(); ctx.moveTo(fx-5,tw.y+10); ctx.quadraticCurveTo(fx-3,tw.y+10-h,fx,tw.y+10-h*1.8); ctx.quadraticCurveTo(fx+3,tw.y+10-h,fx+5,tw.y+10); ctx.fill(); }
+    ctx.restore(); return;
+  }
   ctx.save(); ctx.globalAlpha=Math.min(1,tw.stone*2)*.85;
   ctx.fillStyle='#8d8a84'; ctx.beginPath(); ctx.ellipse(tw.x,tw.y-10,15,25,0,0,Math.PI*2); ctx.fill();
   ctx.strokeStyle='#4d4a45'; ctx.lineWidth=1.2; ctx.beginPath();
@@ -1104,20 +1252,74 @@ function drawShip(x,y){
   ctx.fillStyle='#f3efe4'; ctx.fillRect(-12,-28,24,20); ctx.fillStyle='#b3302a'; ctx.fillRect(-12,-21,24,5);
   ctx.restore();
 }
+const ISLES3=[[120,470,95,58],[270,300,85,55],[450,430,80,50],[560,210,90,56],[720,390,88,55],[840,175,100,70],[400,560,40,18],[660,560,35,16],[80,210,36,18],[390,160,34,16]];
+function drawCh3(){
+  drawIslands(ISLES3);
+  ctx.fillStyle='#8a6a3a'; for(let i=0;i<4;i++) ctx.fillRect(180+i*12,505,8,26);
+  ctx.fillStyle='#4e4038'; ctx.beginPath(); ctx.moveTo(250,285); ctx.lineTo(290,230); ctx.lineTo(330,285); ctx.closePath(); ctx.fill();
+  ctx.save(); ctx.shadowColor='#ff4a1f'; ctx.shadowBlur=14; ctx.fillStyle='#ff6a2a'; ctx.beginPath(); ctx.ellipse(290,232,9,3,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+  const cl=Math.sin(t*1.2)*6;
+  ctx.fillStyle='#4d5358'; ctx.beginPath(); ctx.moveTo(512+cl,440); ctx.lineTo(530+cl,385); ctx.lineTo(548+cl,440); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(566-cl,440); ctx.lineTo(582-cl,380); ctx.lineTo(600-cl,440); ctx.closePath(); ctx.fill();
+  for(let k=0;k<4;k++){ const a=t*1.1+k*1.57, hx=560+Math.cos(a)*62, hy=205+Math.sin(a)*30;
+    ctx.strokeStyle='#3a2a1a'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(hx-6,hy-3+Math.sin(t*9+k)*2); ctx.lineTo(hx,hy); ctx.lineTo(hx+6,hy-3+Math.sin(t*9+k)*2); ctx.stroke(); }
+  ctx.fillStyle='#5b4430'; ctx.fillRect(770,340,6,32); ctx.fillStyle='#4f8a3a'; ctx.beginPath(); ctx.arc(773,330,20,0,Math.PI*2); ctx.fill();
+  ctx.save(); ctx.shadowColor='#ffd84a'; ctx.shadowBlur=12; ctx.fillStyle='#f2c94c'; ctx.beginPath(); ctx.ellipse(782,346,9,6,0.3,0,Math.PI*2); ctx.fill(); ctx.restore();
+  ctx.strokeStyle='#8a2a22'; ctx.lineWidth=9; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(760,215); ctx.quadraticCurveTo(790,260,840,235); ctx.quadraticCurveTo(900,210,895,150); ctx.stroke();
+  ctx.fillStyle='#a8322a'; ctx.beginPath(); ctx.ellipse(898,140,11,8,0.4,0,Math.PI*2); ctx.fill();
+  ctx.save(); ctx.shadowColor='#ffd23a'; ctx.shadowBlur=6; ctx.fillStyle='#ffd23a'; ctx.beginPath(); ctx.arc(902,137,1.8,0,Math.PI*2); ctx.fill(); ctx.restore();
+}
+function drawCh4(){
+  drawIslands([[480,330,440,235],[140,470,110,80],[850,430,110,95]]);
+  for(let i=0;i<9;i++){ const mx=120+i*95, h=40+((i*37)%30); ctx.fillStyle='#8a8f7a'; ctx.beginPath(); ctx.moveTo(mx-35,150); ctx.lineTo(mx,150-h); ctx.lineTo(mx+35,150); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#6f7462'; ctx.beginPath(); ctx.moveTo(mx,150-h); ctx.lineTo(mx+35,150); ctx.lineTo(mx+10,150); ctx.closePath(); ctx.fill(); }
+  ctx.fillStyle='#5a4a3a'; ctx.beginPath(); ctx.ellipse(130,280,40,26,0,Math.PI,0); ctx.fill(); ctx.fillStyle='#1a1512'; ctx.beginPath(); ctx.ellipse(130,284,17,15,0,Math.PI,0); ctx.fill();
+  ctx.fillStyle='#4a6a4a'; ctx.beginPath(); ctx.ellipse(290,470,60,30,0,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#6a7a3a'; ctx.lineWidth=2; for(let i=0;i<7;i++){ const rx=245+i*14; ctx.beginPath(); ctx.moveTo(rx,480); ctx.lineTo(rx+Math.sin(t+i)*2,455); ctx.stroke(); }
+  ctx.fillStyle='#4f9aa6'; ctx.beginPath(); ctx.ellipse(430,285,75,42,0,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.4)'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.ellipse(430,285,75,42,0,0,Math.PI*2); ctx.stroke();
+  for(let k=0;k<3;k++){ const a=t*1.3+k*2.1, bx=430+Math.cos(a)*50, by=250+Math.sin(a)*14; ctx.strokeStyle='#2a2a30'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(bx-6,by-3); ctx.lineTo(bx,by); ctx.lineTo(bx+6,by-3); ctx.stroke(); }
+  [[550,440],[620,430],[640,490],[560,500]].forEach(([x,y])=>{ ctx.fillStyle='#2f4a34'; ctx.beginPath(); ctx.moveTo(x,y-26); ctx.lineTo(x+14,y+4); ctx.lineTo(x-14,y+4); ctx.closePath(); ctx.fill(); });
+  ctx.fillStyle='#a0704a'; ctx.beginPath(); ctx.ellipse(710,255,58,30,0,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#efe6d0'; ctx.lineWidth=5; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(680,215); ctx.quadraticCurveTo(664,212,662,195); ctx.moveTo(740,215); ctx.quadraticCurveTo(756,212,758,195); ctx.stroke();
+  ctx.fillStyle='#8e98a3'; ctx.beginPath(); ctx.moveTo(780,470); ctx.lineTo(850,330); ctx.lineTo(920,470); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(850,330); ctx.lineTo(872,375); ctx.lineTo(850,366); ctx.lineTo(828,375); ctx.closePath(); ctx.fill();
+  ctx.save(); ctx.shadowColor='#8fd8ff'; ctx.shadowBlur=14; ctx.fillStyle='#5a8ac8'; ctx.beginPath(); ctx.arc(850,318,17,0,Math.PI*2); ctx.fill(); ctx.restore();
+  ctx.strokeStyle='rgba(255,255,255,.6)'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.ellipse(850,318,17,6,0,0,Math.PI*2); ctx.moveTo(850,301); ctx.lineTo(850,335); ctx.stroke();
+}
+function drawCloudIsle(x,y,rx){
+  ctx.fillStyle='rgba(120,110,160,.35)'; ctx.beginPath(); ctx.ellipse(x,y+22,rx,rx*.28,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#d8dcee'; [[-.7,.05,.45],[0,-.08,.6],[.7,.05,.45],[-.35,.12,.45],[.35,.12,.45]].forEach(([a,c,r])=>{ ctx.beginPath(); ctx.arc(x+a*rx,y+c*rx,r*rx*.55,0,Math.PI*2); ctx.fill(); });
+  ctx.fillStyle='#f4f6ff'; ctx.beginPath(); ctx.arc(x-rx*.1,y-rx*.18,rx*.3,0,Math.PI*2); ctx.fill();
+}
+function drawCh5(){
+  const pos=[[130,470],[280,290],[440,450],[610,300],[790,460],[830,185]];
+  ctx.fillStyle='#3a3050'; ctx.beginPath(); ctx.moveTo(60,455); ctx.lineTo(115,395); ctx.lineTo(170,455); ctx.closePath(); ctx.fill();
+  pos.forEach(([x,y])=>drawCloudIsle(x,y+8,78));
+  ctx.save(); ctx.shadowColor='#ff6a1f'; ctx.shadowBlur=18; ctx.fillStyle='#3a3036'; ctx.fillRect(405,418,28,12); ctx.fillStyle='#ff8a3a'; ctx.fillRect(410,414,18,4); ctx.restore();
+  ctx.save(); ctx.shadowColor='#c77dff'; ctx.shadowBlur=16; ctx.strokeStyle='rgba(200,150,255,.7)'; ctx.lineWidth=3;
+  for(let k=0;k<6;k++){ const a=-Math.PI*.9+k*.36; ctx.beginPath(); ctx.moveTo(610,300); ctx.lineTo(610+Math.cos(a)*62+Math.sin(t*2+k)*4,300+Math.sin(a)*40); ctx.stroke(); }
+  ctx.restore();
+  ctx.strokeStyle='#e8c46a'; ctx.lineWidth=5; ctx.beginPath(); ctx.arc(790,440,40,Math.PI,0); ctx.stroke(); ctx.fillStyle='#e8c46a'; ctx.fillRect(748,440,8,30); ctx.fillRect(824,440,8,30);
+  ctx.save(); ctx.shadowColor='#b030ff'; ctx.shadowBlur=26; ctx.fillStyle='#2a2238'; ctx.fillRect(800,95,60,70); ctx.fillRect(790,150,80,22); ctx.restore();
+  ctx.fillStyle='#e8c46a'; [812,830,848].forEach(x=>{ ctx.beginPath(); ctx.moveTo(x-6,95); ctx.lineTo(x,80); ctx.lineTo(x+6,95); ctx.fill(); });
+  if(Math.sin(t*1.7)>.93){ ctx.save(); ctx.shadowColor='#fff6a8'; ctx.shadowBlur=14; ctx.strokeStyle='#fff6a8'; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(520,110); ctx.lineTo(505,160); ctx.lineTo(522,160); ctx.lineTo(500,220); ctx.stroke(); ctx.restore(); }
+}
 function drawCampaign(){
   const v=view(), C=CHAPTERS[chapter], ids=chLevels(chapter), open=chapterUnlocked(chapter);
   ctx.fillStyle=C.sea; ctx.fillRect(v.x,v.y,v.w,v.h);
-  seaSpecks.forEach(([x,y,r])=>{ ctx.strokeStyle='rgba(255,255,255,.14)'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(x,y+Math.sin(t*1.2+r*6)*2,6,Math.PI*1.15,Math.PI*1.85); ctx.stroke(); });
-  if(chapter===0) drawCh1(); else drawCh2();
+  if(chapter===4) seaSpecks.forEach(([x,y,r])=>{ ctx.fillStyle=`rgba(255,255,240,${.3+.5*Math.abs(Math.sin(t*1.5+r*20))})`; ctx.fillRect(x,y,r<.2?2.5:1.5,r<.2?2.5:1.5); });
+  else seaSpecks.forEach(([x,y,r])=>{ ctx.strokeStyle='rgba(255,255,255,.14)'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.arc(x,y+Math.sin(t*1.2+r*6)*2,6,Math.PI*1.15,Math.PI*1.85); ctx.stroke(); });
+  [drawCh1,drawCh2,drawCh3,drawCh4,drawCh5][chapter]();
   // trail
-  ctx.strokeStyle= chapter===0 ? 'rgba(90,60,25,.85)' : 'rgba(255,255,255,.6)'; ctx.lineWidth=4; ctx.setLineDash([2,10]); ctx.lineCap='round';
+  ctx.strokeStyle= C.trail; ctx.lineWidth=4; ctx.setLineDash([2,10]); ctx.lineCap='round';
   ctx.beginPath();
   ids.forEach((i,k)=>{ const [x,y]=LEVELS[i].node; if(!k){ ctx.moveTo(x,y); return; }
     const [px,py]=LEVELS[ids[k-1]].node, mx=(px+x)/2, my=(py+y)/2, dx=x-px, dy=y-py, d=Math.hypot(dx,dy), s2=k%2?35:-35;
     ctx.quadraticCurveTo(mx-dy/d*s2, my+dx/d*s2, x, y); });
   ctx.stroke(); ctx.setLineDash([]);
   // ship on chapter 2
-  if(chapter===1 && open){ const nx=ids.find(i=>levelUnlocked(i)&&!starsOf(i)); const at=LEVELS[nx!==undefined?nx:ids[ids.length-1]].node; drawShip(at[0]-62,at[1]+14); }
+  if(C.ship && open){ const nx=ids.find(i=>levelUnlocked(i)&&!starsOf(i)); const at=LEVELS[nx!==undefined?nx:ids[ids.length-1]].node; drawShip(at[0]-62,at[1]+14); }
   // nodes
   let hover=-1;
   ids.forEach(i=>{ if(Math.hypot(LEVELS[i].node[0]-mouse.x,LEVELS[i].node[1]-mouse.y)<34) hover=i; });
@@ -1159,13 +1361,14 @@ function closeModal(){ $('modal').hidden=true; }
 function showWorld(ch){
   if(typeof ch==='number') chapter=ch;
   else if(state==='play') chapter=chOf(levelIdx);
-  else chapter=chapterUnlocked(1)?1:0;
-  [0,1].forEach(c=>{ const b=$('chBtn'+c); b.classList.toggle('sel',chapter===c); b.textContent=CHAPTERS[c].name+(chapterUnlocked(c)?'':' (κλειδωμένο)'); });
+  else { let c=0; for(let k=0;k<CHAPTERS.length;k++) if(chapterUnlocked(k)) c=k; chapter=c; }
+  $('chBtn').textContent=`${CHAPTERS[chapter].name} / ${CHAPTERS.length}`+(chapterUnlocked(chapter)?'':' (κλειδωμένο)');
+  $('chPrev').disabled=chapter===0; $('chNext').disabled=chapter===CHAPTERS.length-1;
   state='world'; closeModal(); placing=null; selected=null;
   document.body.classList.add('world'); resize();
   $('totalStars').textContent=`${totalStars()}/${LEVELS.length*3}`;
   const next=chLevels(chapter).find(i=>levelUnlocked(i)&&!starsOf(i));
-  msg(!chapterUnlocked(chapter) ? 'Το Κεφάλαιο 2 ανοίγει όταν νικήσεις και τις 6 πίστες του Κεφαλαίου 1.'
+  msg(!chapterUnlocked(chapter) ? `Το ${CHAPTERS[chapter].name} ανοίγει όταν νικήσεις όλες τις πίστες του ${CHAPTERS[chapter-1].name}.`
     : next!==undefined ? `Επόμενη πίστα: ${lvlNum(next)} ${LEVELS[next].name}` : 'Κατέκτησες όλο το κεφάλαιο! Κυνήγα τα 3 αστέρια στο Θρυλικό.');
 }
 function startLevel(i){
@@ -1177,7 +1380,7 @@ function startLevel(i){
 function openLevel(i){
   const L=LEVELS[i], s=starsOf(i);
   modal(`<h2>Πίστα ${lvlNum(i)}: ${L.name}</h2><p>${L.desc}</p>
-    <p class="gold">${L.waves} κύματα · ${L.ch===1?'ο Κέρβερος':'η Λερναία Ύδρα'} στο τέλος</p>
+    <p class="gold">${L.waves} κύματα · ${CHAPTERS[L.ch||0].boss} στο τέλος</p>
     <p>Καλύτερο: <span class="gold">${starStr(s)}</span>${save.diff[i]?' · '+DIFFS[save.diff[i]].name:''}</p>
     <p style="font-size:13px;opacity:.85">3 αστέρια: καμία χαμένη ζωή · 2 αστέρια: τουλάχιστον οι μισές ζωές</p>
     <div class="row" id="dsel"></div>
@@ -1200,14 +1403,14 @@ function onWin(){
   const newPowers=PORDER.filter(k=>POWERS[k].unlock>before && POWERS[k].unlock<=after);
   const hasNext=i+1<LEVELS.length;
   const final=!hasNext, chEnd=hasNext && chOf(i+1)!==chOf(i);
-  modal(`<h2>${final?'ΚΑΤΕΚΤΗΣΕΣ ΟΛΟ ΤΟΝ ΚΟΣΜΟ!':chEnd?'ΚΑΤΕΚΤΗΣΕΣ ΤΟΝ ΟΛΥΜΠΟ!':'ΝΙΚΗ!'}</h2>
+  modal(`<h2>${final?'ΚΑΤΕΚΤΗΣΕΣ ΟΛΟ ΤΟΝ ΚΟΣΜΟ ΤΩΝ ΘΕΩΝ!':chEnd?CHAPTERS[chOf(i)].done:'ΝΙΚΗ!'}</h2>
     <div class="stars">${starStr(stars)}</div>
     <p>${LEVELS[i].name} · ${DIFFS[diffKey].name} · Ζωές ${lives}/${maxLives}</p>
     ${record?'<p style="color:#9fe07a">Νέο ρεκόρ!</p>':''}
     ${stars<3?'<p style="font-size:13px;opacity:.85">Για 3 αστέρια τελείωσε την πίστα χωρίς να χάσεις ζωή.</p>':''}
-    ${chEnd && prev===0?`<p class="gold" style="font-size:17px">Ξεκλείδωσες το ΚΕΦΑΛΑΙΟ 2: Η Οδύσσεια!<br><small>Νέος χάρτης με 6 πίστες, Κένταυροι, Μέδουσες και ο Κέρβερος.</small></p>`:hasNext && prev===0?`<p class="gold">Ξεκλείδωσες την πίστα ${lvlNum(i+1)}: ${LEVELS[i+1].name}!</p>`:''}
+    ${chEnd && prev===0?`<p class="gold" style="font-size:17px">Ξεκλείδωσες το ${CHAPTERS[chOf(i+1)].name.toUpperCase()}: ${CHAPTERS[chOf(i+1)].sub}!<br><small>Νέος χάρτης με 6 πίστες και ${CHAPTERS[chOf(i+1)].intro}.</small></p>`:hasNext && prev===0?`<p class="gold">Ξεκλείδωσες την πίστα ${lvlNum(i+1)}: ${LEVELS[i+1].name}!</p>`:''}
     <div id="unl"></div>
-    <div class="row"><button id="mMap">Χάρτης</button><button id="mRetry">Ξανά</button>${hasNext?`<button class="primary" id="mNext">${chEnd?'Στο Κεφάλαιο 2':'Επόμενη πίστα'}</button>`:''}</div>`, ()=>{
+    <div class="row"><button id="mMap">Χάρτης</button><button id="mRetry">Ξανά</button>${hasNext?`<button class="primary" id="mNext">${chEnd?'Στο '+CHAPTERS[chOf(i+1)].name:'Επόμενη πίστα'}</button>`:''}</div>`, ()=>{
     newGods.forEach(ty=>{ const d=document.createElement('div'); d.className='unlock'; d.appendChild(godIcon(ty));
       const sp=document.createElement('span'); sp.innerHTML=`<b class="gold">Νέο σχέδιο: ${TYPES[ty].name}</b><br><small>${TYPES[ty].desc}</small>`; d.appendChild(sp); $('unl').appendChild(d); });
     newPowers.forEach(k=>{ const d=document.createElement('div'); d.className='unlock'; d.appendChild(powerIcon(k));
@@ -1336,8 +1539,8 @@ $('fs').onclick=async()=>{
   settle();
 };
 if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
-$('chBtn0').onclick=()=>showWorld(0);
-$('chBtn1').onclick=()=>showWorld(1);
+$('chPrev').onclick=()=>{ if(chapter>0) showWorld(chapter-1); };
+$('chNext').onclick=()=>{ if(chapter<CHAPTERS.length-1) showWorld(chapter+1); };
 $('resetSave').onclick=()=>modal(`<h2>Νέα εκστρατεία;</h2><p>Θα σβηστούν όλα τα αστέρια και η πρόοδός σου.</p>
   <div class="row"><button id="mNo">Άκυρο</button><button class="primary" id="mYes">Ναι, από την αρχή</button></div>`, ()=>{
   $('mNo').onclick=closeModal; $('mYes').onclick=()=>{ save={stars:{},diff:{}}; persist(); showWorld(); };
