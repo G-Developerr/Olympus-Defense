@@ -1666,9 +1666,10 @@ function sfx(name){
   if(SND.last[name]!==undefined && now-SND.last[name]<lim) return;
   SND.last[name]=now; try{ SFX[name](now+0.01); }catch(e){}
 }
-/* music: ancient-Greek style. Kithara (Karplus-Strong plucked string), aulos, tympanon & krotala.
-   Harmonia: ancient Dorian on E (E F G A B C D), with A as the "mese" (central note). Battle theme in 7/8 (3+2+2). */
-const NOTE=n=>{ const pc={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[n[0]], o=+n.slice(1); return 440*Math.pow(2,(pc+(o-4)*12-9)/12); };
+/* music: ancient / Byzantine-style chant. A synthesized male choir (formant synthesis) sings fast "tu-ru-ru-ru"
+   melismas that open into long swelling "AAAA" notes over an "ison" drone (the held low "Ooo" of Byzantine chant).
+   Scale: D "hijaz" (D Eb F# G A Bb C). Battle: faster chant, frame drums in 7/8 and war shouts "HA!". */
+const NOTE=n=>{ let pc={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[n[0]], i=1; if(n[1]==='#'){ pc++; i=2; } else if(n[1]==='b'){ pc--; i=2; } return 440*Math.pow(2,(pc+(+n.slice(i)-4)*12-9)/12); };
 function makeImpulse(c,dur){
   const len=Math.floor(c.sampleRate*dur), b=c.createBuffer(2,len,c.sampleRate);
   for(let ch=0;ch<2;ch++){ const d=b.getChannelData(ch); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3.2); }
@@ -1689,74 +1690,86 @@ function kithara(fq,t,v){
   src.buffer=ksBuf(fq); f.type='lowpass'; f.frequency.value=3400; g.gain.value=v;
   src.connect(f); f.connect(g); g.connect(SND.musG); src.start(t); src.stop(t+2.4);
 }
-function aulos(n,t,dur,v){
-  const c=SND.ctx, fq=NOTE(n), g=c.createGain(), bp=c.createBiquadFilter(), lfo=c.createOscillator(), lg=c.createGain();
-  bp.type='bandpass'; bp.frequency.value=Math.min(3000,fq*3); bp.Q.value=.9;
-  lfo.frequency.value=5.2; lg.gain.value=fq*.006; lfo.connect(lg);
-  [0,-7].forEach(det=>{ const o=c.createOscillator(); o.type='sawtooth'; o.frequency.value=fq; o.detune.value=det; lg.connect(o.frequency); o.connect(bp); o.start(t); o.stop(t+dur+.25); });
-  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(v,t+.06);
-  g.gain.setValueAtTime(v,t+Math.max(.07,dur-.08)); g.gain.exponentialRampToValueAtTime(0.0001,t+dur+.18);
-  bp.connect(g); g.connect(SND.musG); lfo.start(t); lfo.stop(t+dur+.25);
-}
 function tympanon(t,deep){ osc('sine',deep?95:170,t,deep?.35:.12,deep?.55:.22,deep?48:110,SND.musG); noise(t,deep?.08:.05,deep?.12:.15,'bandpass',deep?250:1600,0,SND.musG); }
 function krotala(t,v){ osc('sine',2960,t,.28,.035*(v||1),0,SND.musG); osc('sine',4410,t,.2,.022*(v||1),0,SND.musG); }
-/* bars: [melody [[note, eighths]...], bass note, voice k=kithara a=aulos] */
-const CALM_BARS=[
-  [[['E4',2],['F4',1],['G4',1],['A4',4]],'E2','k'],
-  [[['G4',2],['A4',1],['B4',1],['C5',2],['B4',2]],'A2','k'],
-  [[['A4',2],['G4',1],['F4',1],['G4',2],['A4',2]],'D3','k'],
-  [[['E4',8]],'E2','k'],
-  [[['A4',2],['B4',1],['C5',1],['D5',4]],'A2','k'],
-  [[['C5',2],['B4',2],['A4',2],['G4',2]],'C3','k'],
-  [[['F4',2],['G4',1],['A4',1],['G4',2],['F4',2]],'D3','k'],
-  [[['E4',8]],'E2','k'],
-  [[['C5',3],['B4',1],['A4',4]],'A2','a'],
-  [[['D5',3],['C5',1],['B4',4]],'G2','a'],
-  [[['C5',2],['B4',2],['A4',2],['G4',2]],'F2','a'],
-  [[['A4',8]],'A2','a'],
-  [[['E5',3],['D5',1],['C5',2],['B4',2]],'C3','a'],
-  [[['A4',2],['B4',2],['C5',4]],'A2','a'],
-  [[['B4',2],['A4',2],['G4',2],['F4',2]],'D3','a'],
-  [[['E4',8]],'E2','a']
+
+/* ---- choir voice (formant synthesis) ---- */
+const FORM={A:[800,1200,2850], O:[480,840,2800], U:[350,780,2450]};
+function makeBank(n,octave,spread){
+  const c=SND.ctx, out=c.createGain(), pre=c.createGain(); out.gain.value=0.0001; pre.gain.value=1/n;
+  const fl=[0,1,2].map(k=>{ const f=c.createBiquadFilter(), g=c.createGain(); f.type='bandpass'; f.Q.value=[5,7,9][k]; f.frequency.value=FORM.A[k]; g.gain.value=[1.6,.9,.45][k]; pre.connect(f); f.connect(g); g.connect(out); return f; });
+  const lfo=c.createOscillator(), lfoG=c.createGain(); lfo.frequency.value=5.4; lfoG.gain.value=0; lfo.connect(lfoG); lfo.start();
+  const oscs=[];
+  for(let i=0;i<n;i++){ const o=c.createOscillator(); o.type='sawtooth'; o.frequency.value=110; o.detune.value=(Math.random()-.5)*spread; lfoG.connect(o.detune); o.connect(pre); o.start(); oscs.push({o, mul: octave && i%3===2 ? .5 : 1}); }
+  out.connect(SND.musG);
+  return {c,out,fl,oscs,lfoG};
+}
+function ensureBanks(){ const c=SND.ctx; if(SND.lead && SND.lead.c===c) return; SND.lead=makeBank(6,true,24); SND.ison=makeBank(4,true,16); }
+function setPitch(b,f,t,glide){ b.oscs.forEach(x=>x.o.frequency.setTargetAtTime(f*x.mul,t,glide)); }
+function setVowel(b,v,t){ FORM[v].forEach((fr,i)=>b.fl[i].frequency.setTargetAtTime(fr,t,.025)); }
+function chant(ph,t,beat,vol){
+  const L=SND.lead, g=L.out.gain; let tt=t;
+  ph.forEach(([n,bt,syl,vow])=>{
+    const d=bt*beat;
+    if(syl==='-'){ g.setTargetAtTime(0.0001,tt,.06); L.lfoG.gain.setTargetAtTime(0,tt,.05); tt+=d; return; }
+    const f=NOTE(n)/2;
+    setVowel(L,vow,tt);
+    if(syl==='tu'){
+      setPitch(L,f,tt,.008); L.lfoG.gain.setTargetAtTime(0,tt,.02);
+      g.setTargetAtTime(0.0001,tt-.012,.005); g.setTargetAtTime(vol,tt+.015,.012);
+      noise(tt,.035,vol*.45,'highpass',3500,0,SND.musG);
+    } else if(syl==='ru'){
+      setPitch(L,f,tt,.012); g.setTargetAtTime(vol*.3,tt,.006); g.setTargetAtTime(vol,tt+.035,.012);
+    } else if(syl==='ha'){
+      setPitch(L,f,tt,.005); L.lfoG.gain.setTargetAtTime(0,tt,.01);
+      g.setTargetAtTime(vol*1.8,tt,.008); g.setTargetAtTime(0.0001,tt+Math.min(.18,d*.7),.03);
+      noise(tt,.09,vol*.6,'bandpass',1400,0,SND.musG);
+    } else {
+      setPitch(L,f,tt,.04); g.setTargetAtTime(vol*.85,tt,.03); g.setTargetAtTime(vol*1.35,tt+d*.25,d*.35);
+      L.lfoG.gain.setTargetAtTime(0,tt,.02); L.lfoG.gain.setTargetAtTime(30,tt+d*.3,d*.25);
+    }
+    tt+=d;
+  });
+  return tt-t;
+}
+function isonAt(note,t,vol){ const I=SND.ison; setPitch(I,NOTE(note),t,.3); setVowel(I,'O',t); I.out.gain.setTargetAtTime(vol,t,.4); }
+const cTR=(notes,v)=>notes.map((n,i)=>[n,.5,i?'ru':'tu',v||'U']);
+const cHold=(n,b,v)=>[[n,b,'A',v||'A']];
+const cHa=n=>[[n,.75,'ha','A']];
+const cRest=b=>[[null,b,'-']];
+const CALM_PH=[
+  {ph:[...cTR(['A4','Bb4','A4','G4','F#4','G4']),...cHold('A4',4),...cRest(1)], ison:'D3'},
+  {ph:[...cTR(['A4','Bb4','C5','Bb4','A4','Bb4']),...cHold('D5',4),...cRest(1)], ison:'D3'},
+  {ph:[...cTR(['C5','Bb4','A4','G4','F#4','Eb4']),...cHold('D4',4,'O'),...cRest(1)], ison:'D3'},
+  {ph:[...cTR(['D4','Eb4','F#4','G4','A4','G4']),...cHold('A4',3),...cTR(['G4','F#4','Eb4']),...cHold('D4',5,'O'),...cRest(1.5)], ison:'D3'}
 ];
-const BATTLE_BARS=[
-  [[['E4',3],['F4',2],['G4',2]],'E2'], [[['A4',3],['G4',2],['F4',2]],'D2'],
-  [[['E4',3],['F4',2],['A4',2]],'E2'], [[['G4',3],['F4',2],['E4',2]],'E2'],
-  [[['A4',3],['B4',2],['C5',2]],'A2'], [[['D5',3],['C5',2],['B4',2]],'G2'],
-  [[['C5',3],['B4',2],['A4',2]],'A2'], [[['G4',3],['F4',2],['E4',2]],'E2'],
-  [[['E5',3],['D5',2],['C5',2]],'C3'], [[['B4',3],['C5',2],['D5',2]],'G2'],
-  [[['C5',2],['B4',1],['A4',2],['G4',2]],'A2'], [[['F4',3],['G4',2],['A4',2]],'D2'],
-  [[['E4',3],['F4',2],['G4',2]],'E2'], [[['A4',3],['G4',2],['F4',2]],'D2'],
-  [[['G4',2],['F4',1],['E4',2],['F4',2]],'E2'], [[['E4',7]],'E2']
+const BATTLE_PH=[
+  {ph:[...cTR(['D4','Eb4','F#4','G4']),...cHold('A4',2),...cHa('D4'),...cHa('D4'),...cRest(.5)], ison:'D3'},
+  {ph:[...cTR(['A4','Bb4','A4','G4']),...cHold('F#4',2),...cHa('D4'),...cHa('D4'),...cRest(.5)], ison:'D3'},
+  {ph:[...cTR(['G4','A4','Bb4','C5']),...cHold('D5',3),...cRest(.5)], ison:'A2'},
+  {ph:[...cTR(['C5','Bb4','A4','G4','F#4','Eb4']),...cHold('D4',2,'O'),...cHa('D4'),...cHa('D4'),...cHa('D4'),...cRest(.5)], ison:'D3'}
 ];
 let mBar=0, mIdx=0, mTheme='calm';
-function scheduleBar(t){
-  const battle=mTheme==='battle', bars=battle?BATTLE_BARS:CALM_BARS, [mel,bass,voice]=bars[mIdx%bars.length], e=battle?.2:.4, b=NOTE(bass);
-  let tt=t;
-  mel.forEach(([n,len])=>{
-    if(battle) aulos(n,tt,len*e*.92,.075);
-    else if(voice==='a') aulos(n,tt,len*e*.95,.08);
-    else kithara(NOTE(n),tt,.8);
-    tt+=len*e;
-  });
+function schedulePhrase(t){
+  ensureBanks();
+  const battle=mTheme==='battle', list=battle?BATTLE_PH:CALM_PH, P=list[mIdx%list.length], beat=battle?.24:.34;
+  isonAt(P.ison,t,battle?.4:.32);
+  const dur=chant(P.ph,t,beat,battle?1.05:.9);
   if(battle){
-    kithara(b,t,.5); kithara(b*1.5,t+3*e,.35); kithara(b*2,t+5*e,.35);
-    tympanon(t,true); tympanon(t+3*e,false); tympanon(t+5*e,false); if(mIdx%2) tympanon(t+6*e,false);
-    krotala(t+3*e,.8); if(mIdx%4===3) krotala(t+6*e,1.2);
+    const e=beat/2;
+    for(let k=0,x=0; x<dur-.01; k++, x+=e){ const p=k%7; if(p===0) tympanon(t+x,true); else if(p===3||p===5) tympanon(t+x,false); if(p===3 && (k/7|0)%2) krotala(t+x,.8); }
   } else {
-    [0,2,4,6].forEach((p,i)=>kithara(b*[1,1.5,2,1.5][i],t+p*e,.38));
-    if(voice==='a') kithara(b*2,t,.22);
-    if(mIdx%4===3) krotala(t+6*e);
+    kithara(NOTE(P.ison),t,.35); kithara(NOTE(P.ison)*1.5,t+beat*2,.22);
   }
-  return (battle?7:8)*e;
+  return dur;
 }
 function musicTick(){
   const c=SND.ctx; if(!c || c.state!=='running' || !SND.musicOn){ if(c) mBar=c.currentTime+0.1; return; }
   const want=(state==='play' && waveActive && !over && !won)?'battle':'calm';
   if(mBar<c.currentTime) mBar=c.currentTime+0.05;
-  while(mBar < c.currentTime+0.5){
-    if(want!==mTheme && (mTheme==='calm' || mIdx%4===0)){ mTheme=want; mIdx=0; }
-    mBar+=scheduleBar(mBar); mIdx++;
+  while(mBar < c.currentTime+0.6){
+    if(want!==mTheme){ mTheme=want; mIdx=0; }
+    mBar+=schedulePhrase(mBar); mIdx++;
   }
 }
 ['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,audioInit,{passive:true}));
