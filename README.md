@@ -23,7 +23,8 @@ The game is written in plain JavaScript on an HTML5 Canvas, with no frameworks, 
 - **4 difficulty levels and a 3-star rating** for every level. Progress is saved locally.
 - **Responsive layout** that fills any screen and switches to a side panel in mobile landscape.
 - **Installable PWA.** Add it to your home screen for fullscreen, landscape play that also works offline.
-- **Keyboard shortcuts:** `1`–`7` gods, `Q` `W` `E` powers, `Space` next wave, `P` pause.
+- **Procedural audio.** Lyre music on a Greek scale and sound effects for every god, power and boss, all synthesized live with the Web Audio API. Music and effects can each be switched off.
+- **Keyboard shortcuts:** `1`–`7` gods, `Q` `W` `E` powers, `U` upgrade, `Space` next wave, `P` pause, `M` mute.
 
 ## Screenshots
 
@@ -40,6 +41,7 @@ The game is written in plain JavaScript on an HTML5 Canvas, with no frameworks, 
 | UI | HTML5 and CSS3 (Flexbox, `clamp()`, safe-area insets, media queries) |
 | Storage | `localStorage` for campaign progress and stars |
 | PWA | Web App Manifest and a network-first Service Worker |
+| Audio | Web Audio API, fully synthesized, no audio files |
 | APIs | Fullscreen API, Screen Orientation API, Pointer Events |
 | Hosting | Render (static site) |
 
