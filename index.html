@@ -70,6 +70,7 @@
   .unlock canvas{width:52px;height:52px;flex:none}
   .unlock small{color:#d9c89a}
   .gold{color:#e8c46a}
+  button.off{opacity:.55;text-decoration:line-through}
   #tpop{position:absolute;z-index:5;transform:translate(-50%,calc(-100% - 10px));background:rgba(34,28,20,.96);border:2px solid #e8c46a;border-radius:10px;padding:8px 10px;min-width:200px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.55)}
   #tpop[hidden]{display:none}
   #tpop:after{content:'';position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);border:8px solid transparent;border-top-color:#e8c46a;border-bottom:0}
@@ -112,6 +113,8 @@
     <button id="chBtn" class="wonly" disabled style="opacity:1"></button>
     <button id="chNext" class="wonly" aria-label="Επόμενο κεφάλαιο">▶</button>
     <button id="resetSave" class="wonly">Νέα εκστρατεία</button>
+    <button id="musBtn" title="Μουσική (M)">♪ Μουσική</button>
+    <button id="sfxBtn" title="Ηχητικά εφέ">Εφέ</button>
     <button id="fs">Πλήρης οθόνη</button>
   </div>
   <div id="mid">
@@ -395,8 +398,8 @@ function startWave(){
   const L=LEVELS[levelIdx];
   if(!canCallWave() || !$('modal').hidden) return;
   const eb=earlyBonus();
-  if(eb>0){ gold+=eb; const [x,y]=wcPos(); effects.push({k:'txt', x, y:y-34, life:1.4, max:1.4, txt:'+'+eb+' ΧΡΥΣΟΣ', c:'242,201,76', size:17}); }
-  nextT=null;
+  if(eb>0){ sfx('coin'); gold+=eb; const [x,y]=wcPos(); effects.push({k:'txt', x, y:y-34, life:1.4, max:1.4, txt:'+'+eb+' ΧΡΥΣΟΣ', c:'242,201,76', size:17}); }
+  nextT=null; sfx('horn');
   wave++; waveActive=true; spawnQ=[]; spawnT=0;
   const n=6+wave*2, tf=L.talosFrom||(L.ch>=2?3:6);
   for(let i=0;i<n;i++){
@@ -432,13 +435,13 @@ function moveEnemy(e,dt){
     if(e.gaze<=0){
       const tw=towers.filter(o=>!(o.stone>0) && Math.hypot(o.x-e.x,o.y-e.y)<=RG).sort((a,b)=>Math.hypot(a.x-e.x,a.y-e.y)-Math.hypot(b.x-e.x,b.y-e.y))[0];
       e.gaze=tw?(drg?4:4.5):0.5;
-      if(tw){ tw.stone=drg?2.5:2.2; tw.stoneKind=drg?'fire':'stone'; effects.push({k:'gaze', x1:e.x, y1:e.y-(drg?28:10), x2:tw.x, y2:tw.y-14, life:.5, max:.5, fire:drg}); }
+      if(tw){ sfx('hiss'); tw.stone=drg?2.5:2.2; tw.stoneKind=drg?'fire':'stone'; effects.push({k:'gaze', x1:e.x, y1:e.y-(drg?28:10), x2:tw.x, y2:tw.y-14, life:.5, max:.5, fire:drg}); }
     }
   }
   if(e.ty==='kronos' && !(e.frozen>0)){
     e.summon=(e.summon===undefined?5:e.summon)-dt;
     if(e.summon<=0){
-      e.summon=7;
+      e.summon=7; sfx('summon');
       for(let q=0;q<3;q++){ spawn('harpy'); const m=enemies[enemies.length-1]; m.x=e.x+(Math.random()-.5)*30; m.y=e.y+(Math.random()-.5)*20; m.wp=e.wp; m.prog=e.prog; }
       effects.push({k:'ring', x:e.x, y:e.y, r:60, life:.5, max:.5, c:'190,120,255'});
     }
@@ -451,7 +454,7 @@ function moveEnemy(e,dt){
     if(dist<=d){ e.x=tx; e.y=ty; d-=dist; e.wp++; } else { e.x+=dx/dist*d; e.y+=dy/dist*d; d=0; }
   }
   e.prog+=sp*dt;
-  if(e.wp>=PATH.length && !e.dead){ e.dead=true; lives-= e.boss?5:1; }
+  if(e.wp>=PATH.length && !e.dead){ e.dead=true; lives-= e.boss?5:1; sfx('leak'); }
 }
 function hurt(e,d,pierce){
   if(e.dead) return;
@@ -459,7 +462,7 @@ function hurt(e,d,pierce){
   if(!pierce && e.armor) d=Math.max(d*0.25, d-e.armor);
   e.hp-=d;
   if(e.hp<=0){
-    e.dead=true; gold+=e.reward;
+    e.dead=true; gold+=e.reward; sfx(e.boss?'bossdie':'die');
     effects.push({k:'puff', x:e.x, y:e.y, life:0.7, max:0.7, txt:'+'+e.reward, big:e.boss});
     if(e.boss) showBanner(BOSS_DOWN[e.ty]||'Boss νικήθηκε!');
   }
@@ -471,7 +474,7 @@ function updateTower(tw,dt){
   const s=st(tw);
   const inR=enemies.filter(e=>!e.dead && Math.hypot(e.x-tw.x,e.y-tw.y)<=s.range).sort((a,b)=>b.prog-a.prog);
   if(!inR.length) return;
-  tw.cd=s.rate; tw.flash=0.18;
+  tw.cd=s.rate; tw.flash=0.18; sfx('fire_'+tw.ty);
   const tg=inR[0];
   switch(tw.ty){
     case 'zeus': {
@@ -518,14 +521,14 @@ function cast(k,x,y){
   const P=POWERS[k], m=1+0.22*Math.max(0,wave-1);
   pcd[k]=P.cd; casting=null;
   if(k==='meteor'){
-    effects.push({k:'meteor', x, y, r:P.r, life:.6, max:.6});
+    effects.push({k:'meteor', x, y, r:P.r, life:.6, max:.6}); sfx('whistle');
     timers.push({t:.6, fn:()=>{
       enemies.forEach(e=>{ const d=Math.hypot(e.x-x,e.y-y); if(!e.dead && d<=P.r){ hurt(e,140*m*(d<P.r*.5?1:.6),true); e.burnDps=Math.max(e.burn>0?e.burnDps:0,12*m); e.burn=4; } });
       effects.push({k:'boom', x, y, r:P.r, life:.6, max:.6});
       decals.push({x, y, r:P.r*.6, life:9, max:9, glow:true});
       for(let i=0;i<18;i++){ const a=Math.random()*Math.PI*2, v=120+Math.random()*220;
         effects.push({k:'spark', x, y, vx:Math.cos(a)*v, vy:Math.sin(a)*v-180, life:.7+Math.random()*.4, max:1, c:i%3?'255,150,50':'90,60,40', s:2+Math.random()*3}); }
-      shake=.5; flash=.25;
+      shake=.5; flash=.25; sfx('boom');
     }});
     msg('Μετεωρίτης!');
   } else if(k==='storm'){
@@ -538,7 +541,7 @@ function cast(k,x,y){
       effects.push({k:'bolt', pts:[[bx+(Math.random()-.5)*80, by-460],[bx,by]], life:.25, max:.25, w:6});
       effects.push({k:'ring', x:bx, y:by, r:42, life:.3, max:.3, c:'255,245,170'});
       decals.push({x:bx, y:by, r:16, life:4, max:4});
-      shake=Math.max(shake,.18); flash=.35;
+      shake=Math.max(shake,.18); flash=.35; sfx('crack');
     }});
     msg('Η οργή του Δία!');
   } else {
@@ -547,7 +550,7 @@ function cast(k,x,y){
     decals.push({x, y, r:P.r*.9, life:3, max:3, ice:true});
     for(let i=0;i<24;i++){ const a=Math.random()*Math.PI*2, v=40+Math.random()*120;
       effects.push({k:'spark', x:x+Math.cos(a)*20, y:y+Math.sin(a)*14, vx:Math.cos(a)*v, vy:Math.sin(a)*v*.6-60, g:40, life:.9, max:.9, c:'225,245,255', s:1.5+Math.random()*2}); }
-    msg('Παγωνιά του Βορέα!');
+    msg('Παγωνιά του Βορέα!'); sfx('chime');
   }
 }
 function update(dt){
@@ -579,7 +582,7 @@ function update(dt){
     if(wave>=LEVELS[levelIdx].waves){ won=true; onWin(); }
   }
 }
-function showBanner(txt){ banner={txt, life:3}; }
+function showBanner(txt){ banner={txt, life:3}; sfx('gong'); }
 
 /* ================= DRAW: GAME WORLD ================= */
 function drawWorld(){
@@ -1392,6 +1395,7 @@ function openLevel(i){
   });
 }
 function onWin(){
+  sfx('win');
   const i=levelIdx, stars=lives>=maxLives?3:lives>=maxLives/2?2:1;
   const before=levelsCleared(), prev=starsOf(i);
   const record = stars>prev || (stars===prev && DORDER.indexOf(diffKey)>DORDER.indexOf(save.diff[i]||'easy'));
@@ -1420,6 +1424,7 @@ function onWin(){
   });
 }
 function onLose(){
+  sfx('lose');
   modal(`<h2>Ο Όλυμπος έπεσε!</h2><p>Άντεξες μέχρι το κύμα ${wave}/${LEVELS[levelIdx].waves}.</p>
     <p style="font-size:13px;opacity:.85">Συμβουλή: βάλε τον Ποσειδώνα σε στροφές για να επιβραδύνει τα τέρατα, και τον Δία κοντά σε σημεία που μαζεύονται πολλά μαζί.</p>
     <div class="row"><button id="mMap">Χάρτης</button><button class="primary" id="mRetry">Ξανά</button></div>`, ()=>{
@@ -1547,13 +1552,13 @@ $('resetSave').onclick=()=>modal(`<h2>Νέα εκστρατεία;</h2><p>Θα �
 });
 function doUpgrade(){
   const s=selected; if(!s || s.lvl>=3 || gold<upCost(s)) return;
-  const c=upCost(s); gold-=c; s.spent+=c; s.lvl++;
+  const c=upCost(s); gold-=c; s.spent+=c; s.lvl++; sfx('upgrade');
   effects.push({k:'ring', x:s.x, y:s.y, r:45, life:.5, max:.5, c:'255,215,90'});
   effects.push({k:'txt', x:s.x, y:s.y-48, life:1.1, max:1.1, txt:'ΕΠΙΠΕΔΟ '+s.lvl+'!', c:'255,225,120', size:15});
   for(let i=0;i<12;i++){ const a=Math.random()*Math.PI*2, v=60+Math.random()*90; effects.push({k:'spark', x:s.x, y:s.y-10, vx:Math.cos(a)*v, vy:Math.sin(a)*v-80, g:160, life:.7, max:.7, c:'255,220,110', s:2}); }
   msg(`${TYPES[s.ty].name} ανέβηκε στο επίπεδο ${s.lvl}!`);
 }
-function doSell(){ if(!selected) return; gold+=Math.round(selected.spent*0.6); towers=towers.filter(o=>o!==selected); selected=null; }
+function doSell(){ if(!selected) return; sfx('sell'); gold+=Math.round(selected.spent*0.6); towers=towers.filter(o=>o!==selected); selected=null; }
 $('up').onclick=doUpgrade; $('sell').onclick=doSell; $('tpUp').onclick=doUpgrade; $('tpSell').onclick=doSell;
 
 cv.addEventListener('pointermove',ev=>{ if(ev.pointerType==='mouse') mouse=pos(ev); });
@@ -1577,7 +1582,7 @@ cv.addEventListener('click',ev=>{
     const T=TYPES[placing];
     if(!canPlace(p.x,p.y)) msg('Δεν μπορείς να χτίσεις εκεί.');
     else if(gold<T.cost) msg('Δεν έχεις αρκετό χρυσό.');
-    else { gold-=T.cost; towers.push({ty:placing,x:p.x,y:p.y,lvl:1,cd:0,spent:T.cost}); if(gold<T.cost) placing=null; }
+    else { gold-=T.cost; towers.push({ty:placing,x:p.x,y:p.y,lvl:1,cd:0,spent:T.cost}); sfx('place'); if(gold<T.cost) placing=null; }
     return;
   }
   selected=towers.find(o=>Math.hypot(o.x-p.x,o.y-p.y)<28)||null;
@@ -1593,6 +1598,107 @@ addEventListener('keydown',ev=>{
   if(ev.key==='p'||ev.key==='P') openPause();
   if(ev.code==='Space'){ ev.preventDefault(); startWave(); }
 });
+
+/* ================= AUDIO (procedural, Web Audio API) ================= */
+const SND={ctx:null, sfxG:null, musG:null, nbuf:null, last:{}, musicOn:true, sfxOn:true};
+try{ const a=JSON.parse(localStorage.getItem('olympus-audio')); if(a){ SND.musicOn=a.music!==false; SND.sfxOn=a.sfx!==false; } }catch(e){}
+function saveAudio(){ try{ localStorage.setItem('olympus-audio', JSON.stringify({music:SND.musicOn, sfx:SND.sfxOn})); }catch(e){} }
+function audioInit(){
+  if(SND.ctx){ if(SND.ctx.state==='suspended' && !document.hidden) SND.ctx.resume(); return; }
+  const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+  const c=SND.ctx=new AC();
+  const comp=c.createDynamicsCompressor(); comp.connect(c.destination);
+  SND.sfxG=c.createGain(); SND.sfxG.gain.value=SND.sfxOn?0.55:0; SND.sfxG.connect(comp);
+  const lp=c.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=2600; lp.connect(comp);
+  SND.musG=c.createGain(); SND.musG.gain.value=SND.musicOn?0.32:0; SND.musG.connect(lp);
+  SND.nbuf=c.createBuffer(1,c.sampleRate,c.sampleRate); const d=SND.nbuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  mNext=c.currentTime+0.1;
+  setInterval(musicTick,90);
+}
+function setGain(g,v){ if(!SND.ctx) return; g.gain.cancelScheduledValues(SND.ctx.currentTime); g.gain.setTargetAtTime(v,SND.ctx.currentTime,0.08); }
+function updateAudioBtns(){
+  $('musBtn').classList.toggle('off',!SND.musicOn); $('sfxBtn').classList.toggle('off',!SND.sfxOn);
+  if(SND.ctx){ setGain(SND.musG,SND.musicOn?0.32:0); setGain(SND.sfxG,SND.sfxOn?0.55:0); }
+}
+function env(g,t0,a,d,peak){ g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(peak,t0+a); g.gain.exponentialRampToValueAtTime(0.0001,t0+a+d); }
+function osc(type,f,t0,dur,vol,f2,dest){
+  const c=SND.ctx, o=c.createOscillator(), g=c.createGain();
+  o.type=type; o.frequency.setValueAtTime(f,t0); if(f2) o.frequency.exponentialRampToValueAtTime(f2,t0+dur);
+  env(g,t0,0.006,dur,vol); o.connect(g); g.connect(dest||SND.sfxG); o.start(t0); o.stop(t0+dur+0.05);
+}
+function noise(t0,dur,vol,ftype,fq,f2,dest){
+  const c=SND.ctx, src=c.createBufferSource(), f=c.createBiquadFilter(), g=c.createGain();
+  src.buffer=SND.nbuf; f.type=ftype; f.frequency.setValueAtTime(fq,t0); if(f2) f.frequency.exponentialRampToValueAtTime(f2,t0+dur);
+  env(g,t0,0.005,dur,vol); src.connect(f); f.connect(g); g.connect(dest||SND.sfxG); src.start(t0); src.stop(t0+dur+0.05);
+}
+const SFX={
+  click:t=>osc('triangle',660,t,.05,.07),
+  place:t=>{ osc('triangle',523,t,.25,.2); osc('triangle',784,t+.05,.3,.15); noise(t,.08,.1,'lowpass',800); },
+  upgrade:t=>[523,659,784,1047].forEach((f,i)=>osc('triangle',f,t+i*.07,.25,.18)),
+  sell:t=>{ osc('square',988,t,.08,.05); osc('square',740,t+.07,.12,.05); },
+  coin:t=>{ osc('square',988,t,.07,.06); osc('square',1319,t+.06,.22,.06); },
+  fire_apollo:t=>osc('triangle',1400,t,.06,.08,700),
+  fire_artemis:t=>{ osc('sine',1800,t,.1,.07,900); noise(t,.05,.05,'highpass',3000); },
+  fire_zeus:t=>{ noise(t,.25,.22,'highpass',2000,600); osc('sawtooth',90,t,.2,.1,40); },
+  fire_poseidon:t=>{ noise(t,.45,.4,'lowpass',300,1500); osc('sine',180,t,.3,.08,120); },
+  fire_athena:t=>noise(t,.15,.3,'bandpass',900,2000),
+  fire_hephaestus:t=>{ osc('sine',120,t,.18,.25,60); noise(t,.1,.1,'bandpass',1800); },
+  fire_hades:t=>{ osc('sine',300,t,.3,.07,600); osc('sine',303,t,.3,.05,590); },
+  die:t=>{ noise(t,.12,.1,'bandpass',600,200); osc('square',220,t,.08,.035,110); },
+  bossdie:t=>{ noise(t,1.2,.4,'lowpass',1200,80); osc('sawtooth',110,t,1,.18,30); },
+  leak:t=>{ osc('triangle',330,t,.25,.2,220); osc('triangle',262,t+.18,.35,.2,160); },
+  horn:t=>[146.8,220,293.7].forEach((f,i)=>osc('sawtooth',f,t+i*.02,.8,.045,f*1.01)),
+  gong:t=>{ osc('sine',98,t,2.2,.3,92); osc('sine',147,t,1.8,.14,140); osc('sine',262,t,1.2,.07,255); noise(t,.3,.08,'lowpass',400); },
+  whistle:t=>osc('sine',1400,t,.6,.1,180),
+  boom:t=>{ noise(t,.9,.45,'lowpass',900,60); osc('sine',70,t,.6,.35,30); },
+  crack:t=>{ noise(t,.35,.28,'highpass',3000,800); osc('sawtooth',70,t,.3,.1,35); },
+  chime:t=>[1568,1976,2349,2637,3136].forEach((f,i)=>osc('sine',f,t+i*.05,.6,.06)),
+  hiss:t=>noise(t,.4,.12,'highpass',2500,5000),
+  summon:t=>{ osc('sawtooth',110,t,.8,.07,55); noise(t,.6,.1,'bandpass',500,150); },
+  win:t=>[523,659,784,1047,784,1047].forEach((f,i)=>osc('triangle',f,t+i*.12,.4,.2)),
+  lose:t=>[392,370,330,262].forEach((f,i)=>osc('triangle',f,t+i*.25,.5,.2))
+};
+const THR={fire_apollo:.07,fire_artemis:.08,fire_zeus:.06,fire_poseidon:.12,fire_athena:.09,fire_hephaestus:.09,fire_hades:.09,die:.05,hiss:.2,leak:.15,click:.03};
+function sfx(name){
+  if(!SND.ctx || !SND.sfxOn || SND.ctx.state!=='running') return;
+  const now=SND.ctx.currentTime, lim=THR[name]||0;
+  if(SND.last[name]!==undefined && now-SND.last[name]<lim) return;
+  SND.last[name]=now; try{ SFX[name](now+0.01); }catch(e){}
+}
+/* music: lyre melody on a Greek-sounding scale (D "hijaz") + bass + frame drum in battle */
+const MSCALE=[0,1,4,5,7,8,10], ROOT=146.83;
+let mNext=0, mStep=0, mDeg=7, mSeed=7;
+const mRnd=()=>{ mSeed=(mSeed*9301+49297)%233280; return mSeed/233280; };
+const degF=d=>{ const o=Math.floor(d/7), k=((d%7)+7)%7; return ROOT*Math.pow(2,o+MSCALE[k]/12); };
+function pluck(f,t,v){ osc('triangle',f,t,.9,v,0,SND.musG); osc('sine',f*2,t,.4,v*.3,0,SND.musG); }
+function drum(t,low){ osc('sine',low?90:160,t,low?.25:.1,low?.4:.15,low?45:90,SND.musG); noise(t,.06,low?.05:.08,'bandpass',low?300:1800,0,SND.musG); }
+function musicTick(){
+  const c=SND.ctx; if(!c || c.state!=='running' || !SND.musicOn) { if(c) mNext=c.currentTime+0.1; return; }
+  const battle = state==='play' && waveActive && !over && !won;
+  const spb=60/(battle?104:84)/2;
+  if(mNext<c.currentTime) mNext=c.currentTime+0.05;
+  while(mNext < c.currentTime+0.3){
+    const pos=mStep%16, bar=Math.floor(mStep/16)%4;
+    if(pos===0){ mDeg = bar===0 ? 7 : mDeg; }
+    const rhythm = battle ? [1,0,1,1,0,1,1,0,1,0,1,1,0,1,0,1] : [1,0,0,1,0,0,1,0,1,0,0,1,0,0,0,0];
+    if(rhythm[pos] && mRnd()<.9){
+      const steps=[-2,-1,-1,1,1,2,0]; mDeg=Math.max(3,Math.min(13,mDeg+steps[Math.floor(mRnd()*steps.length)]));
+      if(bar===3 && pos>=12) mDeg=7;
+      pluck(degF(mDeg), mNext, battle?.16:.13);
+    }
+    if(pos===0) pluck(degF(bar===2?4:0)/2, mNext, .22);
+    if(pos===8) pluck(degF(bar%2?4:0)/2, mNext, .16);
+    if(battle){ if(pos===0||pos===6||pos===10) drum(mNext,true); if(pos===4||pos===12||pos===14) drum(mNext,false); }
+    mNext+=spb; mStep++;
+  }
+}
+['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,audioInit,{passive:true}));
+document.addEventListener('visibilitychange',()=>{ if(!SND.ctx) return; if(document.hidden) SND.ctx.suspend(); else SND.ctx.resume(); });
+document.addEventListener('click',e=>{ if(e.target.closest && e.target.closest('button')) sfx('click'); });
+$('musBtn').onclick=()=>{ SND.musicOn=!SND.musicOn; saveAudio(); updateAudioBtns(); };
+$('sfxBtn').onclick=()=>{ SND.sfxOn=!SND.sfxOn; saveAudio(); updateAudioBtns(); };
+addEventListener('keydown',ev=>{ if(ev.key==='m'||ev.key==='M'){ const on=!(SND.musicOn||SND.sfxOn); SND.musicOn=SND.sfxOn=on; saveAudio(); updateAudioBtns(); msg(on?'Ήχος ενεργός':'Ήχος σε σίγαση'); } });
+updateAudioBtns();
 
 /* ================= BOOT ================= */
 loadMap(0); showWorld();
