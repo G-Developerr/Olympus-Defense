@@ -303,8 +303,8 @@ const lvlNum = i => `${chOf(i)+1}-${chLevels(chOf(i)).indexOf(i)+1}`;
 const DIFFS={
   easy:  {name:'Εύκολο',  hp:.75, spd:.9,  gold:350, lives:30, rew:1.2, d:'30 ζωές'},
   normal:{name:'Κανονικό',hp:1,   spd:1,   gold:250, lives:20, rew:1,   d:'Η κλασική εμπειρία'},
-  hard:  {name:'Δύσκολο', hp:1.35,spd:1.1, gold:200, lives:12, rew:.9,  d:'Γρήγορα, σκληρά τέρατα'},
-  legend:{name:'Θρυλικό', hp:1.55,spd:1.15,gold:200, lives:8,  rew:.85, d:'Μόνο για ημίθεους'}
+  hard:  {name:'Δύσκολο', hp:1.45,spd:1.1, gold:200, lives:12, rew:.9,  d:'Γρήγορα, σκληρά τέρατα'},
+  legend:{name:'Θρυλικό', hp:1.75,spd:1.15,gold:200, lives:8,  rew:.85, d:'Μόνο για ημίθεους'}
 };
 const DORDER=['easy','normal','hard','legend'];
 const TYPES={
@@ -418,24 +418,24 @@ function loadMap(i){
 /* ================= GAME LOGIC ================= */
 let endless=false, chal=false, hero=null, heroSel=false, killsCount=0;
 const SPECS={
-  apollo:    {A:['Ηλιακή Ριπή','Ρίχνει βέλη δύο φορές πιο γρήγορα'], B:['Φλεγόμενα Βέλη','Τα βέλη καίνε τον στόχο και κάνουν +20% ζημιά']},
-  artemis:   {A:['Κυνηγός Θηρίων','50% κριτικά χτυπήματα και διπλή ζημιά στα boss'], B:['Βροχή Βελών','Ρίχνει 3 βέλη σε 3 διαφορετικούς στόχους']},
-  zeus:      {A:['Καταιγίδα','Ο κεραυνός πηδάει σε 6 εχθρούς'], B:['Κεραυνοβόλος','Τριπλάσια ζημιά σε έναν στόχο και τον ζαλίζει']},
-  poseidon:  {A:['Παλίρροια','Πολύ πιο δυνατή επιβράδυνση και +25% εμβέλεια'], B:['Σεισμός','2,5× ζημιά και ζαλίζει τα τέρατα']},
-  athena:    {A:['Αιγίδα','Η αύρα δίνει +60% ζημιά και φτάνει πιο μακριά'], B:['Δόρυ του Πολέμου','2,5× ζημιά και διαπερνά θωράκιση']},
+  apollo:    {A:['Ηλιακή Ριπή','Ρίχνει βέλη 65% πιο γρήγορα'], B:['Φλεγόμενα Βέλη','Τα βέλη καίνε τον στόχο και κάνουν +10% ζημιά']},
+  artemis:   {A:['Κυνηγός Θηρίων','40% κριτικά χτυπήματα και +50% ζημιά στα boss'], B:['Βροχή Βελών','Ρίχνει 3 βέλη σε 3 διαφορετικούς στόχους']},
+  zeus:      {A:['Καταιγίδα','Ο κεραυνός πηδάει σε 6 εχθρούς'], B:['Κεραυνοβόλος','Διπλάσια ζημιά σε έναν στόχο και τον ζαλίζει']},
+  poseidon:  {A:['Παλίρροια','Πολύ πιο δυνατή επιβράδυνση και +25% εμβέλεια'], B:['Σεισμός','1,7× ζημιά και ζαλίζει τα τέρατα']},
+  athena:    {A:['Αιγίδα','Η αύρα δίνει +50% ζημιά και φτάνει πιο μακριά'], B:['Δόρυ του Πολέμου','1,8× ζημιά και διαπερνά θωράκιση']},
   hephaestus:{A:['Ηφαίστειο','Μεγαλύτερη έκρηξη και διπλό κάψιμο'], B:['Θραύση Πανοπλίας','Σπάει για πάντα τη θωράκιση των τεράτων']},
-  hades:     {A:['Κατάρα της Στυγός','Η κατάρα δίνει +60% ζημιά και πιάνει και γύρω'], B:['Ψυχοσυλλέκτης','Πιο γρήγορος, τα καταραμένα τέρατα δίνουν διπλό χρυσό']}
+  hades:     {A:['Κατάρα της Στυγός','Η κατάρα δίνει +45% ζημιά και πιάνει και γύρω'], B:['Ψυχοσυλλέκτης','Πιο γρήγορος, τα καταραμένα τέρατα δίνουν διπλό χρυσό']}
 };
 const SKILLS=[
-  {k:'dmg',   name:'Θεϊκή Δύναμη',          d:'+5% ζημιά σε όλους τους θεούς',                cost:[3,5,8]},
-  {k:'gold',  name:'Θησαυρός του Ολύμπου',  d:'+40 αρχικός χρυσός σε κάθε πίστα',             cost:[2,4,6]},
-  {k:'lives', name:'Τείχη του Ναού',        d:'+2 ζωές σε κάθε πίστα',                        cost:[2,4,6]},
-  {k:'cost',  name:'Ευλογία της Αθηνάς',    d:'Οι θεοί κοστίζουν 5% λιγότερο',                cost:[4,7]},
-  {k:'cd',    name:'Φτερά του Ερμή',        d:'Οι δυνάμεις φορτίζουν 10% πιο γρήγορα',        cost:[3,5,7]},
-  {k:'range', name:'Οξυμένα Βέλη',          d:'+10% εμβέλεια σε Απόλλωνα και Άρτεμη',         cost:[3,6]},
-  {k:'power', name:'Οργή των Θεών',         d:'+20% ζημιά από τις θεϊκές δυνάμεις',           cost:[4,7]},
-  {k:'hero',  name:'Δύναμη του Ηρακλή',     d:'+15% ζωή και ζημιά για τον Ηρακλή',            cost:[3,5,8]},
-  {k:'loot',  name:'Λάφυρα',                d:'+5% χρυσός από κάθε τέρας',                    cost:[4,8]}
+  {k:'dmg',   name:'Θεϊκή Δύναμη',          d:'+4% ζημιά σε όλους τους θεούς',                cost:[3,6,9]},
+  {k:'gold',  name:'Θησαυρός του Ολύμπου',  d:'+25 αρχικός χρυσός σε κάθε πίστα',             cost:[2,4,6]},
+  {k:'lives', name:'Τείχη του Ναού',        d:'+1 ζωή σε κάθε πίστα',                        cost:[2,4,6]},
+  {k:'cost',  name:'Ευλογία της Αθηνάς',    d:'Οι θεοί κοστίζουν 4% λιγότερο',                cost:[4,7]},
+  {k:'cd',    name:'Φτερά του Ερμή',        d:'Οι δυνάμεις φορτίζουν 7% πιο γρήγορα',        cost:[3,5,7]},
+  {k:'range', name:'Οξυμένα Βέλη',          d:'+7% εμβέλεια σε Απόλλωνα και Άρτεμη',         cost:[3,6]},
+  {k:'power', name:'Οργή των Θεών',         d:'+12% ζημιά από τις θεϊκές δυνάμεις',           cost:[4,7]},
+  {k:'hero',  name:'Δύναμη του Ηρακλή',     d:'+10% ζωή και ζημιά για τον Ηρακλή',            cost:[3,5,8]},
+  {k:'loot',  name:'Λάφυρα',                d:'+3% χρυσός από κάθε τέρας',                    cost:[4,8]}
 ];
 Object.assign(ENEMIES,{
   bird:    {hp:45,  speed:85, reward:9,  armor:0, flying:true},
@@ -448,7 +448,7 @@ const ENDLESS_BOSSES=['hydra','cerberus','dragon','lion','kronos'];
 
 const unlocked = ty => !!avail[ty];
 const SK = k => (save.skills && save.skills[k]) || 0;
-const costOf = ty => Math.round(TYPES[ty].cost*(1-0.05*SK('cost')));
+const costOf = ty => Math.round(TYPES[ty].cost*(1-0.04*SK('cost')));
 const maxWaves = () => endless ? Infinity : LEVELS[levelIdx].waves;
 const challenge = () => (chal && !endless) ? challengeFor(levelIdx) : null;
 const auraR = a => a.spec==='A' ? 140 : AURA;
@@ -469,45 +469,45 @@ function challengeFor(i){
 }
 function buffOf(tw){
   let b=1;
-  for(const a of towers) if(a.ty==='athena' && a!==tw && Math.hypot(a.x-tw.x,a.y-tw.y)<=auraR(a)) b=Math.max(b, a.spec==='A'?1.6:1.15+0.1*a.lvl);
+  for(const a of towers) if(a.ty==='athena' && a!==tw && Math.hypot(a.x-tw.x,a.y-tw.y)<=auraR(a)) b=Math.max(b, a.spec==='A'?1.5:1.15+0.1*a.lvl);
   return b;
 }
 function specMul(tw){
   switch(tw.spec ? tw.ty+tw.spec : ''){
-    case 'apolloA': return [1,.5,1];   case 'apolloB': return [1.2,1,1];
-    case 'artemisB': return [.85,1,1];
-    case 'zeusA': return [.9,1,1];     case 'zeusB': return [3,1.3,1];
-    case 'poseidonA': return [1,1,1.25]; case 'poseidonB': return [2.5,1,1];
-    case 'athenaB': return [2.5,1,1];
-    case 'hephaestusB': return [1.5,1,1];
+    case 'apolloA': return [1,.6,1];   case 'apolloB': return [1.1,1,1];
+    case 'artemisB': return [.65,1,1];
+    case 'zeusA': return [.9,1,1];     case 'zeusB': return [2,1.2,1];
+    case 'poseidonA': return [1,1,1.25]; case 'poseidonB': return [1.7,1,1];
+    case 'athenaB': return [1.8,1,1];
+    case 'hephaestusB': return [1.25,1,1];
     case 'hadesB': return [1,.8,1];
   }
   return [1,1,1];
 }
 function st(tw){
   const T=TYPES[tw.ty], m=specMul(tw), archer=tw.ty==='apollo'||tw.ty==='artemis';
-  return {range:T.range*(1+0.12*(tw.lvl-1))*m[2]*(archer?1+0.1*SK('range'):1),
-          dmg:T.dmg*Math.pow(1.5,tw.lvl-1)*buffOf(tw)*m[0]*(1+0.05*SK('dmg')),
+  return {range:T.range*(1+0.12*(tw.lvl-1))*m[2]*(archer?1+0.07*SK('range'):1),
+          dmg:T.dmg*Math.pow(1.5,tw.lvl-1)*buffOf(tw)*m[0]*(1+0.04*SK('dmg')),
           rate:T.rate*(tw.lvl>=3?0.85:1)*m[1]};
 }
-function baseStats(ty,l){ const T=TYPES[ty]; return {dmg:T.dmg*Math.pow(1.5,l-1)*(1+0.05*SK('dmg')), range:T.range*(1+0.12*(l-1)), rate:T.rate*(l>=3?0.85:1)}; }
+function baseStats(ty,l){ const T=TYPES[ty]; return {dmg:T.dmg*Math.pow(1.5,l-1)*(1+0.04*SK('dmg')), range:T.range*(1+0.12*(l-1)), rate:T.rate*(l>=3?0.85:1)}; }
 const canCallWave = () => state==='play' && !spawnQ.length && wave<maxWaves() && !over && !won;
 const earlyBonus = () => (nextT!==null && wave>0) ? Math.ceil(nextT*(1+wave*0.12)) : 0;
 function wcPos(){ const dx=GATE[0]<W/2?95:-95; return [Math.max(40,Math.min(W-40,GATE[0]+dx)), Math.max(40,Math.min(H-50,GATE[1]-50))]; }
-const upCost = tw => Math.round(costOf(tw.ty)*0.8*tw.lvl);
+const upCost = tw => Math.round(costOf(tw.ty)*0.8*tw.lvl*(tw.lvl>=2?1.25:1));
 
 /* ---------- hero: Heracles ---------- */
 function heroHome(){ const [ex,ey]=PATH[PATH.length-1], [px,py]=PATH[PATH.length-2], d=Math.hypot(ex-px,ey-py)||1; return [ex+(px-ex)/d*80, ey+(py-ey)/d*80]; }
 const heroNeed = l => 60+l*l*45;
-const heroMul = () => 1+0.15*SK('hero');
-function makeHero(){ const [x,y]=heroHome(), m=heroMul(); return {x,y,tx:x,ty:y,order:false,lvl:1,xp:0,hp:320*m,max:320*m,cd:0,dead:0,tgt:null,face:1,swing:0,walk:0}; }
-const heroDmg = () => 26*heroMul()*(1+0.25*(hero.lvl-1));
+const heroMul = () => 1+0.1*SK('hero');
+function makeHero(){ const [x,y]=heroHome(), m=heroMul(); return {x,y,tx:x,ty:y,order:false,lvl:1,xp:0,hp:270*m,max:270*m,cd:0,dead:0,tgt:null,face:1,swing:0,walk:0}; }
+const heroDmg = () => 20*heroMul()*(1+0.2*(hero.lvl-1));
 function heroGain(xp){
   if(!hero) return;
   hero.xp+=xp;
   while(hero.lvl<5 && hero.xp>=heroNeed(hero.lvl)){
     hero.xp-=heroNeed(hero.lvl); hero.lvl++;
-    hero.max=320*heroMul()*(1+0.25*(hero.lvl-1)); hero.hp=hero.max;
+    hero.max=270*heroMul()*(1+0.25*(hero.lvl-1)); hero.hp=hero.max;
     effects.push({k:'txt', x:hero.x, y:hero.y-50, life:1.3, max:1.3, txt:'ΗΡΑΚΛΗΣ ΕΠΙΠΕΔΟ '+hero.lvl+'!', c:'255,225,120', size:15});
     effects.push({k:'ring', x:hero.x, y:hero.y, r:40, life:.5, max:.5, c:'255,215,90'}); sfx('upgrade');
   }
@@ -552,8 +552,8 @@ function newGame(){
   avail={}; ORDER.forEach(ty=>avail[ty]=(endless || cl>=TYPES[ty].unlock) && !(C && C.gods && !C.gods.includes(ty)));
   availP={}; PORDER.forEach(k=>{ availP[k]=(endless || cl>=POWERS[k].unlock) && !(C && C.type==='noPowers'); pcd[k]=0; });
   casting=null; timers=[]; decals=[]; shake=0; flash=0; gateFlash=0;
-  gold=(endless?420:D.gold+(LEVELS[levelIdx].ch||0)*60)+40*SK('gold'); if(C && C.type==='poor') gold=Math.round(gold/2);
-  lives=maxLives=(C && C.type==='lives3') ? 3 : D.lives+2*SK('lives');
+  gold=(endless?420:D.gold+(LEVELS[levelIdx].ch||0)*60)+25*SK('gold'); if(C && C.type==='poor') gold=Math.round(gold/2);
+  lives=maxLives=(C && C.type==='lives3') ? 3 : D.lives+SK('lives');
   wave=0; killsCount=0;
   towers=[]; enemies=[]; bullets=[]; effects=[]; spawnQ=[]; spawnT=0;
   placing=null; selected=null; over=false; won=false; waveActive=false; banner=null; nextT=null; paidWave=0;
@@ -603,10 +603,10 @@ function startWave(){
 function spawn(ty){
   gateFlash=0.4;
   const E=ENEMIES[ty], D=DIFFS[endless?'normal':diffKey];
-  const k = endless ? (1+0.3*(wave-1))*(1+wave*wave*0.0025) : D.hp*LEVELS[levelIdx].hp*(1+0.28*(wave-1));
+  const k = endless ? (1+0.3*(wave-1))*(1+wave*wave*0.0025) : D.hp*LEVELS[levelIdx].hp*(1+0.3*(wave-1))*(1+0.01*levelIdx);
   const rw = endless ? (1+wave*0.02) : D.rew*(0.4+0.6*LEVELS[levelIdx].hp);
   enemies.push({ty, x:GATE[0], y:GATE[1], wp:1, frozen:0, curse:0, gaze:2+Math.random()*2, hp:E.hp*k, max:E.hp*k, speed:E.speed*D.spd,
-    reward:Math.max(1,Math.round(E.reward*rw*(1+0.05*SK('loot')))), armor:E.armor, regen:E.regen||0, boss:!!E.boss,
+    reward:Math.max(1,Math.round(E.reward*rw*(1+0.03*SK('loot')))), armor:E.armor, regen:E.regen||0, boss:!!E.boss,
     flying:!!E.flying, shade:!!E.shade, split:!!E.split, seen:false, held:0, stun:0,
     slow:0, slowMul:.5, burn:0, burnDps:0, prog:0, dead:false, ph:Math.random()*6});
 }
@@ -680,7 +680,7 @@ function updateTower(tw,dt){
       effects.push({k:'bolt', pts, life:0.2, max:0.2, w:sp==='B'?9:4}); break;
     }
     case 'poseidon':
-      inR.forEach(e=>{ hurt(e,s.dmg); if(sp==='B') e.stun=0.5; else { e.slow=sp==='A'?2:1.5; e.slowMul=sp==='A'?.3:.5; } });
+      inR.forEach(e=>{ hurt(e,s.dmg); if(sp==='B') e.stun=0.3; else { e.slow=sp==='A'?2:1.5; e.slowMul=sp==='A'?.3:.5; } });
       effects.push({k:'ring', x:tw.x, y:tw.y, r:s.range, life:0.45, max:0.45, c:sp==='B'?'190,140,80':'90,190,240'});
       if(sp==='B') shake=Math.max(shake,.08);
       break;
@@ -689,8 +689,8 @@ function updateTower(tw,dt){
     case 'artemis': {
       const targets = sp==='B' ? inR.slice(0,3) : [tg];
       targets.forEach(t2=>{
-        const crit=Math.random()<(sp==='A'?.5:.25);
-        bullets.push({kind:'silver', x:tw.x-14, y:tw.y-8, tg:t2, dmg:s.dmg*(crit?2.5:1)*(sp==='A' && t2.boss?2:1), crit, sp:620, a:0});
+        const crit=Math.random()<(sp==='A'?.4:.25);
+        bullets.push({kind:'silver', x:tw.x-14, y:tw.y-8, tg:t2, dmg:s.dmg*(crit?2.5:1)*(sp==='A' && t2.boss?1.5:1), crit, sp:620, a:0});
       });
       break;
     }
@@ -706,21 +706,21 @@ function bulletHit(b){
   const e=b.tg;
   if(b.kind==='fire'){
     const R=b.spec==='A'?85:55;
-    enemies.forEach(o=>{ if(!o.dead && !o.flying && Math.hypot(o.x-e.x,o.y-e.y)<=R){ hurt(o,b.dmg,true); o.burnDps=Math.max(o.burn>0?o.burnDps:0, b.dmg*(b.spec==='A'?1.2:0.6)); o.burn=3; if(b.spec==='B') o.armor=0; } });
+    enemies.forEach(o=>{ if(!o.dead && !o.flying && Math.hypot(o.x-e.x,o.y-e.y)<=R){ hurt(o,b.dmg,true); o.burnDps=Math.max(o.burn>0?o.burnDps:0, b.dmg*(b.spec==='A'?0.85:0.6)); o.burn=3; if(b.spec==='B') o.armor=0; } });
     effects.push({k:'ring', x:e.x, y:e.y, r:R, life:0.35, max:0.35, c:'255,130,40'});
   } else {
     if(b.kind==='soul'){
-      const cs = o=>{ o.curse=3; o.curseMul=b.spec==='A'?1.6:1.3; o.curseB=b.spec==='B'; };
+      const cs = o=>{ o.curse=3; o.curseMul=b.spec==='A'?1.45:1.3; o.curseB=b.spec==='B'; };
       cs(e); if(b.spec==='A') enemies.forEach(o=>{ if(!o.dead && o!==e && Math.hypot(o.x-e.x,o.y-e.y)<=60) cs(o); });
     }
-    if(b.burn){ e.burnDps=Math.max(e.burn>0?e.burnDps:0, b.dmg*0.8); e.burn=3; }
+    if(b.burn){ e.burnDps=Math.max(e.burn>0?e.burnDps:0, b.dmg*0.5); e.burn=3; }
     hurt(e,b.dmg,!!b.pierce);
     if(b.crit) effects.push({k:'txt', x:e.x, y:e.y-24, life:0.6, max:0.6, txt:'ΚΡΙΤΙΚΟ!', c:'220,235,255'});
   }
 }
 function cast(k,x,y){
-  const P=POWERS[k], m=(1+0.22*Math.max(0,wave-1))*(1+0.2*SK('power'));
-  pcd[k]=P.cd*(1-0.1*SK('cd')); casting=null;
+  const P=POWERS[k], m=(1+0.22*Math.max(0,wave-1))*(1+0.12*SK('power'));
+  pcd[k]=P.cd*(1-0.07*SK('cd')); casting=null;
   if(k==='meteor'){
     effects.push({k:'meteor', x, y, r:P.r, life:.6, max:.6}); sfx('whistle');
     timers.push({t:.6, fn:()=>{
@@ -1671,7 +1671,7 @@ function render(){
 ['skills','chal','story'].forEach(k=>{ if(!save[k]) save[k]={}; }); if(!save.lb) save.lb=[];
 const chalCount = () => Object.keys(save.chal).filter(k=>save.chal[k]).length;
 const spentStars = () => SKILLS.reduce((a,S)=>{ for(let i=0;i<SK(S.k);i++) a+=S.cost[i]; return a; },0);
-const starBank = () => totalStars()+chalCount()-spentStars();
+const starBank = () => Math.max(0, totalStars()+chalCount()-spentStars());
 const STORY=[
   {who:'zeus',   name:'Δίας',      text:'Οι πύλες του Τάρταρου άνοιξαν! Τέρατα ξεχύνονται από τα έγκατα της γης και βαδίζουν προς τον Όλυμπο. Θνητέ στρατηγέ, οι θεοί σε χρειάζονται. Στήσε μας στον δρόμο τους και μην αφήσεις κανένα να φτάσει στον ναό.'},
   {who:'athena', name:'Αθηνά',     text:'Ο Οδυσσέας χάθηκε στις θάλασσες και ο Ποσειδώνας οργίζεται. Χειρότερα, ο Κέρβερος δραπέτευσε από τον Άδη. Ακολούθησε το καράβι μέσα από νησιά γεμάτα κινδύνους και φέρε τον βασιλιά της Ιθάκης πίσω στην πατρίδα του.'},
@@ -1892,7 +1892,7 @@ function hud(){
   });
   document.querySelectorAll('#powerBtns .pb').forEach(b=>{
     if(b.classList.contains('locked')) return;
-    const k=b.dataset.p, c=pcd[k]||0, full=POWERS[k].cd*(1-0.1*SK('cd')), pct=c/full*100;
+    const k=b.dataset.p, c=pcd[k]||0, full=POWERS[k].cd*(1-0.07*SK('cd')), pct=c/full*100;
     b.disabled=c>0||over||won; b.classList.toggle('sel',casting===k);
     b.style.background = c>0 ? `linear-gradient(to top, #1a1420 ${pct}%, #3a2650 ${pct}%)` : '';
     b.querySelector('small').textContent = c>0 ? `${Math.ceil(c)}s` : tx(`Έτοιμο · ${POWERS[k].key}`);
@@ -2258,19 +2258,19 @@ const EN={
 'Πύρινο σφυρί: ζημιά σε περιοχή και κάψιμο, διαπερνά θωράκιση':'Fiery hammer: area damage and burning, pierces armor','Καταραμένες ψυχές: ο στόχος δέχεται +30% ζημιά από όλους για 3 δευτ.':'Cursed souls: the target takes +30% damage from everyone for 3 sec.',
 'Πέφτει στον δρόμο: τεράστια ζημιά σε περιοχή και κάψιμο':'Strikes the road: huge area damage and burning','Καταιγίδα από 7 κεραυνούς πάνω στον δρόμο':'A storm of 7 lightning bolts on the road','Παγώνει όλα τα τέρατα της περιοχής για 3 δευτερόλεπτα':'Freezes every monster in the area for 3 seconds',
 /* level-3 paths */
-'Ηλιακή Ριπή':'Solar Volley','Ρίχνει βέλη δύο φορές πιο γρήγορα':'Shoots arrows twice as fast','Φλεγόμενα Βέλη':'Flaming Arrows','Τα βέλη καίνε τον στόχο και κάνουν +20% ζημιά':'Arrows set targets ablaze and deal +20% damage',
-'Κυνηγός Θηρίων':'Beast Hunter','50% κριτικά χτυπήματα και διπλή ζημιά στα boss':'50% critical hits and double damage to bosses','Βροχή Βελών':'Arrow Rain','Ρίχνει 3 βέλη σε 3 διαφορετικούς στόχους':'Fires 3 arrows at 3 different targets',
-'Καταιγίδα':'Tempest','Ο κεραυνός πηδάει σε 6 εχθρούς':'Lightning chains to 6 enemies','Κεραυνοβόλος':'Thunderstrike','Τριπλάσια ζημιά σε έναν στόχο και τον ζαλίζει':'Triple damage to one target and stuns it',
-'Παλίρροια':'Tidal Surge','Πολύ πιο δυνατή επιβράδυνση και +25% εμβέλεια':'Much stronger slow and +25% range','Σεισμός':'Earthquake','2,5× ζημιά και ζαλίζει τα τέρατα':'2.5× damage and stuns monsters',
-'Αιγίδα':'Aegis','Η αύρα δίνει +60% ζημιά και φτάνει πιο μακριά':'Aura gives +60% damage and reaches further','Δόρυ του Πολέμου':'Spear of War','2,5× ζημιά και διαπερνά θωράκιση':'2.5× damage and pierces armor',
+'Ηλιακή Ριπή':'Solar Volley','Ρίχνει βέλη 65% πιο γρήγορα':'Shoots arrows 65% faster','Φλεγόμενα Βέλη':'Flaming Arrows','Τα βέλη καίνε τον στόχο και κάνουν +10% ζημιά':'Arrows set targets ablaze and deal +10% damage',
+'Κυνηγός Θηρίων':'Beast Hunter','40% κριτικά χτυπήματα και +50% ζημιά στα boss':'40% critical hits and +50% damage to bosses','Βροχή Βελών':'Arrow Rain','Ρίχνει 3 βέλη σε 3 διαφορετικούς στόχους':'Fires 3 arrows at 3 different targets',
+'Καταιγίδα':'Tempest','Ο κεραυνός πηδάει σε 6 εχθρούς':'Lightning chains to 6 enemies','Κεραυνοβόλος':'Thunderstrike','Διπλάσια ζημιά σε έναν στόχο και τον ζαλίζει':'Double damage to one target and stuns it',
+'Παλίρροια':'Tidal Surge','Πολύ πιο δυνατή επιβράδυνση και +25% εμβέλεια':'Much stronger slow and +25% range','Σεισμός':'Earthquake','1,7× ζημιά και ζαλίζει τα τέρατα':'1.7× damage and stuns monsters',
+'Αιγίδα':'Aegis','Η αύρα δίνει +50% ζημιά και φτάνει πιο μακριά':'Aura gives +50% damage and reaches further','Δόρυ του Πολέμου':'Spear of War','1,8× ζημιά και διαπερνά θωράκιση':'1.8× damage and pierces armor',
 'Ηφαίστειο':'Volcano','Μεγαλύτερη έκρηξη και διπλό κάψιμο':'Bigger blast and double burn','Θραύση Πανοπλίας':'Armor Breaker','Σπάει για πάντα τη θωράκιση των τεράτων':"Permanently shatters monsters' armor",
-'Κατάρα της Στυγός':'Curse of the Styx','Η κατάρα δίνει +60% ζημιά και πιάνει και γύρω':'Curse gives +60% damage and spreads around','Ψυχοσυλλέκτης':'Soul Reaper','Πιο γρήγορος, τα καταραμένα τέρατα δίνουν διπλό χρυσό':'Faster, and cursed monsters give double gold',
+'Κατάρα της Στυγός':'Curse of the Styx','Η κατάρα δίνει +45% ζημιά και πιάνει και γύρω':'Curse gives +45% damage and spreads around','Ψυχοσυλλέκτης':'Soul Reaper','Πιο γρήγορος, τα καταραμένα τέρατα δίνουν διπλό χρυσό':'Faster, and cursed monsters give double gold',
 /* skills */
-'Θεϊκή Δύναμη':'Divine Might','+5% ζημιά σε όλους τους θεούς':'+5% damage for all gods','Θησαυρός του Ολύμπου':'Treasure of Olympus','+40 αρχικός χρυσός σε κάθε πίστα':'+40 starting gold in every level',
-'Τείχη του Ναού':'Temple Walls','+2 ζωές σε κάθε πίστα':'+2 lives in every level','Ευλογία της Αθηνάς':"Athena's Blessing",'Οι θεοί κοστίζουν 5% λιγότερο':'Gods cost 5% less',
-'Φτερά του Ερμή':'Wings of Hermes','Οι δυνάμεις φορτίζουν 10% πιο γρήγορα':'Powers recharge 10% faster','Οξυμένα Βέλη':'Sharpened Arrows','+10% εμβέλεια σε Απόλλωνα και Άρτεμη':'+10% range for Apollo and Artemis',
-'Οργή των Θεών':'Wrath of the Gods','+20% ζημιά από τις θεϊκές δυνάμεις':'+20% damage from divine powers','Δύναμη του Ηρακλή':'Strength of Heracles','+15% ζωή και ζημιά για τον Ηρακλή':'+15% health and damage for Heracles',
-'Λάφυρα':'Spoils of War','+5% χρυσός από κάθε τέρας':'+5% gold from every monster',
+'Θεϊκή Δύναμη':'Divine Might','+4% ζημιά σε όλους τους θεούς':'+4% damage for all gods','Θησαυρός του Ολύμπου':'Treasure of Olympus','+25 αρχικός χρυσός σε κάθε πίστα':'+25 starting gold in every level',
+'Τείχη του Ναού':'Temple Walls','+1 ζωή σε κάθε πίστα':'+1 life in every level','Ευλογία της Αθηνάς':"Athena's Blessing",'Οι θεοί κοστίζουν 4% λιγότερο':'Gods cost 4% less',
+'Φτερά του Ερμή':'Wings of Hermes','Οι δυνάμεις φορτίζουν 7% πιο γρήγορα':'Powers recharge 7% faster','Οξυμένα Βέλη':'Sharpened Arrows','+7% εμβέλεια σε Απόλλωνα και Άρτεμη':'+7% range for Apollo and Artemis',
+'Οργή των Θεών':'Wrath of the Gods','+12% ζημιά από τις θεϊκές δυνάμεις':'+12% damage from divine powers','Δύναμη του Ηρακλή':'Strength of Heracles','+10% ζωή και ζημιά για τον Ηρακλή':'+10% health and damage for Heracles',
+'Λάφυρα':'Spoils of War','+3% χρυσός από κάθε τέρας':'+3% gold from every monster',
 /* challenges */
 'Χωρίς θεϊκές δυνάμεις':'No divine powers','Μόνο:':'Only:','Χωρίς αναβαθμίσεις θεών':'No god upgrades','Χωρίς τον Ηρακλή':'Without Heracles','Μισός αρχικός χρυσός':'Half starting gold','Μόνο 3 ζωές':'Only 3 lives',
 /* chapters & bosses */
