@@ -14,17 +14,28 @@ The game is written in plain JavaScript on an HTML5 Canvas, with no frameworks, 
 
 ## Features
 
-- **Campaign with 30 levels in 5 chapters.** The Olympus campaign, *The Odyssey*, *The Argonauts*, *The Labours of Heracles* and *The Titanomachy*. Each chapter has its own world map and unlocks when the previous one is cleared.
-- **7 gods to build and upgrade.** Some are unlocked as you progress through the campaign.
+- **Title screen and story.** An animated Olympus title screen, plus a short story on parchment with typewriter text at the start of every chapter and an epilogue at the end.
+- **Campaign with 30 levels in 5 chapters.** The chapters are the Olympus campaign, *The Odyssey*, *The Argonauts*, *The Labours of Heracles* and *The Titanomachy*. Each chapter has its own world map and unlocks when the previous one is cleared.
+- **7 gods to build and upgrade.** At level 3 each god branches into one of two specializations. For example, Zeus becomes either *Storm*, with a wider chain, or *Thunderbolt*, with heavy single-target strikes.
+- **A controllable hero.** Heracles fights on the road, blocks monsters, levels up and respawns when he falls.
 - **3 active powers:** Meteor, Wrath of Zeus and Boreas' Frost, cast directly onto the road.
-- **11 enemy types with their own mechanics.** Armored Talos, Medusa's petrifying gaze, the regenerating Hydra, Cerberus who enrages at half health, the fire-breathing Colchian Dragon, the near-invulnerable Nemean Lion, and Kronos, who summons Harpies mid-fight.
+- **14 enemy types with their own mechanics:**
+  - flying Stymphalian birds that only archers can hit;
+  - shades that stay invisible unless they are near Athena;
+  - Spartoi that split in two when they die;
+  - bosses such as Cerberus, the Hydra and Kronos.
+- **Skill tree.** Spend the stars you earn on permanent upgrades to damage, gold, lives, powers and the hero.
+- **Level challenges.** Each level has an optional rule, such as "no powers", "only certain gods" or "3 lives". Beating the level under that rule earns an extra star.
+- **Endless mode with a leaderboard.** Fight ever-stronger waves with bosses every 5 waves, then save your best runs.
+- **English and Greek.** Switch language at any time from the top bar.
 - **Wave timer with early-call bonus.** Call the next wave early for extra gold.
-- **Upgrade gods up to level 3** from an in-world popup.
 - **4 difficulty levels and a 3-star rating** for every level. Progress is saved locally.
 - **Responsive layout** that fills any screen and switches to a side panel in mobile landscape.
 - **Installable PWA.** Add it to your home screen for fullscreen, landscape play that also works offline.
-- **Procedural audio.** Lyre music on a Greek scale and sound effects for every god, power and boss, all synthesized live with the Web Audio API. Music and effects can each be switched off.
-- **Keyboard shortcuts:** `1`–`7` gods, `Q` `W` `E` powers, `U` upgrade, `Space` next wave, `P` pause, `M` mute.
+- **Procedural audio.** The music is an ancient-Greek-style choir chant over a drone, and every god, power and boss has its own sound effects. All of it is synthesized live with the Web Audio API, and music and effects can each be switched off.
+- **Keyboard shortcuts:**
+  - `1`–`7` gods, `Q` `W` `E` powers, `H` hero, `U` upgrade;
+  - `Space` next wave, `P` pause, `M` mute.
 
 ## Screenshots
 
@@ -39,9 +50,9 @@ The game is written in plain JavaScript on an HTML5 Canvas, with no frameworks, 
 | Language | Vanilla JavaScript (ES6+) |
 | Rendering | HTML5 Canvas 2D API, fully procedural graphics |
 | UI | HTML5 and CSS3 (Flexbox, `clamp()`, safe-area insets, media queries) |
-| Storage | `localStorage` for campaign progress and stars |
+| Storage | `localStorage` for progress, stars, skills and the leaderboard |
 | PWA | Web App Manifest and a network-first Service Worker |
-| Audio | Web Audio API, fully synthesized, no audio files |
+| Audio | Web Audio API, fully synthesized (formant choir, drone, SFX), no audio files |
 | APIs | Fullscreen API, Screen Orientation API, Pointer Events |
 | Hosting | Render (static site) |
 
