@@ -28,7 +28,7 @@
   #stage{flex:1;min-height:0;position:relative}
   canvas#c{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
   #dock{display:flex;flex-wrap:wrap;gap:6px;padding:6px 10px;background:#221c14;border-top:2px solid #5a4520;align-items:center}
-  #towerBtns,#powerBtns{display:flex;flex-wrap:wrap;gap:6px}
+  #towerBtns,#powerBtns,#heroBox{display:flex;flex-wrap:wrap;gap:6px}
   button{background:#2c241a;color:#f3e6c4;border:2px solid #8a6d2f;border-radius:8px;padding:6px 10px;font-family:inherit;font-size:clamp(11px,1.25vw,14px);cursor:pointer;touch-action:manipulation}
   button:hover:not(:disabled){border-color:#e8c46a}
   button.sel{background:#8a6d2f;color:#1b1712}
@@ -49,7 +49,7 @@
   #info{padding:4px 10px;font-size:clamp(11px,1.2vw,13px);color:#d9c89a;background:#1b1712;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:24px}
   body.side #mid{flex-direction:row}
   body.side #dock{flex-direction:column;flex-wrap:nowrap;width:168px;border-top:0;border-left:2px solid #5a4520;overflow-y:auto;align-items:stretch;padding:6px}
-  body.side #towerBtns,body.side #powerBtns{flex-direction:column;gap:4px}
+  body.side #towerBtns,body.side #powerBtns,body.side #heroBox{flex-direction:column;gap:4px}
   body.side .tb canvas{width:30px;height:30px}
   body.side #top{padding:3px 8px}
   body.side #title{display:none}
@@ -71,7 +71,44 @@
   .unlock small{color:#d9c89a}
   .gold{color:#e8c46a}
   button.off{opacity:.55;text-decoration:line-through}
-  #tpop{position:absolute;z-index:5;transform:translate(-50%,calc(-100% - 10px));background:rgba(34,28,20,.96);border:2px solid #e8c46a;border-radius:10px;padding:8px 10px;min-width:200px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.55)}
+  body.title .play, body.title #dock, body.title #info{display:none!important}
+  body:not(.title) .tonly{display:none!important}
+  #titleUI{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;z-index:4;width:max-content;max-width:94%}
+  #titleUI .big{font-size:clamp(20px,3.2vw,32px);padding:12px 60px;letter-spacing:4px;box-shadow:0 0 26px rgba(232,196,106,.65)}
+  #titleUI button{background:rgba(34,28,20,.88)}
+  #titleUI .primary{background:#c9a24a;color:#1b1712}
+  #titleUI button.lng.sel{background:#8a6d2f;color:#1b1712}
+  #titleUI .small{font-size:11px;opacity:.75;padding:4px 10px}
+  .trow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .box.wide{width:min(760px,100%)}
+  .box.parch{background:linear-gradient(#f3e6c2,#d9bf8a);border:4px double #7a5a2a;color:#3a2810}
+  .box.parch h2{color:#5a3a10;margin:0}
+  .box.parch p{color:#3a2810;font-size:clamp(15px,2vw,19px);line-height:1.6;text-align:left;min-height:7em;font-style:italic}
+  .box.parch button{background:#7a5a2a;color:#f3e6c4;border-color:#5a3a10}
+  .speaker{display:flex;align-items:center;gap:10px;justify-content:center}
+  .speaker canvas{width:64px;height:64px;background:#e9d7a8;border-radius:50%;border:2px solid #7a5a2a}
+  .skgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-top:10px;text-align:left}
+  .sk{background:#1f1912;border:1px solid #5a4520;border-radius:8px;padding:8px;font-size:12px;display:flex;flex-direction:column;gap:4px;color:#e2d4ae}
+  .sk b{color:#e8c46a;font-size:13px}
+  .sk .pips{color:#e8c46a;letter-spacing:3px}
+  .sk button{font-size:12px;padding:5px 6px;margin-top:auto}
+  .chalbox{border:1px dashed #9a6fd0;border-radius:8px;padding:8px;margin-top:10px;background:#241a30;font-size:14px}
+  .chalbox.on{border-style:solid;background:#3a2650;box-shadow:0 0 12px rgba(181,140,255,.4)}
+  .chalbox b{color:#d6b8ff}
+  .chalbox small{opacity:.8}
+  .chalbox button{margin-top:6px;border-color:#9a6fd0}
+  table.lb{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+  .lb td,.lb th{padding:4px 6px;border-bottom:1px solid #3a3020;text-align:left}
+  .lb th{color:#e8c46a}
+  input.nm{background:#1b1712;color:#f3e6c4;border:2px solid #8a6d2f;border-radius:6px;padding:6px 8px;font-family:inherit;font-size:14px;width:180px}
+  .hb{border-color:#7ccf5a}
+  .hb small{color:#9fe07a}
+  .tprow.specs{flex-direction:column;margin-top:2px}
+  #tpA,#tpB{text-align:left;font-weight:bold;line-height:1.25}
+  #tpA small,#tpB small{display:block;font-weight:normal;opacity:.85;font-size:11px}
+  #tpA{border-color:#2f6fd0;background:#1c2a44}
+  #tpB{border-color:#c0392b;background:#3a1c1c}
+  #tpop{position:absolute;z-index:5;max-width:280px;transform:translate(-50%,calc(-100% - 10px));background:rgba(34,28,20,.96);border:2px solid #e8c46a;border-radius:10px;padding:8px 10px;min-width:200px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.55)}
   #tpop[hidden]{display:none}
   #tpop:after{content:'';position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);border:8px solid transparent;border-top-color:#e8c46a;border-bottom:0}
   #tpop.below{transform:translate(-50%,10px)}
@@ -96,11 +133,12 @@
   body.side #dev{width:56px;height:56px;right:auto;left:calc(10px + env(safe-area-inset-left));bottom:calc(10px + env(safe-area-inset-bottom))}
 </style>
 </head>
-<body class="world">
+<body class="title">
 <div id="app">
   <div id="top">
     <span id="title">OLYMPUS DEFENSE</span>
     <span class="stat wonly">Αστέρια: <b id="totalStars"></b></span>
+    <span class="stat wonly">Προκλήσεις: <b id="chalStars"></b></span>
     <span class="stat play" id="lvlName"></span>
     <span class="stat play">Χρυσός: <b id="gold"></b></span>
     <span class="stat play">Ζωές: <b id="lives"></b></span>
@@ -109,19 +147,30 @@
     <button id="start" class="play">Έναρξη κύματος</button>
     <button id="speed" class="play">x1</button>
     <button id="pause" class="play">Παύση</button>
+    <button id="homeBtn" class="wonly">Αρχική</button>
     <button id="chPrev" class="wonly" aria-label="Προηγούμενο κεφάλαιο">◀</button>
     <button id="chBtn" class="wonly" disabled style="opacity:1"></button>
     <button id="chNext" class="wonly" aria-label="Επόμενο κεφάλαιο">▶</button>
-    <button id="resetSave" class="wonly">Νέα εκστρατεία</button>
+    <button id="skillBtn" class="wonly">Δεξιότητες</button>
+    <button id="storyBtn" class="wonly">Ιστορία</button>
     <button id="musBtn" title="Μουσική (M)">♪ Μουσική</button>
     <button id="sfxBtn" title="Ηχητικά εφέ">Εφέ</button>
+    <button id="langBtn" title="Language / Γλώσσα">EN</button>
     <button id="fs">Πλήρης οθόνη</button>
   </div>
   <div id="mid">
     <div id="stage"><canvas id="c"></canvas>
-      <div id="tpop" hidden><div id="tpInfo"></div><div class="tprow"><button id="tpSell"></button><button id="tpUp"></button></div></div>
+      <div id="tpop" hidden><div id="tpInfo"></div><div class="tprow"><button id="tpSell"></button><button id="tpUp"></button></div><div class="tprow specs"><button id="tpA" hidden></button><button id="tpB" hidden></button></div></div>
+      <div id="titleUI" class="tonly">
+        <button id="tPlay" class="primary big">ΠΑΙΞΕ</button>
+        <div class="trow"><button id="tEndless">Ατελείωτη Μάχη</button><button id="tSkills">Δεξιότητες</button></div>
+        <div class="trow"><button id="tLangGr" class="lng">Ελληνικά</button><button id="tLangEn" class="lng">English</button></div>
+        <button id="resetSave" class="small">Νέα εκστρατεία</button>
+      </div>
     </div>
     <div id="dock">
+      <div id="heroBox"></div>
+      <div class="sepv"></div>
       <div id="towerBtns"></div>
       <div class="sepv"></div>
       <div id="powerBtns"></div>
@@ -321,7 +370,7 @@ addEventListener('resize', resize);
 addEventListener('orientationchange', ()=>setTimeout(resize,200));
 const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement || null;
 function settle(){ [0,100,250,500,900,1500].forEach(d=>setTimeout(resize,d)); }
-function onFsChange(){ settle(); $('fs').textContent = fsEl() ? 'Έξοδος πλήρους οθόνης' : 'Πλήρης οθόνη'; }
+function onFsChange(){ settle(); $('fs').textContent = tx(fsEl() ? 'Έξοδος πλήρους οθόνης' : 'Πλήρης οθόνη'); }
 document.addEventListener('fullscreenchange', onFsChange);
 document.addEventListener('webkitfullscreenchange', onFsChange);
 if(window.visualViewport) visualViewport.addEventListener('resize', ()=>resize());
@@ -367,50 +416,182 @@ function loadMap(i){
   for(let k=0;k<700;k++) seaSpecks.push([-W*0.6+rnd()*W*2.2, -H*0.6+rnd()*H*2.2, rnd()]); }
 
 /* ================= GAME LOGIC ================= */
+let endless=false, chal=false, hero=null, heroSel=false, killsCount=0;
+const SPECS={
+  apollo:    {A:['Ηλιακή Ριπή','Ρίχνει βέλη δύο φορές πιο γρήγορα'], B:['Φλεγόμενα Βέλη','Τα βέλη καίνε τον στόχο και κάνουν +20% ζημιά']},
+  artemis:   {A:['Κυνηγός Θηρίων','50% κριτικά χτυπήματα και διπλή ζημιά στα boss'], B:['Βροχή Βελών','Ρίχνει 3 βέλη σε 3 διαφορετικούς στόχους']},
+  zeus:      {A:['Καταιγίδα','Ο κεραυνός πηδάει σε 6 εχθρούς'], B:['Κεραυνοβόλος','Τριπλάσια ζημιά σε έναν στόχο και τον ζαλίζει']},
+  poseidon:  {A:['Παλίρροια','Πολύ πιο δυνατή επιβράδυνση και +25% εμβέλεια'], B:['Σεισμός','2,5× ζημιά και ζαλίζει τα τέρατα']},
+  athena:    {A:['Αιγίδα','Η αύρα δίνει +60% ζημιά και φτάνει πιο μακριά'], B:['Δόρυ του Πολέμου','2,5× ζημιά και διαπερνά θωράκιση']},
+  hephaestus:{A:['Ηφαίστειο','Μεγαλύτερη έκρηξη και διπλό κάψιμο'], B:['Θραύση Πανοπλίας','Σπάει για πάντα τη θωράκιση των τεράτων']},
+  hades:     {A:['Κατάρα της Στυγός','Η κατάρα δίνει +60% ζημιά και πιάνει και γύρω'], B:['Ψυχοσυλλέκτης','Πιο γρήγορος, τα καταραμένα τέρατα δίνουν διπλό χρυσό']}
+};
+const SKILLS=[
+  {k:'dmg',   name:'Θεϊκή Δύναμη',          d:'+5% ζημιά σε όλους τους θεούς',                cost:[3,5,8]},
+  {k:'gold',  name:'Θησαυρός του Ολύμπου',  d:'+40 αρχικός χρυσός σε κάθε πίστα',             cost:[2,4,6]},
+  {k:'lives', name:'Τείχη του Ναού',        d:'+2 ζωές σε κάθε πίστα',                        cost:[2,4,6]},
+  {k:'cost',  name:'Ευλογία της Αθηνάς',    d:'Οι θεοί κοστίζουν 5% λιγότερο',                cost:[4,7]},
+  {k:'cd',    name:'Φτερά του Ερμή',        d:'Οι δυνάμεις φορτίζουν 10% πιο γρήγορα',        cost:[3,5,7]},
+  {k:'range', name:'Οξυμένα Βέλη',          d:'+10% εμβέλεια σε Απόλλωνα και Άρτεμη',         cost:[3,6]},
+  {k:'power', name:'Οργή των Θεών',         d:'+20% ζημιά από τις θεϊκές δυνάμεις',           cost:[4,7]},
+  {k:'hero',  name:'Δύναμη του Ηρακλή',     d:'+15% ζωή και ζημιά για τον Ηρακλή',            cost:[3,5,8]},
+  {k:'loot',  name:'Λάφυρα',                d:'+5% χρυσός από κάθε τέρας',                    cost:[4,8]}
+];
+Object.assign(ENEMIES,{
+  bird:    {hp:45,  speed:85, reward:9,  armor:0, flying:true},
+  shade:   {hp:95,  speed:58, reward:14, armor:0, shade:true},
+  spartos: {hp:150, speed:40, reward:12, armor:4, split:true},
+  spartlet:{hp:45,  speed:68, reward:3,  armor:0}
+});
+const HIT={harpy:6,cyclops:12,minotaur:20,talos:16,centaur:10,medusa:10,bird:0,shade:12,spartos:14,spartlet:6,hydra:40,cerberus:45,dragon:45,lion:50,kronos:60};
+const ENDLESS_BOSSES=['hydra','cerberus','dragon','lion','kronos'];
+
 const unlocked = ty => !!avail[ty];
+const SK = k => (save.skills && save.skills[k]) || 0;
+const costOf = ty => Math.round(TYPES[ty].cost*(1-0.05*SK('cost')));
+const maxWaves = () => endless ? Infinity : LEVELS[levelIdx].waves;
+const challenge = () => (chal && !endless) ? challengeFor(levelIdx) : null;
+const auraR = a => a.spec==='A' ? 140 : AURA;
+const visible = e => !e.shade || e.seen;
+const canHit = (tw,e) => !(e.flying && tw.ty!=='apollo' && tw.ty!=='artemis') && visible(e);
+function challengeFor(i){
+  const ch=LEVELS[i].ch||0, k=i%6, pool=ORDER.filter(ty=>TYPES[ty].unlock<=i);
+  if(k===0) return {type:'noPowers', d:'Χωρίς θεϊκές δυνάμεις'};
+  if(k===1) return {type:'maxTowers', n:7+ch, d:`Το πολύ ${7+ch} θεοί στον χάρτη`};
+  if(k===2){
+    const g=[pool.includes('artemis')?'artemis':'apollo','zeus', ch>=1?'athena':'poseidon'];
+    if(ch>=2 && pool.includes('hephaestus')) g.push('hephaestus');
+    return {type:'onlyGods', gods:g, d:'Μόνο: '+g.map(x=>TYPES[x].name).join(', ')};
+  }
+  if(k===3) return {type:'noUpgrades', d:'Χωρίς αναβαθμίσεις θεών'};
+  if(k===4) return ch%2 ? {type:'noHero', d:'Χωρίς τον Ηρακλή'} : {type:'poor', d:'Μισός αρχικός χρυσός'};
+  return {type:'lives3', d:'Μόνο 3 ζωές'};
+}
 function buffOf(tw){
   let b=1;
-  for(const a of towers) if(a.ty==='athena' && a!==tw && Math.hypot(a.x-tw.x,a.y-tw.y)<=AURA) b=Math.max(b,1.15+0.1*a.lvl);
+  for(const a of towers) if(a.ty==='athena' && a!==tw && Math.hypot(a.x-tw.x,a.y-tw.y)<=auraR(a)) b=Math.max(b, a.spec==='A'?1.6:1.15+0.1*a.lvl);
   return b;
 }
-function st(tw){
-  const T=TYPES[tw.ty];
-  return {range:T.range*(1+0.12*(tw.lvl-1)), dmg:T.dmg*Math.pow(1.5,tw.lvl-1)*buffOf(tw), rate:T.rate*(tw.lvl>=3?0.85:1)};
+function specMul(tw){
+  switch(tw.spec ? tw.ty+tw.spec : ''){
+    case 'apolloA': return [1,.5,1];   case 'apolloB': return [1.2,1,1];
+    case 'artemisB': return [.85,1,1];
+    case 'zeusA': return [.9,1,1];     case 'zeusB': return [3,1.3,1];
+    case 'poseidonA': return [1,1,1.25]; case 'poseidonB': return [2.5,1,1];
+    case 'athenaB': return [2.5,1,1];
+    case 'hephaestusB': return [1.5,1,1];
+    case 'hadesB': return [1,.8,1];
+  }
+  return [1,1,1];
 }
-function baseStats(ty,l){ const T=TYPES[ty]; return {dmg:T.dmg*Math.pow(1.5,l-1), range:T.range*(1+0.12*(l-1)), rate:T.rate*(l>=3?0.85:1)}; }
-const canCallWave = () => state==='play' && !spawnQ.length && wave<LEVELS[levelIdx].waves && !over && !won;
+function st(tw){
+  const T=TYPES[tw.ty], m=specMul(tw), archer=tw.ty==='apollo'||tw.ty==='artemis';
+  return {range:T.range*(1+0.12*(tw.lvl-1))*m[2]*(archer?1+0.1*SK('range'):1),
+          dmg:T.dmg*Math.pow(1.5,tw.lvl-1)*buffOf(tw)*m[0]*(1+0.05*SK('dmg')),
+          rate:T.rate*(tw.lvl>=3?0.85:1)*m[1]};
+}
+function baseStats(ty,l){ const T=TYPES[ty]; return {dmg:T.dmg*Math.pow(1.5,l-1)*(1+0.05*SK('dmg')), range:T.range*(1+0.12*(l-1)), rate:T.rate*(l>=3?0.85:1)}; }
+const canCallWave = () => state==='play' && !spawnQ.length && wave<maxWaves() && !over && !won;
 const earlyBonus = () => (nextT!==null && wave>0) ? Math.ceil(nextT*(1+wave*0.12)) : 0;
 function wcPos(){ const dx=GATE[0]<W/2?95:-95; return [Math.max(40,Math.min(W-40,GATE[0]+dx)), Math.max(40,Math.min(H-50,GATE[1]-50))]; }
-const upCost = tw => Math.round(TYPES[tw.ty].cost*0.8*tw.lvl);
+const upCost = tw => Math.round(costOf(tw.ty)*0.8*tw.lvl);
+
+/* ---------- hero: Heracles ---------- */
+function heroHome(){ const [ex,ey]=PATH[PATH.length-1], [px,py]=PATH[PATH.length-2], d=Math.hypot(ex-px,ey-py)||1; return [ex+(px-ex)/d*80, ey+(py-ey)/d*80]; }
+const heroNeed = l => 60+l*l*45;
+const heroMul = () => 1+0.15*SK('hero');
+function makeHero(){ const [x,y]=heroHome(), m=heroMul(); return {x,y,tx:x,ty:y,order:false,lvl:1,xp:0,hp:320*m,max:320*m,cd:0,dead:0,tgt:null,face:1,swing:0,walk:0}; }
+const heroDmg = () => 26*heroMul()*(1+0.25*(hero.lvl-1));
+function heroGain(xp){
+  if(!hero) return;
+  hero.xp+=xp;
+  while(hero.lvl<5 && hero.xp>=heroNeed(hero.lvl)){
+    hero.xp-=heroNeed(hero.lvl); hero.lvl++;
+    hero.max=320*heroMul()*(1+0.25*(hero.lvl-1)); hero.hp=hero.max;
+    effects.push({k:'txt', x:hero.x, y:hero.y-50, life:1.3, max:1.3, txt:'ΗΡΑΚΛΗΣ ΕΠΙΠΕΔΟ '+hero.lvl+'!', c:'255,225,120', size:15});
+    effects.push({k:'ring', x:hero.x, y:hero.y, r:40, life:.5, max:.5, c:'255,215,90'}); sfx('upgrade');
+  }
+}
+function updateHero(dt){
+  const h=hero; if(!h) return;
+  if(h.dead>0){
+    h.dead-=dt;
+    if(h.dead<=0){ const [x,y]=heroHome(); Object.assign(h,{x,y,tx:x,ty:y,order:false,hp:h.max,tgt:null}); effects.push({k:'ring', x, y, r:40, life:.6, max:.6, c:'255,215,90'}); }
+    return;
+  }
+  h.swing=Math.max(0,h.swing-dt); h.cd-=dt;
+  if(h.tgt && (h.tgt.dead || !visible(h.tgt) || Math.hypot(h.tgt.x-h.x,h.tgt.y-h.y)>110)) h.tgt=null;
+  if(!h.tgt && !h.order){
+    const c=enemies.filter(e=>!e.dead && !e.flying && visible(e) && Math.hypot(e.x-h.x,e.y-h.y)<80).sort((a,b)=>Math.hypot(a.x-h.x,a.y-h.y)-Math.hypot(b.x-h.x,b.y-h.y))[0];
+    if(c) h.tgt=c;
+  }
+  let gx=h.tx, gy=h.ty, stopAt=3;
+  if(h.tgt && !h.order){ gx=h.tgt.x; gy=h.tgt.y; stopAt=24; }
+  const dx=gx-h.x, dy=gy-h.y, d=Math.hypot(dx,dy);
+  if(d>stopAt){ const s=Math.min(d-stopAt,95*dt); h.x+=dx/d*s; h.y+=dy/d*s; h.face=dx<0?-1:1; h.walk+=dt; }
+  else if(h.order){ h.order=false; h.tx=h.x; h.ty=h.y; }
+  if(h.tgt && !h.order && d<=28){
+    const e=h.tgt;
+    if(!e.boss) e.held=0.15;
+    h.hp-=(HIT[e.ty]||8)*(1+0.06*Math.max(0,wave-1))*dt;
+    if(h.cd<=0){
+      h.cd=0.8; h.swing=0.25; sfx('club');
+      hurt(e,heroDmg());
+      if(e.dead) heroGain(e.reward*2);
+    }
+  } else if(!h.tgt) h.hp=Math.min(h.max,h.hp+h.max*0.04*dt);
+  if(h.hp<=0){
+    h.dead=12; h.tgt=null; h.order=false; heroSel=false;
+    effects.push({k:'puff', x:h.x, y:h.y, life:.8, max:.8, txt:'', big:true});
+    msg('Ο Ηρακλής έπεσε! Επιστρέφει σε 12 δευτερόλεπτα.'); sfx('leak');
+  }
+}
 
 function newGame(){
-  const D=DIFFS[diffKey], cl=levelsCleared();
-  avail={}; ORDER.forEach(ty=>avail[ty]=cl>=TYPES[ty].unlock);
-  availP={}; PORDER.forEach(k=>{ availP[k]=cl>=POWERS[k].unlock; pcd[k]=0; });
+  const D=DIFFS[endless?'normal':diffKey], cl=levelsCleared(), C=challenge();
+  avail={}; ORDER.forEach(ty=>avail[ty]=(endless || cl>=TYPES[ty].unlock) && !(C && C.gods && !C.gods.includes(ty)));
+  availP={}; PORDER.forEach(k=>{ availP[k]=(endless || cl>=POWERS[k].unlock) && !(C && C.type==='noPowers'); pcd[k]=0; });
   casting=null; timers=[]; decals=[]; shake=0; flash=0; gateFlash=0;
-  gold=D.gold+(LEVELS[levelIdx].ch||0)*60; lives=maxLives=D.lives; wave=0;
+  gold=(endless?420:D.gold+(LEVELS[levelIdx].ch||0)*60)+40*SK('gold'); if(C && C.type==='poor') gold=Math.round(gold/2);
+  lives=maxLives=(C && C.type==='lives3') ? 3 : D.lives+2*SK('lives');
+  wave=0; killsCount=0;
   towers=[]; enemies=[]; bullets=[]; effects=[]; spawnQ=[]; spawnT=0;
   placing=null; selected=null; over=false; won=false; waveActive=false; banner=null; nextT=null; paidWave=0;
+  hero=(C && C.type==='noHero') ? null : makeHero(); heroSel=false;
   buildButtons();
-  msg('Διάλεξε θεό από κάτω και πάτα πάνω στον χάρτη για να τον τοποθετήσεις. Μετά πάτα «Έναρξη κύματος».');
+  msg(C ? 'Πρόκληση: '+C.d+'.' : 'Διάλεξε θεό από κάτω και πάτα πάνω στον χάρτη για να τον τοποθετήσεις. Μετά πάτα «Έναρξη κύματος».');
+}
+function waveList(w,ch,L){
+  const q=[], n=6+w*2, tf=(L && L.talosFrom)||(ch>=2?3:6);
+  for(let i=0;i<n;i++){
+    const r=Math.random(); let ty;
+    if(w>=tf && r<0.10+w*0.01) ty='talos';
+    else if(w>=3 && r<0.28+w*0.02) ty='minotaur';
+    else if(r<0.62) ty='harpy';
+    else ty='cyclops';
+    if(ch>=1){ const r2=Math.random(); if(ty==='harpy' && r2<.45) ty='centaur'; else if((ty==='cyclops'||ty==='minotaur') && w>=3 && r2<.3) ty='medusa'; }
+    const r3=Math.random();
+    if(w>=3 && (ch>=1 || endless || levelIdx>=2) && r3<.1) ty='bird';
+    else if(w>=4 && ch>=1 && r3<.17) ty='shade';
+    else if(w>=3 && ch>=2 && r3<.26) ty='spartos';
+    q.push(ty);
+  }
+  return q;
 }
 function startWave(){
-  const L=LEVELS[levelIdx];
   if(!canCallWave() || !$('modal').hidden) return;
   const eb=earlyBonus();
   if(eb>0){ sfx('coin'); gold+=eb; const [x,y]=wcPos(); effects.push({k:'txt', x, y:y-34, life:1.4, max:1.4, txt:'+'+eb+' ΧΡΥΣΟΣ', c:'242,201,76', size:17}); }
   nextT=null; sfx('horn');
-  wave++; waveActive=true; spawnQ=[]; spawnT=0;
-  const n=6+wave*2, tf=L.talosFrom||(L.ch>=2?3:6);
-  for(let i=0;i<n;i++){
-    const r=Math.random(); let ty;
-    if(wave>=tf && r<0.10+wave*0.01) ty='talos';
-    else if(wave>=3 && r<0.28+wave*0.02) ty='minotaur';
-    else if(r<0.62) ty='harpy';
-    else ty='cyclops';
-    if(L.ch>=1){ const r2=Math.random(); if(ty==='harpy' && r2<.45) ty='centaur'; else if((ty==='cyclops'||ty==='minotaur') && wave>=3 && r2<.3) ty='medusa'; }
-    spawnQ.push(ty);
+  wave++; waveActive=true; spawnT=0;
+  if(endless){
+    spawnQ=waveList(wave, Math.min(4,Math.floor((wave-1)/4)), null);
+    if(wave%5===0){ const bs=ENDLESS_BOSSES[(wave/5-1)%5]; spawnQ.push(bs); if(wave>=25) spawnQ.push(ENDLESS_BOSSES[(wave/5)%5]); showBanner(BOSS_IN[bs]||'Η ΛΕΡΝΑΙΑ ΥΔΡΑ ΕΡΧΕΤΑΙ!'); }
+    msg(`Κύμα ${wave}: ${spawnQ.length} τέρατα έρχονται!` + (eb?` Γρήγορο κάλεσμα: +${eb} χρυσός`:''));
+    return;
   }
+  const L=LEVELS[levelIdx];
+  spawnQ=waveList(wave, L.ch||0, L);
   const bk=CHAPTERS[L.ch||0].bossKey;
   if(bk && wave===L.waves){ spawnQ.push(bk); showBanner(BOSS_IN[bk]); }
   else if(wave%5===0 || wave===L.waves){
@@ -421,14 +602,18 @@ function startWave(){
 }
 function spawn(ty){
   gateFlash=0.4;
-  const E=ENEMIES[ty], D=DIFFS[diffKey], k=D.hp*LEVELS[levelIdx].hp*(1+0.28*(wave-1));
+  const E=ENEMIES[ty], D=DIFFS[endless?'normal':diffKey];
+  const k = endless ? (1+0.3*(wave-1))*(1+wave*wave*0.0025) : D.hp*LEVELS[levelIdx].hp*(1+0.28*(wave-1));
+  const rw = endless ? (1+wave*0.02) : D.rew*(0.4+0.6*LEVELS[levelIdx].hp);
   enemies.push({ty, x:GATE[0], y:GATE[1], wp:1, frozen:0, curse:0, gaze:2+Math.random()*2, hp:E.hp*k, max:E.hp*k, speed:E.speed*D.spd,
-    reward:Math.max(1,Math.round(E.reward*D.rew*(0.4+0.6*LEVELS[levelIdx].hp))), armor:E.armor, regen:E.regen||0, boss:!!E.boss,
-    slow:0, burn:0, burnDps:0, prog:0, dead:false, ph:Math.random()*6});
+    reward:Math.max(1,Math.round(E.reward*rw*(1+0.05*SK('loot')))), armor:E.armor, regen:E.regen||0, boss:!!E.boss,
+    flying:!!E.flying, shade:!!E.shade, split:!!E.split, seen:false, held:0, stun:0,
+    slow:0, slowMul:.5, burn:0, burnDps:0, prog:0, dead:false, ph:Math.random()*6});
 }
 function moveEnemy(e,dt){
-  const sp=e.frozen>0?0:e.speed*(e.slow>0?0.5:1)*((e.ty==='cerberus'||e.ty==='kronos')&&e.hp<e.max*.5?1.5:1);
-  e.slow-=dt; if(e.frozen>0) e.frozen-=dt; if(e.curse>0) e.curse-=dt;
+  let sp=(e.frozen>0||e.stun>0)?0:e.speed*(e.slow>0?e.slowMul:1)*((e.ty==='cerberus'||e.ty==='kronos')&&e.hp<e.max*.5?1.5:1);
+  if(e.held>0){ e.held-=dt; sp=0; }
+  e.slow-=dt; if(e.frozen>0) e.frozen-=dt; if(e.stun>0) e.stun-=dt; if(e.curse>0) e.curse-=dt;
   if((e.ty==='medusa'||e.ty==='dragon') && !(e.frozen>0)){
     const drg=e.ty==='dragon', RG=drg?160:130;
     e.gaze-=dt;
@@ -458,13 +643,18 @@ function moveEnemy(e,dt){
 }
 function hurt(e,d,pierce){
   if(e.dead) return;
-  if(e.curse>0) d*=1.3;
+  if(e.curse>0) d*=(e.curseMul||1.3);
   if(!pierce && e.armor) d=Math.max(d*0.25, d-e.armor);
   e.hp-=d;
   if(e.hp<=0){
-    e.dead=true; gold+=e.reward; sfx(e.boss?'bossdie':'die');
-    effects.push({k:'puff', x:e.x, y:e.y, life:0.7, max:0.7, txt:'+'+e.reward, big:e.boss});
+    e.dead=true; killsCount++;
+    const rw=e.reward*(e.curse>0 && e.curseB ? 2 : 1); gold+=rw; sfx(e.boss?'bossdie':'die');
+    effects.push({k:'puff', x:e.x, y:e.y, life:0.7, max:0.7, txt:'+'+rw, big:e.boss});
     if(e.boss) showBanner(BOSS_DOWN[e.ty]||'Boss νικήθηκε!');
+    if(e.split){
+      for(let q=0;q<2;q++){ spawn('spartlet'); const m=enemies[enemies.length-1]; m.x=e.x+(q?10:-10); m.y=e.y+(q?6:-6); m.wp=e.wp; m.prog=e.prog-q*8; }
+      effects.push({k:'ring', x:e.x, y:e.y, r:30, life:.35, max:.35, c:'200,160,90'});
+    }
   }
 }
 function updateTower(tw,dt){
@@ -472,58 +662,69 @@ function updateTower(tw,dt){
   if(tw.stone>0){ tw.stone-=dt; return; }
   tw.cd-=dt; if(tw.cd>0) return;
   const s=st(tw);
-  const inR=enemies.filter(e=>!e.dead && Math.hypot(e.x-tw.x,e.y-tw.y)<=s.range).sort((a,b)=>b.prog-a.prog);
+  const inR=enemies.filter(e=>!e.dead && canHit(tw,e) && Math.hypot(e.x-tw.x,e.y-tw.y)<=s.range).sort((a,b)=>b.prog-a.prog);
   if(!inR.length) return;
   tw.cd=s.rate; tw.flash=0.18; sfx('fire_'+tw.ty);
-  const tg=inR[0];
+  const tg=inR[0], sp=tw.spec;
   switch(tw.ty){
     case 'zeus': {
-      const hits=[tg];
-      for(let k=0;k<2;k++){
+      const hits=[tg], chain = sp==='B' ? 0 : sp==='A' ? 5 : 2, reach = sp==='A' ? 120 : 95;
+      for(let k=0;k<chain;k++){
         const cur=hits[hits.length-1];
-        const nx=enemies.filter(e=>!e.dead && !hits.includes(e) && Math.hypot(e.x-cur.x,e.y-cur.y)<95)
+        const nx=enemies.filter(e=>!e.dead && canHit(tw,e) && !hits.includes(e) && Math.hypot(e.x-cur.x,e.y-cur.y)<reach)
           .sort((a,b)=>Math.hypot(a.x-cur.x,a.y-cur.y)-Math.hypot(b.x-cur.x,b.y-cur.y))[0];
         if(nx) hits.push(nx); else break;
       }
       const pts=[[tw.x+18,tw.y-24]];
-      hits.forEach((e,i)=>{ pts.push([e.x,e.y]); hurt(e,s.dmg*(i?0.6:1),true); });
-      effects.push({k:'bolt', pts, life:0.2, max:0.2}); break;
+      hits.forEach((e,i)=>{ pts.push([e.x,e.y]); hurt(e,s.dmg*(i?0.6:1),true); if(sp==='B') e.stun=0.4; });
+      effects.push({k:'bolt', pts, life:0.2, max:0.2, w:sp==='B'?9:4}); break;
     }
     case 'poseidon':
-      inR.forEach(e=>{ hurt(e,s.dmg); e.slow=1.5; });
-      effects.push({k:'ring', x:tw.x, y:tw.y, r:s.range, life:0.45, max:0.45, c:'90,190,240'}); break;
+      inR.forEach(e=>{ hurt(e,s.dmg); if(sp==='B') e.stun=0.5; else { e.slow=sp==='A'?2:1.5; e.slowMul=sp==='A'?.3:.5; } });
+      effects.push({k:'ring', x:tw.x, y:tw.y, r:s.range, life:0.45, max:0.45, c:sp==='B'?'190,140,80':'90,190,240'});
+      if(sp==='B') shake=Math.max(shake,.08);
+      break;
     case 'apollo':
-      bullets.push({kind:'arrow', x:tw.x-14, y:tw.y-8, tg, dmg:s.dmg, sp:480, a:0}); break;
+      bullets.push({kind:'arrow', x:tw.x-14, y:tw.y-8, tg, dmg:s.dmg, sp:480, a:0, burn:sp==='B'}); break;
     case 'artemis': {
-      const crit=Math.random()<0.25;
-      bullets.push({kind:'silver', x:tw.x-14, y:tw.y-8, tg, dmg:s.dmg*(crit?2.5:1), crit, sp:620, a:0}); break;
+      const targets = sp==='B' ? inR.slice(0,3) : [tg];
+      targets.forEach(t2=>{
+        const crit=Math.random()<(sp==='A'?.5:.25);
+        bullets.push({kind:'silver', x:tw.x-14, y:tw.y-8, tg:t2, dmg:s.dmg*(crit?2.5:1)*(sp==='A' && t2.boss?2:1), crit, sp:620, a:0});
+      });
+      break;
     }
     case 'athena':
-      bullets.push({kind:'spear', x:tw.x+14, y:tw.y-20, tg, dmg:s.dmg, sp:420, a:0}); break;
+      bullets.push({kind:'spear', x:tw.x+14, y:tw.y-20, tg, dmg:s.dmg, sp:420, a:0, pierce:sp==='B'}); break;
     case 'hades':
-      bullets.push({kind:'soul', x:tw.x+14, y:tw.y-20, tg, dmg:s.dmg, sp:360, a:0}); break;
+      bullets.push({kind:'soul', x:tw.x+14, y:tw.y-20, tg, dmg:s.dmg, sp:360, a:0, spec:sp}); break;
     case 'hephaestus':
-      bullets.push({kind:'fire', x:tw.x+14, y:tw.y-18, tg, dmg:s.dmg, sp:330, a:0}); break;
+      bullets.push({kind:'fire', x:tw.x+14, y:tw.y-18, tg, dmg:s.dmg, sp:330, a:0, spec:sp}); break;
   }
 }
 function bulletHit(b){
   const e=b.tg;
   if(b.kind==='fire'){
-    enemies.forEach(o=>{ if(!o.dead && Math.hypot(o.x-e.x,o.y-e.y)<=55){ hurt(o,b.dmg,true); o.burnDps=Math.max(o.burn>0?o.burnDps:0, b.dmg*0.6); o.burn=3; } });
-    effects.push({k:'ring', x:e.x, y:e.y, r:55, life:0.35, max:0.35, c:'255,130,40'});
+    const R=b.spec==='A'?85:55;
+    enemies.forEach(o=>{ if(!o.dead && !o.flying && Math.hypot(o.x-e.x,o.y-e.y)<=R){ hurt(o,b.dmg,true); o.burnDps=Math.max(o.burn>0?o.burnDps:0, b.dmg*(b.spec==='A'?1.2:0.6)); o.burn=3; if(b.spec==='B') o.armor=0; } });
+    effects.push({k:'ring', x:e.x, y:e.y, r:R, life:0.35, max:0.35, c:'255,130,40'});
   } else {
-    if(b.kind==='soul') e.curse=3;
-    hurt(e,b.dmg);
+    if(b.kind==='soul'){
+      const cs = o=>{ o.curse=3; o.curseMul=b.spec==='A'?1.6:1.3; o.curseB=b.spec==='B'; };
+      cs(e); if(b.spec==='A') enemies.forEach(o=>{ if(!o.dead && o!==e && Math.hypot(o.x-e.x,o.y-e.y)<=60) cs(o); });
+    }
+    if(b.burn){ e.burnDps=Math.max(e.burn>0?e.burnDps:0, b.dmg*0.8); e.burn=3; }
+    hurt(e,b.dmg,!!b.pierce);
     if(b.crit) effects.push({k:'txt', x:e.x, y:e.y-24, life:0.6, max:0.6, txt:'ΚΡΙΤΙΚΟ!', c:'220,235,255'});
   }
 }
 function cast(k,x,y){
-  const P=POWERS[k], m=1+0.22*Math.max(0,wave-1);
-  pcd[k]=P.cd; casting=null;
+  const P=POWERS[k], m=(1+0.22*Math.max(0,wave-1))*(1+0.2*SK('power'));
+  pcd[k]=P.cd*(1-0.1*SK('cd')); casting=null;
   if(k==='meteor'){
     effects.push({k:'meteor', x, y, r:P.r, life:.6, max:.6}); sfx('whistle');
     timers.push({t:.6, fn:()=>{
-      enemies.forEach(e=>{ const d=Math.hypot(e.x-x,e.y-y); if(!e.dead && d<=P.r){ hurt(e,140*m*(d<P.r*.5?1:.6),true); e.burnDps=Math.max(e.burn>0?e.burnDps:0,12*m); e.burn=4; } });
+      enemies.forEach(e=>{ const d=Math.hypot(e.x-x,e.y-y); if(!e.dead && !e.flying && d<=P.r){ hurt(e,140*m*(d<P.r*.5?1:.6),true); e.burnDps=Math.max(e.burn>0?e.burnDps:0,12*m); e.burn=4; } });
       effects.push({k:'boom', x, y, r:P.r, life:.6, max:.6});
       decals.push({x, y, r:P.r*.6, life:9, max:9, glow:true});
       for(let i=0;i<18;i++){ const a=Math.random()*Math.PI*2, v=120+Math.random()*220;
@@ -556,9 +757,11 @@ function cast(k,x,y){
 function update(dt){
   t+=dt;
   if(spawnQ.length){ spawnT-=dt; if(spawnT<=0){ spawn(spawnQ.shift()); spawnT=0.75;
-    if(!spawnQ.length && wave<LEVELS[levelIdx].waves){ nextMax=Math.min(35,Math.round(16+wave*1.5+(LEVELS[levelIdx].ch?4:0))); nextT=nextMax; } } }
+    if(!spawnQ.length && wave<maxWaves()){ nextMax=Math.min(endless?30:35,Math.round(16+wave*1.5+(!endless && LEVELS[levelIdx].ch?4:0))); nextT=nextMax; } } }
   if(nextT!==null){ nextT-=dt; if(nextT<=0){ nextT=0; startWave(); } }
+  for(const e of enemies) if(e.shade) e.seen=towers.some(a=>a.ty==='athena' && !(a.stone>0) && Math.hypot(a.x-e.x,a.y-e.y)<=auraR(a));
   enemies.forEach(e=>moveEnemy(e,dt));
+  updateHero(dt);
   towers.forEach(tw=>updateTower(tw,dt));
   bullets.forEach(b=>{
     const e=b.tg; if(e.dead){ b.done=true; return; }
@@ -577,9 +780,9 @@ function update(dt){
   if(lives<=0 && !over){ lives=0; over=true; onLose(); return; }
   if(waveActive && !spawnQ.length && !enemies.length){
     waveActive=false;
-    let bonus=0; while(paidWave<wave){ paidWave++; bonus+=20+paidWave*5; } gold+=bonus;
+    let bonus=0; while(paidWave<wave){ paidWave++; bonus+=20+paidWave*5; } gold+=bonus; heroGain(15);
     msg(`Κύμα ${wave} καθαρίστηκε! +${bonus} χρυσός` + (nextT!==null?` · Κάλεσε το επόμενο τώρα για extra χρυσό!`:''));
-    if(wave>=LEVELS[levelIdx].waves){ won=true; onWin(); }
+    if(!endless && wave>=maxWaves()){ won=true; onWin(); }
   }
 }
 function showBanner(txt){ banner={txt, life:3}; sfx('gong'); }
@@ -1003,6 +1206,34 @@ function drawEnemy(e){
       if(rage){ ctx.fillStyle=`rgba(255,120,30,${.6+.4*Math.sin(t*12+i)})`; ctx.beginPath(); ctx.arc(0,13+Math.abs(Math.sin(t*6+i))*4,1.8,0,Math.PI*2); ctx.fill(); }
       ctx.restore();
     });
+  } else if(e.ty==='bird'){
+    ctx.translate(0,-26+b*3);
+    ctx.fillStyle='#8a6a3a'; ctx.strokeStyle='#5a4220'; ctx.lineWidth=1;
+    [-1,1].forEach(s2=>{ ctx.save(); ctx.scale(s2,1); ctx.rotate(-0.3+b*0.6);
+      ctx.beginPath(); ctx.moveTo(3,0); ctx.lineTo(24,-10); ctx.lineTo(20,-3); ctx.lineTo(27,0); ctx.lineTo(18,3); ctx.lineTo(22,7); ctx.lineTo(3,5); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeStyle='#d9b45a'; ctx.beginPath(); ctx.moveTo(8,1); ctx.lineTo(20,-5); ctx.stroke(); ctx.restore(); });
+    ctx.fillStyle='#b8863b'; ctx.beginPath(); ctx.ellipse(0,2,6,9,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#c99a4a'; ctx.beginPath(); ctx.arc(0,-8,5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#e8c46a'; ctx.beginPath(); ctx.moveTo(-2,-6); ctx.lineTo(0,0); ctx.lineTo(2,-6); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#ff4a3a'; ctx.beginPath(); ctx.arc(-2,-9,1.2,0,Math.PI*2); ctx.arc(2,-9,1.2,0,Math.PI*2); ctx.fill();
+  } else if(e.ty==='shade'){
+    ctx.globalAlpha = e.seen ? 1 : .15+.06*Math.sin(t*5+e.ph);
+    ctx.translate(0,Math.sin(t*3+e.ph)*2-4);
+    const sg=ctx.createLinearGradient(0,-22,0,18); sg.addColorStop(0,'#3a2a4a'); sg.addColorStop(1,'rgba(30,20,40,0)');
+    ctx.fillStyle=sg; ctx.beginPath(); ctx.moveTo(-12,-6); ctx.quadraticCurveTo(0,-28,12,-6); ctx.lineTo(14,16); ctx.lineTo(7,10); ctx.lineTo(2,18); ctx.lineTo(-4,10); ctx.lineTo(-10,17); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#1a1222'; ctx.beginPath(); ctx.arc(0,-10,7,0,Math.PI*2); ctx.fill();
+    ctx.save(); ctx.shadowColor='#7fe0ff'; ctx.shadowBlur=8; ctx.fillStyle='#9ff0ff'; ctx.beginPath(); ctx.arc(-2.5,-10,1.6,0,Math.PI*2); ctx.arc(2.5,-10,1.6,0,Math.PI*2); ctx.fill(); ctx.restore();
+  } else if(e.ty==='spartos'||e.ty==='spartlet'){
+    const k2=e.ty==='spartlet'?.7:1; ctx.scale(k2,k2); ctx.translate(0,Math.abs(b)*-1.5);
+    ctx.fillStyle='#8a6a3a'; ctx.fillRect(-6,8,4,9); ctx.fillRect(2,8,4,9);
+    ctx.strokeStyle='#6b4a2a'; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(10,14); ctx.lineTo(12,-28); ctx.stroke();
+    ctx.fillStyle='#d8dde4'; ctx.beginPath(); ctx.moveTo(12,-34); ctx.lineTo(9.5,-26); ctx.lineTo(14.5,-26); ctx.closePath(); ctx.fill();
+    ctx.fillStyle='#b8863b'; ctx.fillRect(-8,-6,16,14); ctx.fillStyle='#7a3a2a'; ctx.fillRect(-8,6,16,4);
+    ctx.fillStyle='#a8322a'; ctx.beginPath(); ctx.arc(-8,2,9,0,Math.PI*2); ctx.fill(); ctx.strokeStyle='#e8c46a'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#e8c46a'; ctx.beginPath(); ctx.arc(-8,2,2.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#c99a4a'; ctx.beginPath(); ctx.arc(0,-12,6.5,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#a8322a'; ctx.beginPath(); ctx.ellipse(0,-19,7,3,0,Math.PI,0); ctx.fill();
+    ctx.fillStyle='#2a1a10'; ctx.fillRect(-3.5,-13,7,2.2);
   } else if(e.ty==='dragon'){
     const fl=Math.sin(t*6+e.ph);
     ctx.translate(0,-4+fl*2);
@@ -1054,7 +1285,7 @@ function drawEnemy(e){
     ctx.fillStyle='rgba(255,255,255,.65)'; ctx.fillRect(-s*.6,-s*.7,s*.25,s*.9); }
   if(e.burn>0){ ctx.fillStyle='rgba(255,120,30,.8)'; for(let i=0;i<3;i++){ ctx.beginPath(); ctx.arc(-8+i*8,-16-Math.abs(Math.sin(t*10+i))*6,2.5,0,Math.PI*2); ctx.fill(); } }
   ctx.restore();
-  if(e.hp<e.max || e.boss){
+  if((e.hp<e.max || e.boss) && visible(e)){
     const w=e.boss?60:28, p=Math.max(0,e.hp/e.max), yy=e.boss?e.y-46:e.y-34;
     ctx.fillStyle='#2a1a12'; ctx.fillRect(e.x-w/2,yy,w,e.boss?6:4);
     ctx.fillStyle=p>.5?'#7ccf5a':p>.25?'#e8c046':'#e0513c'; ctx.fillRect(e.x-w/2,yy,w*p,e.boss?6:4);
@@ -1166,15 +1397,93 @@ function drawStone(tw){
   ctx.moveTo(tw.x-6,tw.y-30); ctx.lineTo(tw.x-1,tw.y-18); ctx.lineTo(tw.x-5,tw.y-8); ctx.moveTo(tw.x+7,tw.y-20); ctx.lineTo(tw.x+2,tw.y-2); ctx.stroke();
   ctx.restore();
 }
+function drawHeroFig(x,y,face,swing,walk,alpha){
+  ctx.save(); ctx.globalAlpha=alpha; ctx.translate(x,y);
+  ctx.fillStyle='rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(2,18,14,5,0,0,Math.PI*2); ctx.fill();
+  ctx.translate(0,Math.sin(walk*12)*1.5); ctx.scale(face,1);
+  ctx.fillStyle='#b8862e'; ctx.beginPath(); ctx.moveTo(-9,-15); ctx.lineTo(8,-15); ctx.lineTo(11,13); ctx.lineTo(-13,13); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#c98d58'; ctx.fillRect(-6,8,5,10); ctx.fillRect(1,8,5,10);
+  ctx.fillStyle='#d99a64'; ctx.beginPath(); ctx.ellipse(0,-2,8,11,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#7a4a2a'; ctx.fillRect(-8,4,16,6);
+  ctx.fillStyle='#d99a64'; ctx.beginPath(); ctx.arc(-9,-3,3.2,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(0,-17,6,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#3a2410'; ctx.beginPath(); ctx.arc(0,-15,5.5,0.15*Math.PI,0.85*Math.PI); ctx.fill();
+  ctx.fillStyle='#8a5a1f'; for(let i=0;i<7;i++){ const a=Math.PI*(0.9+i*0.2); ctx.beginPath(); ctx.arc(Math.cos(a)*9,-18+Math.sin(a)*9,3,0,Math.PI*2); ctx.fill(); }
+  ctx.fillStyle='#c8963e'; ctx.beginPath(); ctx.arc(0,-19,8,Math.PI*1.05,Math.PI*1.95); ctx.fill();
+  ctx.fillStyle='#3a2410'; ctx.beginPath(); ctx.arc(-2.5,-17,1,0,Math.PI*2); ctx.arc(2.5,-17,1,0,Math.PI*2); ctx.fill();
+  ctx.save(); ctx.translate(9,-5); ctx.rotate(swing>0 ? -1.7+(0.25-swing)/0.25*2.3 : -0.45);
+  ctx.fillStyle='#6b4a2a'; ctx.beginPath(); ctx.moveTo(-2,2); ctx.lineTo(2,2); ctx.lineTo(4.5,-22); ctx.lineTo(-4.5,-22); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#4a3020'; [[-3,-16],[3,-12],[-2,-8]].forEach(([a,c])=>{ ctx.beginPath(); ctx.arc(a,c,1.6,0,Math.PI*2); ctx.fill(); });
+  ctx.restore();
+  ctx.restore();
+}
+function heroIcon(){
+  const c=document.createElement('canvas'); c.width=c.height=76;
+  const old=ctx; ctx=c.getContext('2d'); ctx.setTransform(1.3,0,0,1.3,0,0); drawHeroFig(29,38,1,0,0,1); ctx=old; return c;
+}
+function drawHero(){
+  const h=hero; if(!h) return;
+  if(h.dead>0){
+    const [x,y]=heroHome(); drawHeroFig(x,y,1,0,0,.3);
+    ctx.font='bold 12px Georgia'; ctx.textAlign='center'; ctx.fillStyle='rgba(20,14,8,.8)'; ctx.fillRect(x-20,y-44,40,16);
+    ctx.fillStyle='#f3e6c4'; ctx.fillText(Math.ceil(h.dead)+'s',x,y-32); return;
+  }
+  if(h.order){ ctx.strokeStyle='rgba(124,207,90,.8)'; ctx.lineWidth=2; ctx.beginPath(); ctx.ellipse(h.tx,h.ty+6,10,4,0,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle='#7ccf5a'; ctx.fillRect(h.tx-1,h.ty-16,2,22); ctx.beginPath(); ctx.moveTo(h.tx+1,h.ty-16); ctx.lineTo(h.tx+11,h.ty-12); ctx.lineTo(h.tx+1,h.ty-8); ctx.fill(); }
+  if(heroSel){ ctx.strokeStyle=`rgba(124,207,90,${.6+.4*Math.sin(t*6)})`; ctx.lineWidth=2.5; ctx.setLineDash([5,4]); ctx.beginPath(); ctx.ellipse(h.x,h.y+16,20,8,0,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]); }
+  drawHeroFig(h.x,h.y,h.face,h.swing,h.walk,1);
+  const w=34, p=Math.max(0,h.hp/h.max);
+  ctx.fillStyle='#2a1a12'; ctx.fillRect(h.x-w/2,h.y-38,w,5);
+  ctx.fillStyle=p>.5?'#4fd04a':p>.25?'#e8c046':'#e0513c'; ctx.fillRect(h.x-w/2,h.y-38,w*p,5);
+  ctx.fillStyle='#e8c46a'; ctx.beginPath(); ctx.arc(h.x-w/2-7,h.y-36,6,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#1b1712'; ctx.font='bold 9px Georgia'; ctx.textAlign='center'; ctx.fillText(h.lvl,h.x-w/2-7,h.y-33);
+}
+function drawSpec(tw){
+  const x=tw.x-17, y=tw.y+17;
+  ctx.fillStyle=tw.spec==='A'?'#2f6fd0':'#c0392b'; ctx.beginPath(); ctx.arc(x,y,6.5,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#fff2b0'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.fillStyle='#fff'; ctx.font='bold 9px Georgia'; ctx.textAlign='center'; ctx.fillText(LANG==='en'?tw.spec:(tw.spec==='A'?'Α':'Β'),x,y+3);
+}
+function drawCloud(x,y,s,a){
+  ctx.fillStyle=`rgba(255,255,255,${a})`;
+  [[-.9,0,.5],[-.35,-.25,.6],[.3,-.2,.55],[.85,0,.45],[0,.1,.6]].forEach(([dx,dy,r])=>{ ctx.beginPath(); ctx.arc(x+dx*s,y+dy*s,r*s,0,Math.PI*2); ctx.fill(); });
+}
+function drawTitle(){
+  const v=view();
+  const g=ctx.createLinearGradient(0,v.y,0,v.y+v.h); g.addColorStop(0,'#101a36'); g.addColorStop(.5,'#34477c'); g.addColorStop(.78,'#c98f55'); g.addColorStop(1,'#f0c878');
+  ctx.fillStyle=g; ctx.fillRect(v.x,v.y,v.w,v.h);
+  seaSpecks.slice(0,140).forEach(([x,y,r])=>{ if(y<330){ ctx.fillStyle=`rgba(255,255,240,${.25+.5*Math.abs(Math.sin(t*1.3+r*30))})`; ctx.fillRect(x,y,1.6,1.6); } });
+  ctx.save(); ctx.translate(480,215); ctx.rotate(t*.04);
+  for(let i=0;i<16;i++){ const a=i*Math.PI*2/16; ctx.fillStyle='rgba(255,220,150,.06)'; ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,900,a,a+.11); ctx.closePath(); ctx.fill(); }
+  ctx.restore();
+  const sg=ctx.createRadialGradient(480,215,10,480,215,240); sg.addColorStop(0,'rgba(255,236,180,.75)'); sg.addColorStop(1,'rgba(255,236,180,0)');
+  ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(480,215,240,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#4e5e8e'; ctx.beginPath(); ctx.moveTo(v.x,520); ctx.lineTo(120,360); ctx.lineTo(260,450); ctx.lineTo(700,430); ctx.lineTo(850,350); ctx.lineTo(v.x+v.w,470); ctx.lineTo(v.x+v.w,v.y+v.h); ctx.lineTo(v.x,v.y+v.h); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#6e6a80'; ctx.beginPath(); ctx.moveTo(90,v.y+v.h); ctx.lineTo(480,200); ctx.lineTo(870,v.y+v.h); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#57546a'; ctx.beginPath(); ctx.moveTo(480,200); ctx.lineTo(870,v.y+v.h); ctx.lineTo(560,v.y+v.h); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#f4f6fb'; ctx.beginPath(); ctx.moveTo(480,200); ctx.lineTo(560,272); ctx.lineTo(530,262); ctx.lineTo(505,284); ctx.lineTo(480,265); ctx.lineTo(452,286); ctx.lineTo(430,262); ctx.lineTo(400,272); ctx.closePath(); ctx.fill();
+  ctx.save(); ctx.translate(480,205); ctx.scale(.9,.9); ctx.translate(-480,-205);
+  ctx.save(); ctx.shadowColor='#ffe9a8'; ctx.shadowBlur=30; drawTemple(480,205); ctx.restore(); ctx.restore();
+  [[10,250,.55,60],[16,380,.7,80],[24,505,.85,100]].forEach(([spd,y,a,sz],L)=>{
+    for(let k=0;k<6;k++){ const span=v.w+500, x=v.x-250+(((k*260+L*120+t*spd)%span)+span)%span; drawCloud(x,y+Math.sin(t*.5+k)*4,sz,a); }
+  });
+  for(let k=0;k<3;k++){ const a=t*.35+k*2.1, bx=480+Math.cos(a)*(170+k*30), by=150+Math.sin(a)*30;
+    ctx.strokeStyle='rgba(30,20,20,.7)'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(bx-8,by-4+Math.sin(t*8+k)*2); ctx.lineTo(bx,by); ctx.lineTo(bx+8,by-4+Math.sin(t*8+k)*2); ctx.stroke(); }
+  ctx.textAlign='center';
+  ctx.font='bold 66px Georgia'; ctx.fillStyle='rgba(0,0,0,.5)'; ctx.fillText('OLYMPUS DEFENSE',483,103);
+  const tg=ctx.createLinearGradient(0,50,0,105); tg.addColorStop(0,'#fff2b0'); tg.addColorStop(1,'#d9a83a');
+  ctx.fillStyle=tg; ctx.fillText('OLYMPUS DEFENSE',480,100);
+  ctx.font='italic 22px Georgia'; ctx.fillStyle='#f3e6c4'; ctx.fillText('Η Υπεράσπιση του Ολύμπου',480,136);
+}
 function drawGame(){
   drawWorld();
   if(selected){ const s=st(selected); ctx.setLineDash([6,6]); ctx.strokeStyle='rgba(255,240,190,.8)'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(selected.x,selected.y,s.range,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]); }
-  const ents=[...enemies.map(e=>({y:e.y,f:()=>drawEnemy(e)})), ...towers.map(tw=>({y:tw.y,f:()=>{ drawGod(tw.ty,tw.x,tw.y,tw.lvl,tw.flash,1,buffOf(tw)>1); if(tw.stone>0) drawStone(tw); else if(tw.lvl<3 && gold>=upCost(tw)) drawUpArrow(tw); }}))];
+  const ents=[...enemies.map(e=>({y:e.y,f:()=>drawEnemy(e)})), ...towers.map(tw=>({y:tw.y,f:()=>{ drawGod(tw.ty,tw.x,tw.y,tw.lvl,tw.flash,1,buffOf(tw)>1); if(tw.spec) drawSpec(tw); if(tw.stone>0) drawStone(tw); else if(tw.lvl<3 && gold>=upCost(tw) && !(challenge() && challenge().type==='noUpgrades')) drawUpArrow(tw); }})), ...(hero?[{y:hero.dead>0?heroHome()[1]:hero.y, f:drawHero}]:[])];
   ents.sort((a,b)=>a.y-b.y).forEach(o=>o.f());
   drawFx();
   drawWaveCall();
   if(placing && mouse.x>-500){
-    const ok=canPlace(mouse.x,mouse.y) && gold>=TYPES[placing].cost;
+    const ok=canPlace(mouse.x,mouse.y) && gold>=costOf(placing);
     ctx.fillStyle=ok?'rgba(120,255,120,.12)':'rgba(255,80,80,.15)'; ctx.strokeStyle=ok?'rgba(120,255,120,.6)':'rgba(255,80,80,.6)';
     ctx.lineWidth=2; ctx.beginPath(); ctx.arc(mouse.x,mouse.y,TYPES[placing].range,0,Math.PI*2); ctx.fill(); ctx.stroke();
     drawGod(placing,mouse.x,mouse.y,1,0,0.65);
@@ -1340,6 +1649,7 @@ function drawCampaign(){
     ctx.fillStyle='rgba(30,22,14,.85)'; ctx.fillRect(x-w/2,y+32,w,22);
     ctx.fillStyle=un?'#f3e6c4':'#a89c86'; ctx.textAlign='center'; ctx.fillText(L.name,x,y+48);
     if(un) for(let q=0;q<3;q++) drawStar(x-20+q*20,y+68,8,q<st2);
+    if(un && save.chal && save.chal[i]){ ctx.fillStyle='#b58cff'; ctx.strokeStyle='#4a2a7a'; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(x+40,y+60); ctx.lineTo(x+47,y+68); ctx.lineTo(x+40,y+76); ctx.lineTo(x+33,y+68); ctx.closePath(); ctx.fill(); ctx.stroke(); }
   });
   if(!open){ ctx.fillStyle='rgba(10,6,3,.45)'; ctx.fillRect(v.x,v.y,v.w,v.h); }
   ctx.textAlign='center'; ctx.font='bold 28px Georgia';
@@ -1351,45 +1661,129 @@ function drawCampaign(){
 
 function render(){
   ctx.setTransform(1,0,0,1,0,0);
-  ctx.fillStyle = state==='world' ? CHAPTERS[chapter].sea : theme.bg; ctx.fillRect(0,0,cv.width,cv.height);
+  ctx.fillStyle = state==='title' ? '#101a36' : state==='world' ? CHAPTERS[chapter].sea : theme.bg; ctx.fillRect(0,0,cv.width,cv.height);
   const sh = state==='play' && shake>0 ? shake*14 : 0;
   ctx.setTransform(dpr*sc,0,0,dpr*sc,dpr*(ox+(Math.random()-.5)*sh),dpr*(oy+(Math.random()-.5)*sh));
-  if(state==='world') drawCampaign(); else drawGame();
+  if(state==='title') drawTitle(); else if(state==='world') drawCampaign(); else drawGame();
 }
 
 /* ================= SCREENS / MODALS ================= */
-function msg(s){ $('info').textContent=s; }
-function modal(html,bind){ $('box').innerHTML=html; $('modal').hidden=false; if(bind) bind(); }
-function closeModal(){ $('modal').hidden=true; }
+['skills','chal','story'].forEach(k=>{ if(!save[k]) save[k]={}; }); if(!save.lb) save.lb=[];
+const chalCount = () => Object.keys(save.chal).filter(k=>save.chal[k]).length;
+const spentStars = () => SKILLS.reduce((a,S)=>{ for(let i=0;i<SK(S.k);i++) a+=S.cost[i]; return a; },0);
+const starBank = () => totalStars()+chalCount()-spentStars();
+const STORY=[
+  {who:'zeus',   name:'Δίας',      text:'Οι πύλες του Τάρταρου άνοιξαν! Τέρατα ξεχύνονται από τα έγκατα της γης και βαδίζουν προς τον Όλυμπο. Θνητέ στρατηγέ, οι θεοί σε χρειάζονται. Στήσε μας στον δρόμο τους και μην αφήσεις κανένα να φτάσει στον ναό.'},
+  {who:'athena', name:'Αθηνά',     text:'Ο Οδυσσέας χάθηκε στις θάλασσες και ο Ποσειδώνας οργίζεται. Χειρότερα, ο Κέρβερος δραπέτευσε από τον Άδη. Ακολούθησε το καράβι μέσα από νησιά γεμάτα κινδύνους και φέρε τον βασιλιά της Ιθάκης πίσω στην πατρίδα του.'},
+  {who:'apollo', name:'Απόλλωνας', text:'Ο Ιάσονας και οι Αργοναύτες σαλπάρουν με την Αργώ για το Χρυσόμαλλο Δέρας. Στην Κολχίδα το φυλάει ένας δράκος που δεν κοιμάται ποτέ, και από τα δόντια του φυτρώνουν πολεμιστές. Προστάτεψε την Αργώ σε κάθε λιμάνι.'},
+  {who:'zeus',   name:'Δίας',      text:'Ο γιος μου ο Ηρακλής πρέπει να ολοκληρώσει τους άθλους του, μα τα τέρατα της γης ενώθηκαν εναντίον του. Στην κορυφή του κόσμου τον περιμένει ο Λέων της Νεμέας, που κανένα όπλο δεν μπορεί να τρυπήσει.'},
+  {who:'zeus',   name:'Δίας',      text:'Οι Τιτάνες ξύπνησαν! Ο πατέρας μου ο Κρόνος θέλει πίσω τον θρόνο του ουρανού. Αυτή είναι η τελική μάχη. Αν πέσει ο Όλυμπος, πέφτει μαζί του όλος ο κόσμος.'},
+  {who:'zeus',   name:'Δίας',      text:'Ο Κρόνος ηττήθηκε και οι Τιτάνες κλείστηκαν ξανά στα βάθη του Τάρταρου. Ο Όλυμπος στέκει ακόμα χάρη σε σένα. Από σήμερα το όνομά σου θα το τραγουδούν οι ραψωδοί σε όλη την Ελλάδα.'}
+];
+function msg(s){ $('info').textContent=tx(s); }
+function modal(html,bind,cls){ const b=$('box'); b.className='box'+(cls?' '+cls:''); b.innerHTML=tx(html); $('modal').hidden=false; if(bind) bind(); }
+function closeModal(){ $('modal').hidden=true; if(storyTimer){ clearInterval(storyTimer); storyTimer=null; } }
+function setBody(mode){ ['title','world'].forEach(c=>document.body.classList.toggle(c, mode===c)); resize(); }
+function showTitle(){
+  state='title'; endless=false; closeModal(); placing=null; selected=null; heroSel=false;
+  setBody('title'); msg(''); updateLangBtns();
+}
 function showWorld(ch){
+  endless=false;
   if(typeof ch==='number') chapter=ch;
   else if(state==='play') chapter=chOf(levelIdx);
   else { let c=0; for(let k=0;k<CHAPTERS.length;k++) if(chapterUnlocked(k)) c=k; chapter=c; }
-  $('chBtn').textContent=`${CHAPTERS[chapter].name} / ${CHAPTERS.length}`+(chapterUnlocked(chapter)?'':' (κλειδωμένο)');
+  $('chBtn').textContent=tx(`${CHAPTERS[chapter].name} / ${CHAPTERS.length}`+(chapterUnlocked(chapter)?'':' (κλειδωμένο)'));
   $('chPrev').disabled=chapter===0; $('chNext').disabled=chapter===CHAPTERS.length-1;
-  state='world'; closeModal(); placing=null; selected=null;
-  document.body.classList.add('world'); resize();
+  state='world'; closeModal(); placing=null; selected=null; heroSel=false;
+  setBody('world');
   $('totalStars').textContent=`${totalStars()}/${LEVELS.length*3}`;
+  $('chalStars').textContent=`${chalCount()}/${LEVELS.length}`;
   const next=chLevels(chapter).find(i=>levelUnlocked(i)&&!starsOf(i));
   msg(!chapterUnlocked(chapter) ? `Το ${CHAPTERS[chapter].name} ανοίγει όταν νικήσεις όλες τις πίστες του ${CHAPTERS[chapter-1].name}.`
     : next!==undefined ? `Επόμενη πίστα: ${lvlNum(next)} ${LEVELS[next].name}` : 'Κατέκτησες όλο το κεφάλαιο! Κυνήγα τα 3 αστέρια στο Θρυλικό.');
+  if(chapterUnlocked(chapter) && !save.story[chapter]) setTimeout(()=>{ if(state==='world' && $('modal').hidden) showStory(chapter); },350);
 }
 function startLevel(i){
-  loadMap(i); state='play'; closeModal();
-  document.body.classList.remove('world'); resize();
-  $('lvlName').textContent=`${lvlNum(i)} ${LEVELS[i].name}`;
+  endless=false; loadMap(i); state='play'; closeModal(); setBody('play');
+  $('lvlName').textContent=tx(`${lvlNum(i)} ${LEVELS[i].name}`)+(chal?' ⚑':'');
   newGame();
 }
+function startEndless(i){
+  endless=true; chal=false; loadMap(i); state='play'; closeModal(); setBody('play');
+  $('lvlName').textContent=tx(`∞ ${LEVELS[i].name}`);
+  newGame();
+}
+/* ---- story (parchment + typewriter) ---- */
+let storyTimer=null;
+function showStory(i,then){
+  const S=STORY[i]; save.story[i]=1; persist();
+  modal(`<div class="speaker"><span id="spk"></span><h2>${S.name}</h2></div><p id="stTxt"></p>
+    <div class="row"><button id="stSkip">Παράλειψη</button><button class="primary" id="stGo">Συνέχεια</button></div>`, ()=>{
+    $('spk').appendChild(godIcon(S.who));
+    const full=tx(S.text); let n=0;
+    storyTimer=setInterval(()=>{ n+=2; $('stTxt').textContent=full.slice(0,n); if(n>=full.length){ clearInterval(storyTimer); storyTimer=null; } },28);
+    const done=()=>{ closeModal(); if(then) then(); };
+    $('stSkip').onclick=done;
+    $('stGo').onclick=()=>{ if(storyTimer){ clearInterval(storyTimer); storyTimer=null; $('stTxt').textContent=full; } else done(); };
+  }, 'parch');
+}
+/* ---- skill tree ---- */
+function openSkills(){
+  const draw=()=>{
+    modal(`<h2>Δέντρο Δεξιοτήτων</h2><p>Ξόδεψε τα αστέρια σου για μόνιμες ευλογίες των θεών.</p>
+      <p class="gold" style="font-size:18px">Διαθέσιμα αστέρια: ${starBank()} ★</p>
+      <div class="skgrid" id="skg"></div>
+      <div class="row"><button id="skReset">Επιστροφή αστεριών</button><button class="primary" id="skOk">Κλείσιμο</button></div>`, ()=>{
+      SKILLS.forEach(S=>{
+        const r=SK(S.k), max=S.cost.length, c=S.cost[r], d=document.createElement('div'); d.className='sk';
+        d.innerHTML=tx(`<b>${S.name}</b><span>${S.d}</span><span class="pips">${'●'.repeat(r)}${'○'.repeat(max-r)}</span>`);
+        const b=document.createElement('button');
+        b.textContent = r>=max ? tx('Μέγιστο') : tx(`Αγορά · ${c} ★`);
+        b.disabled = r>=max || starBank()<c;
+        b.onclick=()=>{ save.skills[S.k]=r+1; persist(); sfx('upgrade'); draw(); };
+        d.appendChild(b); $('skg').appendChild(d);
+      });
+      $('skReset').onclick=()=>{ save.skills={}; persist(); draw(); };
+      $('skOk').onclick=()=>{ closeModal(); if(state==='world') showWorld(chapter); };
+    }, 'wide');
+  };
+  draw();
+}
+/* ---- endless + leaderboard ---- */
+function lbTable(){
+  const rows=save.lb.slice(0,10).map((r,i)=>`<tr><td>${i+1}</td><td>${r.n.replace(/[<>&]/g,'')}</td><td>${r.w}</td><td>${r.k}</td><td>${LEVELS[r.m]?LEVELS[r.m].name:''}</td></tr>`).join('');
+  return rows ? `<table class="lb"><tr><th>#</th><th>Όνομα</th><th>Κύμα</th><th>Τέρατα</th><th>Αρένα</th></tr>${rows}</table>` : '<p style="opacity:.7">Δεν υπάρχουν ακόμα ρεκόρ. Γίνε ο πρώτος!</p>';
+}
+function openEndless(){
+  const arenas=[0,6,12,18,24].filter(i=>levelUnlocked(i));
+  modal(`<h2>Ατελείωτη Μάχη</h2><p>Κύματα χωρίς τέλος που δυναμώνουν συνέχεια. Όλοι οι θεοί και οι δυνάμεις είναι διαθέσιμοι. Πόσο θα αντέξεις;</p>
+    <p class="gold">Διάλεξε αρένα (νέες αρένες ανοίγουν με την εκστρατεία):</p>
+    <div class="row" id="ar"></div>
+    <h2 style="font-size:20px;margin-top:14px">Πίνακας Κατάταξης</h2>${lbTable()}
+    <div class="row"><button id="mBack">Πίσω</button></div>`, ()=>{
+    arenas.forEach(i=>{ const b=document.createElement('button'); b.className='diff'; b.innerHTML=tx(`${LEVELS[i].name}<small>${CHAPTERS[chOf(i)].sub}</small>`); b.onclick=()=>startEndless(i); $('ar').appendChild(b); });
+    $('mBack').onclick=closeModal;
+  }, 'wide');
+}
 function openLevel(i){
-  const L=LEVELS[i], s=starsOf(i);
+  const L=LEVELS[i], s=starsOf(i), ch=chOf(i);
+  if(chLevels(ch)[0]===i && !save.story[ch]){ showStory(ch,()=>openLevel(i)); return; }
+  const C=challengeFor(i);
   modal(`<h2>Πίστα ${lvlNum(i)}: ${L.name}</h2><p>${L.desc}</p>
     <p class="gold">${L.waves} κύματα · ${CHAPTERS[L.ch||0].boss} στο τέλος</p>
-    <p>Καλύτερο: <span class="gold">${starStr(s)}</span>${save.diff[i]?' · '+DIFFS[save.diff[i]].name:''}</p>
+    <p>Καλύτερο: <span class="gold">${starStr(s)}</span>${save.diff[i]?' · '+DIFFS[save.diff[i]].name:''}${save.chal[i]?' · <span style="color:#d6b8ff">Πρόκληση ✓</span>':''}</p>
     <p style="font-size:13px;opacity:.85">3 αστέρια: καμία χαμένη ζωή · 2 αστέρια: τουλάχιστον οι μισές ζωές</p>
     <div class="row" id="dsel"></div>
+    <div class="chalbox" id="chb"></div>
     <div class="row"><button id="mBack">Πίσω</button><button class="primary" id="mPlay">Παίξε</button></div>`, ()=>{
     const draw=()=>{ $('dsel').innerHTML=''; DORDER.forEach(k=>{ const b=document.createElement('button'); b.className='diff'+(k===diffKey?' sel':'');
-      b.innerHTML=`${DIFFS[k].name}<small>${DIFFS[k].d}</small>`; b.onclick=()=>{ diffKey=k; draw(); }; $('dsel').appendChild(b); }); };
+      b.innerHTML=tx(`${DIFFS[k].name}<small>${DIFFS[k].d}</small>`); b.onclick=()=>{ diffKey=k; draw(); }; $('dsel').appendChild(b); });
+      $('chb').className='chalbox'+(chal?' on':'');
+      $('chb').innerHTML=tx(`<b>Πρόκληση:</b> ${C.d}<br><small>Νίκησε με αυτόν τον κανόνα για +1 αστέρι πρόκλησης</small><br>`);
+      const tb=document.createElement('button'); tb.textContent=tx(chal?'Απενεργοποίηση πρόκλησης':'Ενεργοποίηση πρόκλησης'); tb.onclick=()=>{ chal=!chal; draw(); };
+      $('chb').appendChild(tb);
+    };
     draw();
     $('mBack').onclick=closeModal; $('mPlay').onclick=()=>startLevel(i);
   });
@@ -1397,57 +1791,83 @@ function openLevel(i){
 function onWin(){
   sfx('win');
   const i=levelIdx, stars=lives>=maxLives?3:lives>=maxLives/2?2:1;
-  const before=levelsCleared(), prev=starsOf(i);
+  const before=levelsCleared(), prev=starsOf(i), C=challenge();
   const record = stars>prev || (stars===prev && DORDER.indexOf(diffKey)>DORDER.indexOf(save.diff[i]||'easy'));
   if(stars>prev) save.stars[i]=stars;
   if(!save.diff[i] || DORDER.indexOf(diffKey)>DORDER.indexOf(save.diff[i])) save.diff[i]=diffKey;
+  const newChal = C && !save.chal[i]; if(C) save.chal[i]=1;
   persist();
   const after=levelsCleared();
   const newGods=ORDER.filter(ty=>TYPES[ty].unlock>before && TYPES[ty].unlock<=after);
   const newPowers=PORDER.filter(k=>POWERS[k].unlock>before && POWERS[k].unlock<=after);
   const hasNext=i+1<LEVELS.length;
   const final=!hasNext, chEnd=hasNext && chOf(i+1)!==chOf(i);
-  modal(`<h2>${final?'ΚΑΤΕΚΤΗΣΕΣ ΟΛΟ ΤΟΝ ΚΟΣΜΟ ΤΩΝ ΘΕΩΝ!':chEnd?CHAPTERS[chOf(i)].done:'ΝΙΚΗ!'}</h2>
+  const show=()=>modal(`<h2>${final?'ΚΑΤΕΚΤΗΣΕΣ ΟΛΟ ΤΟΝ ΚΟΣΜΟ ΤΩΝ ΘΕΩΝ!':chEnd?CHAPTERS[chOf(i)].done:'ΝΙΚΗ!'}</h2>
     <div class="stars">${starStr(stars)}</div>
     <p>${LEVELS[i].name} · ${DIFFS[diffKey].name} · Ζωές ${lives}/${maxLives}</p>
     ${record?'<p style="color:#9fe07a">Νέο ρεκόρ!</p>':''}
+    ${C?`<p style="color:#d6b8ff">Πρόκληση ολοκληρώθηκε!${newChal?' +1 ★':''}</p>`:''}
     ${stars<3?'<p style="font-size:13px;opacity:.85">Για 3 αστέρια τελείωσε την πίστα χωρίς να χάσεις ζωή.</p>':''}
     ${chEnd && prev===0?`<p class="gold" style="font-size:17px">Ξεκλείδωσες το ${CHAPTERS[chOf(i+1)].name.toUpperCase()}: ${CHAPTERS[chOf(i+1)].sub}!<br><small>Νέος χάρτης με 6 πίστες και ${CHAPTERS[chOf(i+1)].intro}.</small></p>`:hasNext && prev===0?`<p class="gold">Ξεκλείδωσες την πίστα ${lvlNum(i+1)}: ${LEVELS[i+1].name}!</p>`:''}
+    <p style="font-size:13px">Αστέρια για δεξιότητες: <b class="gold">${starBank()} ★</b></p>
     <div id="unl"></div>
     <div class="row"><button id="mMap">Χάρτης</button><button id="mRetry">Ξανά</button>${hasNext?`<button class="primary" id="mNext">${chEnd?'Στο '+CHAPTERS[chOf(i+1)].name:'Επόμενη πίστα'}</button>`:''}</div>`, ()=>{
     newGods.forEach(ty=>{ const d=document.createElement('div'); d.className='unlock'; d.appendChild(godIcon(ty));
-      const sp=document.createElement('span'); sp.innerHTML=`<b class="gold">Νέο σχέδιο: ${TYPES[ty].name}</b><br><small>${TYPES[ty].desc}</small>`; d.appendChild(sp); $('unl').appendChild(d); });
+      const sp=document.createElement('span'); sp.innerHTML=tx(`<b class="gold">Νέο σχέδιο: ${TYPES[ty].name}</b><br><small>${TYPES[ty].desc}</small>`); d.appendChild(sp); $('unl').appendChild(d); });
     newPowers.forEach(k=>{ const d=document.createElement('div'); d.className='unlock'; d.appendChild(powerIcon(k));
-      const sp=document.createElement('span'); sp.innerHTML=`<b style="color:#d6b8ff">Νέα δύναμη: ${POWERS[k].name}</b><br><small>${POWERS[k].desc}</small>`; d.appendChild(sp); $('unl').appendChild(d); });
+      const sp=document.createElement('span'); sp.innerHTML=tx(`<b style="color:#d6b8ff">Νέα δύναμη: ${POWERS[k].name}</b><br><small>${POWERS[k].desc}</small>`); d.appendChild(sp); $('unl').appendChild(d); });
     $('mMap').onclick=showWorld; $('mRetry').onclick=()=>startLevel(i);
     if(hasNext) $('mNext').onclick=()=>{ if(chEnd){ showWorld(chOf(i+1)); } else { closeModal(); openLevel(i+1); } };
   });
+  if(final && !save.story[5]) showStory(5,show); else show();
 }
 function onLose(){
   sfx('lose');
+  if(endless){
+    const res={n:(save.pname||'Παίκτης'), w:wave, k:killsCount, m:levelIdx, d:Date.now()};
+    modal(`<h2>Η μάχη τελείωσε!</h2><p class="stars" style="font-size:40px">${wave}</p><p>Έφτασες στο κύμα ${wave} και νίκησες ${killsCount} τέρατα.</p>
+      <p>Όνομα για τον πίνακα: <input class="nm" id="nm" maxlength="16"></p>
+      <div class="row"><button class="primary" id="mSave">Αποθήκευση ρεκόρ</button></div>
+      <div id="lbw">${lbTable()}</div>
+      <div class="row"><button id="mHome">Αρχική</button><button class="primary" id="mRetry">Ξανά</button></div>`, ()=>{
+      $('nm').value=res.n;
+      $('mSave').onclick=()=>{ res.n=($('nm').value.trim()||'Παίκτης').slice(0,16); save.pname=res.n; save.lb.push(res); save.lb.sort((a,b)=>b.w-a.w||b.k-a.k); save.lb=save.lb.slice(0,20); persist();
+        $('lbw').innerHTML=tx(lbTable()); $('mSave').disabled=true; $('mSave').textContent=tx('Αποθηκεύτηκε!'); };
+      $('mHome').onclick=showTitle; $('mRetry').onclick=()=>startEndless(levelIdx);
+    }, 'wide');
+    return;
+  }
   modal(`<h2>Ο Όλυμπος έπεσε!</h2><p>Άντεξες μέχρι το κύμα ${wave}/${LEVELS[levelIdx].waves}.</p>
     <p style="font-size:13px;opacity:.85">Συμβουλή: βάλε τον Ποσειδώνα σε στροφές για να επιβραδύνει τα τέρατα, και τον Δία κοντά σε σημεία που μαζεύονται πολλά μαζί.</p>
-    <div class="row"><button id="mMap">Χάρτης</button><button class="primary" id="mRetry">Ξανά</button></div>`, ()=>{
-    $('mMap').onclick=showWorld; $('mRetry').onclick=()=>startLevel(levelIdx);
+    <div class="row"><button id="mMap">Χάρτης</button><button id="mSk">Δεξιότητες</button><button class="primary" id="mRetry">Ξανά</button></div>`, ()=>{
+    $('mMap').onclick=showWorld; $('mRetry').onclick=()=>startLevel(levelIdx); $('mSk').onclick=openSkills;
   });
 }
 function openPause(){
   if(state!=='play' || over || won) return;
-  modal(`<h2>Παύση</h2><p>${LEVELS[levelIdx].name} · ${DIFFS[diffKey].name}</p>
-    <div class="row"><button id="mMap">Χάρτης</button><button id="mRestart">Επανεκκίνηση</button><button class="primary" id="mGo">Συνέχεια</button></div>`, ()=>{
-    $('mMap').onclick=showWorld; $('mRestart').onclick=()=>startLevel(levelIdx); $('mGo').onclick=closeModal;
+  modal(`<h2>Παύση</h2><p>${LEVELS[levelIdx].name}${endless?' · ∞':' · '+DIFFS[diffKey].name}</p>
+    <div class="row"><button id="mMap">${endless?'Αρχική':'Χάρτης'}</button><button id="mRestart">Επανεκκίνηση</button><button class="primary" id="mGo">Συνέχεια</button></div>`, ()=>{
+    $('mMap').onclick=endless?showTitle:showWorld; $('mRestart').onclick=()=>endless?startEndless(levelIdx):startLevel(levelIdx); $('mGo').onclick=closeModal;
   });
 }
 
 /* ================= HUD ================= */
 function buildButtons(){
+  const hb=$('heroBox'); hb.innerHTML='';
+  if(hero){
+    const b=document.createElement('button'); b.className='tb hb'; b.id='heroBtn'; b.appendChild(heroIcon());
+    const sp=document.createElement('span'); sp.innerHTML=tx('Ηρακλής<small id="heroInfo"></small>'); b.appendChild(sp);
+    b.onclick=toggleHero; b.title=tx('Πάτα και μετά πάτα στον χάρτη για να μετακινήσεις τον Ηρακλή (πλήκτρο H)'); hb.appendChild(b);
+  }
+  const C=challenge();
   const box=$('towerBtns'); box.innerHTML='';
   ORDER.forEach((ty,i)=>{
     const T=TYPES[ty], b=document.createElement('button'); b.className='tb'; b.dataset.t=ty;
     b.appendChild(godIcon(ty));
     const sp=document.createElement('span');
-    if(unlocked(ty)){ sp.innerHTML=`${T.name}<small>${T.cost} χρυσός</small>`; b.onclick=()=>setPlacing(ty); b.title=`${T.desc} (πλήκτρο ${i+1})`; }
-    else { b.classList.add('locked'); sp.innerHTML=`${T.name}<small>Κλειδωμένο</small>`;
+    if(unlocked(ty)){ sp.innerHTML=tx(`${T.name}<small>${costOf(ty)} χρυσός</small>`); b.onclick=()=>setPlacing(ty); b.title=tx(`${T.desc} (πλήκτρο ${i+1})`); }
+    else if(C && C.gods && (endless || levelsCleared()>=T.unlock)){ b.classList.add('locked'); sp.innerHTML=tx(`${T.name}<small>Πρόκληση</small>`); b.onclick=()=>msg('Αυτός ο θεός δεν επιτρέπεται σε αυτή την πρόκληση.'); }
+    else { b.classList.add('locked'); sp.innerHTML=tx(`${T.name}<small>Κλειδωμένο</small>`);
       b.onclick=()=>msg(`Σχέδιο «${T.name}»: ξεκλειδώνει όταν νικήσεις την πίστα ${lvlNum(T.unlock-1)} (${LEVELS[T.unlock-1].name}).`); }
     b.appendChild(sp); box.appendChild(b);
   });
@@ -1456,56 +1876,74 @@ function buildButtons(){
     const P=POWERS[k], b=document.createElement('button'); b.className='tb pb'; b.dataset.p=k;
     b.appendChild(powerIcon(k));
     const sp=document.createElement('span');
-    if(availP[k]){ sp.innerHTML=`${P.name}<small>Έτοιμο · ${P.key}</small>`; b.onclick=()=>setCasting(k); b.title=`${P.desc} (πλήκτρο ${P.key})`; }
-    else { b.classList.add('locked'); sp.innerHTML=`${P.name}<small>Κλειδωμένο</small>`;
+    if(availP[k]){ sp.innerHTML=tx(`${P.name}<small>Έτοιμο · ${P.key}</small>`); b.onclick=()=>setCasting(k); b.title=tx(`${P.desc} (πλήκτρο ${P.key})`); }
+    else if(C && C.type==='noPowers'){ b.classList.add('locked'); sp.innerHTML=tx(`${P.name}<small>Πρόκληση</small>`); b.onclick=()=>msg('Οι δυνάμεις δεν επιτρέπονται σε αυτή την πρόκληση.'); }
+    else { b.classList.add('locked'); sp.innerHTML=tx(`${P.name}<small>Κλειδωμένο</small>`);
       b.onclick=()=>msg(`Δύναμη «${P.name}»: ξεκλειδώνει όταν νικήσεις την πίστα ${lvlNum(P.unlock-1)} (${LEVELS[P.unlock-1].name}).`); }
     b.appendChild(sp); pb.appendChild(b);
   });
 }
 function hud(){
   if(state!=='play') return;
-  $('gold').textContent=gold; $('lives').textContent=lives; $('wave').textContent=`${wave}/${LEVELS[levelIdx].waves}`;
+  $('gold').textContent=gold; $('lives').textContent=lives; $('wave').textContent=endless?`${wave}`:`${wave}/${LEVELS[levelIdx].waves}`;
   document.querySelectorAll('#towerBtns .tb').forEach(b=>{
     if(b.classList.contains('locked')) return;
-    b.disabled=gold<TYPES[b.dataset.t].cost; b.classList.toggle('sel',placing===b.dataset.t);
+    b.disabled=gold<costOf(b.dataset.t); b.classList.toggle('sel',placing===b.dataset.t);
   });
   document.querySelectorAll('#powerBtns .pb').forEach(b=>{
     if(b.classList.contains('locked')) return;
-    const k=b.dataset.p, c=pcd[k]||0, pct=c/POWERS[k].cd*100;
+    const k=b.dataset.p, c=pcd[k]||0, full=POWERS[k].cd*(1-0.1*SK('cd')), pct=c/full*100;
     b.disabled=c>0||over||won; b.classList.toggle('sel',casting===k);
     b.style.background = c>0 ? `linear-gradient(to top, #1a1420 ${pct}%, #3a2650 ${pct}%)` : '';
-    b.querySelector('small').textContent = c>0 ? `${Math.ceil(c)}s` : `Έτοιμο · ${POWERS[k].key}`;
+    b.querySelector('small').textContent = c>0 ? `${Math.ceil(c)}s` : tx(`Έτοιμο · ${POWERS[k].key}`);
   });
-  const L=LEVELS[levelIdx];
+  if(hero && $('heroInfo')){
+    $('heroInfo').textContent = hero.dead>0 ? tx(`Επιστρέφει σε ${Math.ceil(hero.dead)}s`) : tx(`Επ. ${hero.lvl} · Ζωή ${Math.round(hero.hp/hero.max*100)}%`);
+    $('heroBtn').classList.toggle('sel',heroSel);
+  }
   $('start').disabled=!canCallWave();
-  $('start').textContent = wave===0 ? 'Έναρξη κύματος' : wave>=L.waves ? 'Τελευταίο κύμα' : nextT!==null ? `Επόμενο κύμα · ${Math.ceil(nextT)}s · +${earlyBonus()}` : 'Κύμα σε εξέλιξη';
+  $('start').textContent = tx(wave===0 ? 'Έναρξη κύματος' : wave>=maxWaves() ? 'Τελευταίο κύμα' : nextT!==null ? `Επόμενο κύμα · ${Math.ceil(nextT)}s · +${earlyBonus()}` : 'Κύμα σε εξέλιξη');
   updatePopup();
 }
 function updatePopup(){
   const pop=$('tpop');
   if(state!=='play' || !selected || !towers.includes(selected) || over || won || !$('modal').hidden){ pop.hidden=true; return; }
   pop.hidden=false;
-  const tw=selected, T=TYPES[tw.ty], l=tw.lvl, a=baseStats(tw.ty,l), b=l<3?baseStats(tw.ty,l+1):null;
-  const html=`<div class="tpName">${T.name} · Επίπεδο ${l}/3</div><div class="tpStats">Ζημιά <b>${Math.round(a.dmg)}</b>${b?` → <b class="up">${Math.round(b.dmg)}</b>`:''} · Εμβέλεια <b>${Math.round(a.range)}</b>${b?` → <b class="up">${Math.round(b.range)}</b>`:''}${l===2?'<br><span class="up">Επ. 3: +15% ταχύτητα επίθεσης</span>':''}${l===3?'<br><span class="gold">Μέγιστη δύναμη!</span>':''}</div>`;
-  if(pop.dataset.h!==html){ $('tpInfo').innerHTML=html; pop.dataset.h=html; }
-  $('tpUp').textContent = l>=3 ? 'Μέγιστο' : `Αναβάθμιση · ${upCost(tw)}`;
-  $('tpUp').disabled = l>=3 || gold<upCost(tw);
-  $('tpSell').textContent = `Πώληση · +${Math.round(tw.spent*0.6)}`;
-  const px=ox+tw.x*sc, top=oy+(tw.y-44)*sc, below=top<140;
+  const tw=selected, T=TYPES[tw.ty], l=tw.lvl, a=baseStats(tw.ty,l), b=l<2?baseStats(tw.ty,l+1):null, C=challenge(), noUp=C && C.type==='noUpgrades';
+  const sname = tw.spec ? ' · '+SPECS[tw.ty][tw.spec][0] : '';
+  const html=`<div class="tpName">${T.name} · Επίπεδο ${l}/3${sname}</div><div class="tpStats">Ζημιά <b>${Math.round(a.dmg)}</b>${b?` → <b class="up">${Math.round(b.dmg)}</b>`:''} · Εμβέλεια <b>${Math.round(a.range)}</b>${b?` → <b class="up">${Math.round(b.range)}</b>`:''}${l===2&&!noUp?'<br><span class="up">Επίπεδο 3: διάλεξε κατεύθυνση</span>':''}${tw.spec?'<br><span class="gold">'+SPECS[tw.ty][tw.spec][1]+'</span>':''}${noUp?'<br><span style="color:#d6b8ff">Χωρίς αναβαθμίσεις (πρόκληση)</span>':''}</div>`;
+  const h2=tx(html);
+  if(pop.dataset.h!==h2){ $('tpInfo').innerHTML=h2; pop.dataset.h=h2; }
+  const two = l===2 && !noUp;
+  $('tpUp').hidden=two; $('tpA').hidden=!two; $('tpB').hidden=!two;
+  if(two){
+    ['A','B'].forEach(k=>{ const S=SPECS[tw.ty][k], el=$('tp'+k), h=tx(`${LANG==='en'?k:(k==='A'?'Α':'Β')}: ${S[0]} · ${upCost(tw)}<small>${S[1]}</small>`); if(el.dataset.h!==h){ el.innerHTML=h; el.dataset.h=h; } el.disabled=gold<upCost(tw); });
+  } else {
+    $('tpUp').textContent = tx(l>=3 ? 'Μέγιστο' : noUp ? 'Κλειδωμένο' : `Αναβάθμιση · ${upCost(tw)}`);
+    $('tpUp').disabled = l>=3 || noUp || gold<upCost(tw);
+  }
+  $('tpSell').textContent = tx(`Πώληση · +${Math.round(tw.spent*0.6)}`);
+  const px=ox+tw.x*sc, top=oy+(tw.y-44)*sc, below=top<190;
   pop.classList.toggle('below',below);
-  const w=pop.offsetWidth||210;
+  const w=pop.offsetWidth||230;
   pop.style.left=Math.max(w/2+4,Math.min(cw-w/2-4,px))+'px';
   pop.style.top=(below ? oy+(tw.y+34)*sc : top)+'px';
 }
 function setPlacing(ty){
   if(!unlocked(ty)) return;
-  placing = placing===ty ? null : ty; selected=null; casting=null;
+  placing = placing===ty ? null : ty; selected=null; casting=null; heroSel=false;
   if(placing) msg(`${TYPES[placing].name}: ${TYPES[placing].desc}. Πάτα στον χάρτη για να τον βάλεις (Esc ή δεξί κλικ για ακύρωση).`);
 }
 function setCasting(k){
   if(!availP[k] || pcd[k]>0 || over || won) return;
-  casting = casting===k ? null : k; placing=null; selected=null;
+  casting = casting===k ? null : k; placing=null; selected=null; heroSel=false;
   if(casting) msg(`${POWERS[k].name}: πάτα πάνω στον δρόμο για να τη ρίξεις (Esc για ακύρωση).`);
+}
+function toggleHero(){
+  if(!hero || state!=='play') return;
+  if(hero.dead>0){ msg(`Ο Ηρακλής επιστρέφει σε ${Math.ceil(hero.dead)} δευτερόλεπτα.`); return; }
+  heroSel=!heroSel; placing=null; casting=null; selected=null;
+  if(heroSel) msg('Πάτα στον χάρτη εκεί που θέλεις να πάει ο Ηρακλής.');
 }
 function pos(ev){ const r=cv.getBoundingClientRect(); return {x:(ev.clientX-r.left-ox)/sc, y:(ev.clientY-r.top-oy)/sc}; }
 
@@ -1546,27 +1984,38 @@ $('fs').onclick=async()=>{
 if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
 $('chPrev').onclick=()=>{ if(chapter>0) showWorld(chapter-1); };
 $('chNext').onclick=()=>{ if(chapter<CHAPTERS.length-1) showWorld(chapter+1); };
-$('resetSave').onclick=()=>modal(`<h2>Νέα εκστρατεία;</h2><p>Θα σβηστούν όλα τα αστέρια και η πρόοδός σου.</p>
+$('homeBtn').onclick=showTitle;
+$('skillBtn').onclick=openSkills;
+$('storyBtn').onclick=()=>{ if(chapterUnlocked(chapter)) showStory(chapter); else msg('Ξεκλείδωσε πρώτα αυτό το κεφάλαιο.'); };
+$('tPlay').onclick=()=>showWorld();
+$('tEndless').onclick=openEndless;
+$('tSkills').onclick=openSkills;
+$('tLangGr').onclick=()=>setLang('gr');
+$('tLangEn').onclick=()=>setLang('en');
+$('langBtn').onclick=()=>setLang(LANG==='gr'?'en':'gr');
+$('resetSave').onclick=()=>modal(`<h2>Νέα εκστρατεία;</h2><p>Θα σβηστούν όλα τα αστέρια, οι προκλήσεις, οι δεξιότητες και η πρόοδός σου. Ο πίνακας κατάταξης μένει.</p>
   <div class="row"><button id="mNo">Άκυρο</button><button class="primary" id="mYes">Ναι, από την αρχή</button></div>`, ()=>{
-  $('mNo').onclick=closeModal; $('mYes').onclick=()=>{ save={stars:{},diff:{}}; persist(); showWorld(); };
+  $('mNo').onclick=closeModal; $('mYes').onclick=()=>{ save={stars:{},diff:{},skills:{},chal:{},story:{},lb:save.lb,pname:save.pname}; persist(); showTitle(); };
 });
-function doUpgrade(){
-  const s=selected; if(!s || s.lvl>=3 || gold<upCost(s)) return;
-  const c=upCost(s); gold-=c; s.spent+=c; s.lvl++; sfx('upgrade');
+function doUpgrade(spec){
+  const s=selected, C=challenge(); if(!s || s.lvl>=3 || gold<upCost(s) || (C && C.type==='noUpgrades')) return;
+  if(s.lvl===2 && !spec){ msg('Διάλεξε μία από τις δύο κατευθύνσεις για το επίπεδο 3.'); return; }
+  const c=upCost(s); gold-=c; s.spent+=c; s.lvl++; if(s.lvl===3) s.spec=spec; sfx('upgrade');
   effects.push({k:'ring', x:s.x, y:s.y, r:45, life:.5, max:.5, c:'255,215,90'});
-  effects.push({k:'txt', x:s.x, y:s.y-48, life:1.1, max:1.1, txt:'ΕΠΙΠΕΔΟ '+s.lvl+'!', c:'255,225,120', size:15});
+  effects.push({k:'txt', x:s.x, y:s.y-48, life:1.1, max:1.1, txt:s.spec?tx(SPECS[s.ty][s.spec][0]).toUpperCase()+'!':'ΕΠΙΠΕΔΟ '+s.lvl+'!', c:'255,225,120', size:15});
   for(let i=0;i<12;i++){ const a=Math.random()*Math.PI*2, v=60+Math.random()*90; effects.push({k:'spark', x:s.x, y:s.y-10, vx:Math.cos(a)*v, vy:Math.sin(a)*v-80, g:160, life:.7, max:.7, c:'255,220,110', s:2}); }
-  msg(`${TYPES[s.ty].name} ανέβηκε στο επίπεδο ${s.lvl}!`);
+  msg(s.spec ? `${TYPES[s.ty].name}: ${SPECS[s.ty][s.spec][0]}! ${SPECS[s.ty][s.spec][1]}.` : `${TYPES[s.ty].name} ανέβηκε στο επίπεδο ${s.lvl}!`);
 }
 function doSell(){ if(!selected) return; sfx('sell'); gold+=Math.round(selected.spent*0.6); towers=towers.filter(o=>o!==selected); selected=null; }
-$('up').onclick=doUpgrade; $('sell').onclick=doSell; $('tpUp').onclick=doUpgrade; $('tpSell').onclick=doSell;
+$('up').onclick=()=>doUpgrade(); $('sell').onclick=doSell; $('tpUp').onclick=()=>doUpgrade(); $('tpSell').onclick=doSell;
+$('tpA').onclick=()=>doUpgrade('A'); $('tpB').onclick=()=>doUpgrade('B');
 
 cv.addEventListener('pointermove',ev=>{ if(ev.pointerType==='mouse') mouse=pos(ev); });
 cv.addEventListener('mouseleave',()=>mouse={x:-999,y:-999});
-cv.addEventListener('contextmenu',ev=>{ ev.preventDefault(); placing=null; casting=null; });
+cv.addEventListener('contextmenu',ev=>{ ev.preventDefault(); placing=null; casting=null; heroSel=false; });
 cv.addEventListener('click',ev=>{
   const p=pos(ev); mouse=p;
-  if(!$('modal').hidden) return;
+  if(!$('modal').hidden || state==='title') return;
   if(state==='world'){
     const i=chLevels(chapter).find(j=>Math.hypot(LEVELS[j].node[0]-p.x,LEVELS[j].node[1]-p.y)<36);
     if(i!==undefined){ if(levelUnlocked(i)) openLevel(i); else msg(`Η πίστα «${LEVELS[i].name}» είναι κλειδωμένη: νίκησε πρώτα την «${LEVELS[i-1].name}».`); }
@@ -1579,10 +2028,16 @@ cv.addEventListener('click',ev=>{
     return;
   }
   if(placing){
-    const T=TYPES[placing];
+    const C=challenge();
     if(!canPlace(p.x,p.y)) msg('Δεν μπορείς να χτίσεις εκεί.');
-    else if(gold<T.cost) msg('Δεν έχεις αρκετό χρυσό.');
-    else { gold-=T.cost; towers.push({ty:placing,x:p.x,y:p.y,lvl:1,cd:0,spent:T.cost}); sfx('place'); if(gold<T.cost) placing=null; }
+    else if(gold<costOf(placing)) msg('Δεν έχεις αρκετό χρυσό.');
+    else if(C && C.type==='maxTowers' && towers.length>=C.n) msg(`Όριο πρόκλησης: το πολύ ${C.n} θεοί.`);
+    else { const c=costOf(placing); gold-=c; towers.push({ty:placing,x:p.x,y:p.y,lvl:1,cd:0,spent:c}); sfx('place'); if(gold<costOf(placing)) placing=null; }
+    return;
+  }
+  if(hero && !(hero.dead>0) && Math.hypot(hero.x-p.x,hero.y-p.y)<24){ toggleHero(); return; }
+  if(heroSel && hero && !(hero.dead>0)){
+    hero.tx=Math.max(20,Math.min(W-20,p.x)); hero.ty=Math.max(30,Math.min(H-20,p.y)); hero.order=true; hero.tgt=null; heroSel=false; sfx('click');
     return;
   }
   selected=towers.find(o=>Math.hypot(o.x-p.x,o.y-p.y)<28)||null;
@@ -1591,10 +2046,12 @@ cv.addEventListener('click',ev=>{
 addEventListener('keydown',ev=>{
   if(state!=='play') return;
   if(!$('modal').hidden){ if(ev.key==='Escape' && !over && !won) closeModal(); return; }
+  if(ev.target && ev.target.tagName==='INPUT') return;
   const n=parseInt(ev.key); if(n>=1 && n<=ORDER.length) setPlacing(ORDER[n-1]);
   const pk=PORDER.find(k=>POWERS[k].key===ev.key.toUpperCase()); if(pk) setCasting(pk);
   if((ev.key==='u'||ev.key==='U') && selected) doUpgrade();
-  if(ev.key==='Escape'){ if(placing||selected||casting){ placing=null; selected=null; casting=null; } else openPause(); }
+  if(ev.key==='h'||ev.key==='H') toggleHero();
+  if(ev.key==='Escape'){ if(placing||selected||casting||heroSel){ placing=null; selected=null; casting=null; heroSel=false; } else openPause(); }
   if(ev.key==='p'||ev.key==='P') openPause();
   if(ev.code==='Space'){ ev.preventDefault(); startWave(); }
 });
@@ -1634,6 +2091,7 @@ function noise(t0,dur,vol,ftype,fq,f2,dest){
 }
 const SFX={
   click:t=>osc('triangle',660,t,.05,.07),
+  club:t=>{ osc('sine',140,t,.12,.22,70); noise(t,.07,.12,'bandpass',900); },
   place:t=>{ osc('triangle',523,t,.25,.2); osc('triangle',784,t+.05,.3,.15); noise(t,.08,.1,'lowpass',800); },
   upgrade:t=>[523,659,784,1047].forEach((f,i)=>osc('triangle',f,t+i*.07,.25,.18)),
   sell:t=>{ osc('square',988,t,.08,.05); osc('square',740,t+.07,.12,.05); },
@@ -1659,7 +2117,7 @@ const SFX={
   win:t=>[523,659,784,1047,784,1047].forEach((f,i)=>osc('triangle',f,t+i*.12,.4,.2)),
   lose:t=>[392,370,330,262].forEach((f,i)=>osc('triangle',f,t+i*.25,.5,.2))
 };
-const THR={fire_apollo:.07,fire_artemis:.08,fire_zeus:.06,fire_poseidon:.12,fire_athena:.09,fire_hephaestus:.09,fire_hades:.09,die:.05,hiss:.2,leak:.15,click:.03};
+const THR={club:.1,fire_apollo:.07,fire_artemis:.08,fire_zeus:.06,fire_poseidon:.12,fire_athena:.09,fire_hephaestus:.09,fire_hades:.09,die:.05,hiss:.2,leak:.15,click:.03};
 function sfx(name){
   if(!SND.ctx || !SND.sfxOn || SND.ctx.state!=='running') return;
   const now=SND.ctx.currentTime, lim=THR[name]||0;
@@ -1780,8 +2238,193 @@ $('sfxBtn').onclick=()=>{ SND.sfxOn=!SND.sfxOn; saveAudio(); updateAudioBtns(); 
 addEventListener('keydown',ev=>{ if(ev.key==='m'||ev.key==='M'){ const on=!(SND.musicOn||SND.sfxOn); SND.musicOn=SND.sfxOn=on; saveAudio(); updateAudioBtns(); msg(on?'Ήχος ενεργός':'Ήχος σε σίγαση'); } });
 updateAudioBtns();
 
+/* ================= LANGUAGE (Ελληνικά / English) ================= */
+let LANG=(()=>{ try{ const l=localStorage.getItem('olympus-lang'); if(l) return l; }catch(e){} return (navigator.language||'el').toLowerCase().startsWith('el')?'gr':'en'; })();
+const EN={
+'Εφέ':'SFX','Δίας':'Zeus','Άδης':'Hades','Αθηνά':'Athena','Ζωές':'Lives','Παύση':'Pause','ΠΑΙΞΕ':'PLAY','Κύμα':'Wave','Αρχική':'Home','Ιστορία':'Story',
+'Εύκολο':'Easy','Κανονικό':'Normal','Δύσκολο':'Hard','Θρυλικό':'Legendary','30 ζωές':'30 lives','Η κλασική εμπειρία':'The classic experience','Γρήγορα, σκληρά τέρατα':'Fast, tough monsters','Μόνο για ημίθεους':'For demigods only',
+'Χρυσός':'Gold','χρυσός':'gold','ΧΡΥΣΟΣ':'GOLD','ΤΩΡΑ:':'NOW:','Μέγιστο':'Max','Παίκτης':'Player','ΟΛΥΜΠΟΣ':'OLYMPUS','ΚΡΙΤΙΚΟ!':'CRITICAL!','ΕΠΙΠΕΔΟ':'LEVEL','ΗΡΑΚΛΗΣ ΕΠΙΠΕΔΟ':'HERACLES LEVEL',
+'Αστέρια':'Stars','Προκλήσεις':'Challenges','Πρόκληση':'Challenge','Κλειδωμένο':'Locked','κλειδωμένο':'locked','Δεξιότητες':'Skills','♪ Μουσική':'♪ Music','Μουσική':'Music','Μουσική (M)':'Music (M)','Ηχητικά εφέ':'Sound effects',
+'Ήχος ενεργός':'Sound on','Ήχος σε σίγαση':'Sound muted','Πλήρης οθόνη':'Fullscreen','Έξοδος πλήρους οθόνης':'Exit fullscreen','Νέα εκστρατεία':'New campaign','Έναρξη κύματος':'Start wave','Ατελείωτη Μάχη':'Endless Battle',
+'ΚΑΛΕΣΕ ΤΟ ΚΥΜΑ':'CALL THE WAVE','Τελευταίο κύμα':'Final wave','Επόμενο κύμα':'Next wave','Κύμα σε εξέλιξη':'Wave in progress','Επόμενη πίστα':'Next level','Επόμενο κεφάλαιο':'Next chapter','Προηγούμενο κεφάλαιο':'Previous chapter',
+'Κεφάλαιο':'Chapter','Κεφαλαίου':'Chapter','ΚΕΦΆΛΑΙΟ':'CHAPTER','Στο':'To','Έτοιμο':'Ready','πλήκτρο':'key','Αναβάθμιση':'Upgrade','Πώληση':'Sell','Επιστρέφει σε':'Back in','Επ.':'Lv.','Ζωή':'HP','Αγορά':'Buy',
+'Γρήγορο κάλεσμα':'Early call','Κάλεσε το επόμενο τώρα για extra χρυσό!':'Call the next one now for extra gold!','Boss νικήθηκε!':'Boss defeated!','Μετεωρίτης!':'Meteor!','Η οργή του Δία!':'The wrath of Zeus!','Παγωνιά του Βορέα!':"Boreas' Frost!",
+'Ηρακλής':'Heracles','Language / Γλώσσα':'Language / Γλώσσα','Ελληνικά':'Ελληνικά','G-navos Developer στο Instagram':'G-navos Developer on Instagram','Η Υπεράσπιση του Ολύμπου':'The Defense of Mount Olympus',
+'Πάτα μια ανοιχτή πίστα για να παίξεις':'Tap an open level to play','Κλειδωμένο: τελείωσε όλες τις πίστες του Κεφαλαίου':'Locked: beat every level of Chapter',
+/* gods & powers */
+'Απόλλωνας':'Apollo','Ποσειδώνας':'Poseidon','Άρτεμις':'Artemis','Ήφαιστος':'Hephaestus','Μετεωρίτης':'Meteor','Οργή του Δία':'Wrath of Zeus','Παγωνιά του Βορέα':"Boreas' Frost",
+'Γρήγορα χρυσά βέλη':'Fast golden arrows','Κύμα που χτυπά όλους γύρω και τους επιβραδύνει':'A wave that hits everything around and slows it','Κεραυνός σε 3 εχθρούς, διαπερνά θωράκιση':'Lightning hits 3 enemies and pierces armor',
+'Τεράστιο βεληνεκές, 25% πιθανότητα κριτικού χτυπήματος x2.5':'Huge range, 25% chance of a x2.5 critical hit','Δυναμώνει τους κοντινούς θεούς (+25% ζημιά) και ρίχνει δόρυ':'Empowers nearby gods (+25% damage) and throws a spear',
+'Πύρινο σφυρί: ζημιά σε περιοχή και κάψιμο, διαπερνά θωράκιση':'Fiery hammer: area damage and burning, pierces armor','Καταραμένες ψυχές: ο στόχος δέχεται +30% ζημιά από όλους για 3 δευτ.':'Cursed souls: the target takes +30% damage from everyone for 3 sec.',
+'Πέφτει στον δρόμο: τεράστια ζημιά σε περιοχή και κάψιμο':'Strikes the road: huge area damage and burning','Καταιγίδα από 7 κεραυνούς πάνω στον δρόμο':'A storm of 7 lightning bolts on the road','Παγώνει όλα τα τέρατα της περιοχής για 3 δευτερόλεπτα':'Freezes every monster in the area for 3 seconds',
+/* level-3 paths */
+'Ηλιακή Ριπή':'Solar Volley','Ρίχνει βέλη δύο φορές πιο γρήγορα':'Shoots arrows twice as fast','Φλεγόμενα Βέλη':'Flaming Arrows','Τα βέλη καίνε τον στόχο και κάνουν +20% ζημιά':'Arrows set targets ablaze and deal +20% damage',
+'Κυνηγός Θηρίων':'Beast Hunter','50% κριτικά χτυπήματα και διπλή ζημιά στα boss':'50% critical hits and double damage to bosses','Βροχή Βελών':'Arrow Rain','Ρίχνει 3 βέλη σε 3 διαφορετικούς στόχους':'Fires 3 arrows at 3 different targets',
+'Καταιγίδα':'Tempest','Ο κεραυνός πηδάει σε 6 εχθρούς':'Lightning chains to 6 enemies','Κεραυνοβόλος':'Thunderstrike','Τριπλάσια ζημιά σε έναν στόχο και τον ζαλίζει':'Triple damage to one target and stuns it',
+'Παλίρροια':'Tidal Surge','Πολύ πιο δυνατή επιβράδυνση και +25% εμβέλεια':'Much stronger slow and +25% range','Σεισμός':'Earthquake','2,5× ζημιά και ζαλίζει τα τέρατα':'2.5× damage and stuns monsters',
+'Αιγίδα':'Aegis','Η αύρα δίνει +60% ζημιά και φτάνει πιο μακριά':'Aura gives +60% damage and reaches further','Δόρυ του Πολέμου':'Spear of War','2,5× ζημιά και διαπερνά θωράκιση':'2.5× damage and pierces armor',
+'Ηφαίστειο':'Volcano','Μεγαλύτερη έκρηξη και διπλό κάψιμο':'Bigger blast and double burn','Θραύση Πανοπλίας':'Armor Breaker','Σπάει για πάντα τη θωράκιση των τεράτων':"Permanently shatters monsters' armor",
+'Κατάρα της Στυγός':'Curse of the Styx','Η κατάρα δίνει +60% ζημιά και πιάνει και γύρω':'Curse gives +60% damage and spreads around','Ψυχοσυλλέκτης':'Soul Reaper','Πιο γρήγορος, τα καταραμένα τέρατα δίνουν διπλό χρυσό':'Faster, and cursed monsters give double gold',
+/* skills */
+'Θεϊκή Δύναμη':'Divine Might','+5% ζημιά σε όλους τους θεούς':'+5% damage for all gods','Θησαυρός του Ολύμπου':'Treasure of Olympus','+40 αρχικός χρυσός σε κάθε πίστα':'+40 starting gold in every level',
+'Τείχη του Ναού':'Temple Walls','+2 ζωές σε κάθε πίστα':'+2 lives in every level','Ευλογία της Αθηνάς':"Athena's Blessing",'Οι θεοί κοστίζουν 5% λιγότερο':'Gods cost 5% less',
+'Φτερά του Ερμή':'Wings of Hermes','Οι δυνάμεις φορτίζουν 10% πιο γρήγορα':'Powers recharge 10% faster','Οξυμένα Βέλη':'Sharpened Arrows','+10% εμβέλεια σε Απόλλωνα και Άρτεμη':'+10% range for Apollo and Artemis',
+'Οργή των Θεών':'Wrath of the Gods','+20% ζημιά από τις θεϊκές δυνάμεις':'+20% damage from divine powers','Δύναμη του Ηρακλή':'Strength of Heracles','+15% ζωή και ζημιά για τον Ηρακλή':'+15% health and damage for Heracles',
+'Λάφυρα':'Spoils of War','+5% χρυσός από κάθε τέρας':'+5% gold from every monster',
+/* challenges */
+'Χωρίς θεϊκές δυνάμεις':'No divine powers','Μόνο:':'Only:','Χωρίς αναβαθμίσεις θεών':'No god upgrades','Χωρίς τον Ηρακλή':'Without Heracles','Μισός αρχικός χρυσός':'Half starting gold','Μόνο 3 ζωές':'Only 3 lives',
+/* chapters & bosses */
+'Η Εκστρατεία του Ολύμπου':'The Olympus Campaign','Η Οδύσσεια':'The Odyssey','Οι Αργοναύτες':'The Argonauts','Οι Άθλοι του Ηρακλή':'The Labours of Heracles','Η Τιτανομαχία':'The Titanomachy',
+'ΚΕΦΑΛΑΙΟ 1 · Η ΕΚΣΤΡΑΤΕΙΑ ΤΟΥ ΟΛΥΜΠΟΥ':'CHAPTER 1 · THE OLYMPUS CAMPAIGN','ΚΕΦΑΛΑΙΟ 2 · Η ΟΔΥΣΣΕΙΑ':'CHAPTER 2 · THE ODYSSEY','ΚΕΦΑΛΑΙΟ 3 · ΟΙ ΑΡΓΟΝΑΥΤΕΣ':'CHAPTER 3 · THE ARGONAUTS',
+'ΚΕΦΑΛΑΙΟ 4 · ΟΙ ΑΘΛΟΙ ΤΟΥ ΗΡΑΚΛΗ':'CHAPTER 4 · THE LABOURS OF HERACLES','ΚΕΦΑΛΑΙΟ 5 · Η ΤΙΤΑΝΟΜΑΧΙΑ':'CHAPTER 5 · THE TITANOMACHY',
+'ΚΑΤΕΚΤΗΣΕΣ ΤΟΝ ΟΛΥΜΠΟ!':'YOU CONQUERED OLYMPUS!','Η ΟΔΥΣΣΕΙΑ ΟΛΟΚΛΗΡΩΘΗΚΕ!':'THE ODYSSEY IS COMPLETE!','ΤΟ ΧΡΥΣΟΜΑΛΛΟ ΔΕΡΑΣ ΕΙΝΑΙ ΔΙΚΟ ΣΟΥ!':'THE GOLDEN FLEECE IS YOURS!','ΟΙ ΑΘΛΟΙ ΟΛΟΚΛΗΡΩΘΗΚΑΝ!':'THE LABOURS ARE COMPLETE!','ΝΙΚΗΣΕΣ ΤΟΥΣ ΤΙΤΑΝΕΣ!':'YOU DEFEATED THE TITANS!',
+'η Λερναία Ύδρα':'the Lernaean Hydra','ο Κέρβερος':'Cerberus','ο Δράκος της Κολχίδας':'the Colchian Dragon','ο Λέων της Νεμέας':'the Nemean Lion','ο Κρόνος':'Kronos',
+'Κένταυροι, Μέδουσες και ο Κέρβερος':'Centaurs, Medusas and Cerberus','ο Δράκος της Κολχίδας που καίει τους θεούς σου':'the Colchian Dragon that burns your gods','ο σχεδόν άτρωτος Λέων της Νεμέας':'the nearly invulnerable Nemean Lion','ο Κρόνος, ο βασιλιάς των Τιτάνων':'Kronos, king of the Titans',
+'Ο ΚΕΡΒΕΡΟΣ ΞΥΠΝΗΣΕ!':'CERBERUS AWAKENS!','Ο ΔΡΑΚΟΣ ΤΗΣ ΚΟΛΧΙΔΑΣ!':'THE COLCHIAN DRAGON!','Ο ΛΕΩΝ ΤΗΣ ΝΕΜΕΑΣ!':'THE NEMEAN LION!','Ο ΚΡΟΝΟΣ ΚΑΤΕΒΑΙΝΕΙ!':'KRONOS DESCENDS!','Η ΛΕΡΝΑΙΑ ΥΔΡΑ ΕΡΧΕΤΑΙ!':'THE LERNAEAN HYDRA IS COMING!',
+'Η Ύδρα νικήθηκε!':'The Hydra is defeated!','Ο Κέρβερος νικήθηκε!':'Cerberus is defeated!','Ο Δράκος νικήθηκε!':'The Dragon is defeated!','Ο Λέων νικήθηκε!':'The Lion is defeated!','Ο ΚΡΟΝΟΣ ΕΠΕΣΕ!':'KRONOS HAS FALLEN!',
+/* level names */
+'Κοιλάδα των Δελφών':'Valley of Delphi','Λαβύρινθος της Κρήτης':'Labyrinth of Crete','Νησιά του Αιγαίου':'Aegean Islands','Τείχη της Τροίας':'Walls of Troy','Κάτω Κόσμος':'The Underworld','Όρος Όλυμπος':'Mount Olympus',
+'Σπηλιά του Πολύφημου':"Polyphemus' Cave",'Νησί της Κίρκης':"Circe's Island",'Σκύλλα και Χάρυβδη':'Scylla and Charybdis','Κήποι των Εσπερίδων':'Garden of the Hesperides','Πεδίο του Άρη':'Field of Ares','Τάρταρος':'Tartarus',
+'Ιωλκός':'Iolcus','Λήμνος':'Lemnos','Συμπληγάδες Πέτρες':'The Clashing Rocks','Θράκη των Αρπυιών':'Thrace of the Harpies','Κολχίδα':'Colchis','Ο Δράκος της Κολχίδας':'The Colchian Dragon',
+'Νεμέα':'Nemea','Βάλτος της Λέρνης':'Swamp of Lerna','Στυμφαλίδες Λίμνη':'Lake Stymphalia','Κερύνεια':'Ceryneia','Ο Ταύρος της Κρήτης':'The Cretan Bull','Το Βουνό του Άτλαντα':'The Mountain of Atlas',
+'Όρος Όθρυς':'Mount Othrys','Καμένη Θεσσαλία':'Scorched Thessaly','Το Σιδηρουργείο των Κυκλώπων':'The Forge of the Cyclopes','Οι Εκατόγχειρες':'The Hundred-Handed','Η Ουράνια Πύλη':'The Gate of Heaven','Ο Θρόνος του Κρόνου':'The Throne of Kronos',
+/* level descriptions */
+'Η πρώτη σου μάχη. Φιδωτός δρόμος με άφθονο χώρο για χτίσιμο.':'Your first battle. A winding road with plenty of room to build.',
+'Πολύ μακρύς δρόμος, αλλά στενός χώρος ανάμεσα στους διαδρόμους.':'A very long road, but little room between the corridors.',
+'Σύντομη διαδρομή πάνω από τη θάλασσα. Τα τέρατα φτάνουν πολύ γρήγορα στον ναό.':'A short route over the sea. Monsters reach the temple very quickly.',
+'Ο δρόμος περνά ανάμεσα από τα τείχη. Οι χάλκινοι Τάλως εμφανίζονται νωρίτερα.':'The road runs between the walls. The bronze Taloi appear earlier.',
+'Το βασίλειο του Άδη. Σπειροειδής διαδρομή ανάμεσα σε λάβα και σκοτάδι.':'The kingdom of Hades. A spiral path through lava and darkness.',
+'Η τελική μάχη στην κορυφή. Τα τέρατα ανεβαίνουν ζιγκ-ζαγκ προς τους θεούς.':'The final battle at the summit. Monsters zigzag up toward the gods.',
+'Το σκοτεινό σπήλαιο του Κύκλωπα. Εμφανίζονται οι γρήγοροι Κένταυροι.':"The Cyclops' dark cave. Fast Centaurs appear.",
+'Μαγεμένο δάσος. Η Μέδουσα πετρώνει τους θεούς σου για λίγα δευτερόλεπτα!':'An enchanted forest. Medusa turns your gods to stone for a few seconds!',
+'Στενό πέρασμα ανάμεσα σε δίνες. Λίγος χώρος, πολλά τέρατα.':'A narrow strait between whirlpools. Little room, many monsters.',
+'Ο κήπος με τα χρυσά μήλα. Τρεις μακριές στροφές πάνω-κάτω.':'The garden of golden apples. Three long switchbacks.',
+'Το πεδίο μάχης του θεού του πολέμου. Τα τέρατα έρχονται από δεξιά.':'The battlefield of the god of war. Monsters come from the right.',
+'Η τελική άβυσσος. 20 κύματα και στο τέλος ο τρικέφαλος Κέρβερος.':'The final abyss. 20 waves and three-headed Cerberus at the end.',
+'Το λιμάνι όπου ναυπηγείται η Αργώ. Τέσσερις μακριές στροφές.':'The harbour where the Argo is built. Four long bends.',
+'Το ηφαιστειακό νησί του Ηφαίστου. Σπείρα ανάμεσα σε λάβα.':"Hephaestus' volcanic island. A spiral through lava.",
+'Οι βράχοι που συγκρούονται. Τα τέρατα έρχονται από τη θάλασσα, από κάτω.':'The rocks that crash together. Monsters come from the sea, from below.',
+'Σκοτεινό δάσος γεμάτο Άρπυιες.':'A dark forest full of Harpies.',
+'Η χώρα του Χρυσόμαλλου Δέρατος. Μακρύς δρόμος με πολλές παγίδες.':'The land of the Golden Fleece. A long road full of traps.',
+'Ο άγρυπνος δράκος φυλάει το Δέρας και καίει τους θεούς σου με φωτιά!':'The sleepless dragon guards the Fleece and burns your gods with fire!',
+'Ο πρώτος άθλος. Ξερή πεδιάδα με αρχαία ερείπια.':'The first labour. A dry plain with ancient ruins.',
+'Ο βάλτος της Ύδρας. Λάσπη, καλάμια και πολλά κεφάλια.':"The Hydra's swamp. Mud, reeds and many heads.",
+'Η λίμνη με τα σιδερένια πουλιά. Τα τέρατα μπαίνουν από πάνω.':'The lake of the iron-feathered birds. Monsters enter from the top.',
+'Το δάσος της χρυσοκέρατης ελαφίνας της Άρτεμης.':"The forest of Artemis' golden-horned hind.",
+'Μια αρένα από κόκκινο χώμα. Ορμάνε από δεξιά.':'An arena of red earth. They charge from the right.',
+'Στην κορυφή του κόσμου σε περιμένει ο άτρωτος Λέων της Νεμέας.':'At the top of the world the invulnerable Nemean Lion awaits.',
+'Το φρούριο των Τιτάνων. Σκοτεινοί βράχοι παντού.':'The fortress of the Titans. Dark rocks everywhere.',
+'Η πεδιάδα που κάηκε στη μάχη θεών και Τιτάνων.':'The plain that burned in the war of gods and Titans.',
+'Εδώ σφυρηλατήθηκαν οι κεραυνοί του Δία.':"Where Zeus' thunderbolts were forged.",
+'Οι γίγαντες με τα εκατό χέρια. Μαγεμένο, μωβ πεδίο μάχης.':'The giants with a hundred hands. An enchanted purple battlefield.',
+'Μάχη πάνω στα σύννεφα, μπροστά στην πύλη του ουρανού.':'A battle on the clouds, before the gate of heaven.',
+'Η τελική μάχη. 25 κύματα και ο ίδιος ο Κρόνος, που καλεί στρατό από Άρπυιες.':'The final battle. 25 waves and Kronos himself, who summons an army of Harpies.',
+/* story */
+'Οι πύλες του Τάρταρου άνοιξαν! Τέρατα ξεχύνονται από τα έγκατα της γης και βαδίζουν προς τον Όλυμπο. Θνητέ στρατηγέ, οι θεοί σε χρειάζονται. Στήσε μας στον δρόμο τους και μην αφήσεις κανένα να φτάσει στον ναό.':'The gates of Tartarus have opened! Monsters pour out of the depths of the earth and march on Olympus. Mortal general, the gods need you. Set us on their path and let none of them reach the temple.',
+'Ο Οδυσσέας χάθηκε στις θάλασσες και ο Ποσειδώνας οργίζεται. Χειρότερα, ο Κέρβερος δραπέτευσε από τον Άδη. Ακολούθησε το καράβι μέσα από νησιά γεμάτα κινδύνους και φέρε τον βασιλιά της Ιθάκης πίσω στην πατρίδα του.':'Odysseus is lost at sea and Poseidon rages. Worse, Cerberus has escaped from Hades. Follow the ship through islands full of danger and bring the king of Ithaca back home.',
+'Ο Ιάσονας και οι Αργοναύτες σαλπάρουν με την Αργώ για το Χρυσόμαλλο Δέρας. Στην Κολχίδα το φυλάει ένας δράκος που δεν κοιμάται ποτέ, και από τα δόντια του φυτρώνουν πολεμιστές. Προστάτεψε την Αργώ σε κάθε λιμάνι.':'Jason and the Argonauts set sail on the Argo for the Golden Fleece. In Colchis it is guarded by a dragon that never sleeps, and warriors sprout from its teeth. Protect the Argo in every harbour.',
+'Ο γιος μου ο Ηρακλής πρέπει να ολοκληρώσει τους άθλους του, μα τα τέρατα της γης ενώθηκαν εναντίον του. Στην κορυφή του κόσμου τον περιμένει ο Λέων της Νεμέας, που κανένα όπλο δεν μπορεί να τρυπήσει.':'My son Heracles must complete his labours, but the monsters of the earth have united against him. At the top of the world waits the Nemean Lion, whose hide no weapon can pierce.',
+'Οι Τιτάνες ξύπνησαν! Ο πατέρας μου ο Κρόνος θέλει πίσω τον θρόνο του ουρανού. Αυτή είναι η τελική μάχη. Αν πέσει ο Όλυμπος, πέφτει μαζί του όλος ο κόσμος.':'The Titans have awoken! My father Kronos wants the throne of heaven back. This is the final battle. If Olympus falls, the whole world falls with it.',
+'Ο Κρόνος ηττήθηκε και οι Τιτάνες κλείστηκαν ξανά στα βάθη του Τάρταρου. Ο Όλυμπος στέκει ακόμα χάρη σε σένα. Από σήμερα το όνομά σου θα το τραγουδούν οι ραψωδοί σε όλη την Ελλάδα.':'Kronos is defeated and the Titans are sealed once more in the depths of Tartarus. Olympus still stands thanks to you. From this day on, bards will sing your name across all of Greece.',
+'Παράλειψη':'Skip','Συνέχεια':'Continue',
+/* messages */
+'Δεν έχεις αρκετό χρυσό.':'Not enough gold.','Δεν μπορείς να χτίσεις εκεί.':"You can't build there.",'Ξεκλείδωσε πρώτα αυτό το κεφάλαιο.':'Unlock this chapter first.',
+'Ο Ηρακλής έπεσε! Επιστρέφει σε 12 δευτερόλεπτα.':'Heracles has fallen! He returns in 12 seconds.','Πάτα στον χάρτη εκεί που θέλεις να πάει ο Ηρακλής.':'Tap the map where you want Heracles to go.',
+'Οι δυνάμεις δεν επιτρέπονται σε αυτή την πρόκληση.':'Powers are not allowed in this challenge.','Αυτός ο θεός δεν επιτρέπεται σε αυτή την πρόκληση.':'This god is not allowed in this challenge.',
+'Οι δυνάμεις πέφτουν μόνο πάνω στον δρόμο των τεράτων.':"Powers can only be cast on the monsters' road.",'Διάλεξε μία από τις δύο κατευθύνσεις για το επίπεδο 3.':'Choose one of the two paths for level 3.',
+'Συμβουλή: γύρισε το κινητό οριζόντια για μεγαλύτερο χάρτη.':'Tip: turn your phone sideways for a bigger map.','Κατέκτησες όλο το κεφάλαιο! Κυνήγα τα 3 αστέρια στο Θρυλικό.':'You conquered the whole chapter! Go for 3 stars on Legendary.',
+'Πάτα και μετά πάτα στον χάρτη για να μετακινήσεις τον Ηρακλή (πλήκτρο H)':'Tap, then tap the map to move Heracles (key H)',
+'πάτα πάνω στον δρόμο για να τη ρίξεις (Esc για ακύρωση).':'tap the road to cast it (Esc to cancel).','Πάτα στον χάρτη για να τον βάλεις (Esc ή δεξί κλικ για ακύρωση).':'Tap the map to place it (Esc or right-click to cancel).',
+'Διάλεξε θεό από κάτω και πάτα πάνω στον χάρτη για να τον τοποθετήσεις. Μετά πάτα «Έναρξη κύματος».':'Pick a god below and tap the map to place it. Then press "Start wave".',
+'επίπεδο':'level','Επίπεδο':'Level','Ζημιά':'Damage','Εμβέλεια':'Range','Επίπεδο 3: διάλεξε κατεύθυνση':'Level 3: choose a path','Χωρίς αναβαθμίσεις (πρόκληση)':'No upgrades (challenge)',
+'Νέο σχέδιο':'New blueprint','Νέα δύναμη':'New power',
+/* modals */
+'Πίστα':'Level','κύματα':'waves','στο τέλος':'at the end','Καλύτερο':'Best','Παίξε':'Play','Πίσω':'Back',
+'3 αστέρια: καμία χαμένη ζωή · 2 αστέρια: τουλάχιστον οι μισές ζωές':'3 stars: no lives lost · 2 stars: at least half your lives left',
+'Νίκησε με αυτόν τον κανόνα για +1 αστέρι πρόκλησης':'Win with this rule for +1 challenge star','Ενεργοποίηση πρόκλησης':'Enable challenge','Απενεργοποίηση πρόκλησης':'Disable challenge',
+'ΚΑΤΕΚΤΗΣΕΣ ΟΛΟ ΤΟΝ ΚΟΣΜΟ ΤΩΝ ΘΕΩΝ!':'YOU CONQUERED THE WHOLE WORLD OF THE GODS!','ΝΙΚΗ!':'VICTORY!','Νέο ρεκόρ!':'New record!','Πρόκληση ολοκληρώθηκε!':'Challenge complete!',
+'Για 3 αστέρια τελείωσε την πίστα χωρίς να χάσεις ζωή.':'For 3 stars, finish the level without losing a life.','Αστέρια για δεξιότητες':'Stars for skills','Χάρτης':'Map','Ξανά':'Retry','Επόμενη πίστα':'Next level',
+'Δέντρο Δεξιοτήτων':'Skill Tree','Ξόδεψε τα αστέρια σου για μόνιμες ευλογίες των θεών.':'Spend your stars on permanent blessings from the gods.','Διαθέσιμα αστέρια':'Available stars','Επιστροφή αστεριών':'Refund stars','Κλείσιμο':'Close',
+'Κύματα χωρίς τέλος που δυναμώνουν συνέχεια. Όλοι οι θεοί και οι δυνάμεις είναι διαθέσιμοι. Πόσο θα αντέξεις;':'Endless waves that keep getting stronger. All gods and powers are available. How long can you hold out?',
+'Διάλεξε αρένα (νέες αρένες ανοίγουν με την εκστρατεία):':'Choose an arena (new arenas unlock through the campaign):','Πίνακας Κατάταξης':'Leaderboard','Όνομα':'Name','Τέρατα':'Monsters','Αρένα':'Arena',
+'Δεν υπάρχουν ακόμα ρεκόρ. Γίνε ο πρώτος!':'No records yet. Be the first!',
+'Ο Όλυμπος έπεσε!':'Olympus has fallen!','Συμβουλή: βάλε τον Ποσειδώνα σε στροφές για να επιβραδύνει τα τέρατα, και τον Δία κοντά σε σημεία που μαζεύονται πολλά μαζί.':'Tip: put Poseidon on bends to slow monsters down, and Zeus where many of them bunch up.',
+'Η μάχη τελείωσε!':'The battle is over!','Όνομα για τον πίνακα':'Name for the leaderboard','Αποθήκευση ρεκόρ':'Save record','Αποθηκεύτηκε!':'Saved!','Επανεκκίνηση':'Restart',
+'Νέα εκστρατεία;':'New campaign?','Θα σβηστούν όλα τα αστέρια, οι προκλήσεις, οι δεξιότητες και η πρόοδός σου. Ο πίνακας κατάταξης μένει.':'All your stars, challenges, skills and progress will be erased. The leaderboard stays.',
+'Άκυρο':'Cancel','Ναι, από την αρχή':'Yes, start over',
+'Πλήρης οθόνη στο iPhone':'Fullscreen on iPhone','Ο Safari δεν επιτρέπει πλήρη οθόνη σε ιστοσελίδες. Βάλε το παιχνίδι στην αρχική οθόνη και θα ανοίγει σαν εφαρμογή, χωρίς μπάρες:':"Safari doesn't allow fullscreen for websites. Add the game to your home screen and it will open like an app, with no bars:",
+'Πάτα το κουμπί':'Tap the','Κοινοποίηση':'Share','(το τετράγωνο με το βελάκι ↑)':'button (the square with the ↑ arrow)','Διάλεξε':'Choose','«Προσθήκη στην οθόνη Αφετηρίας»':'"Add to Home Screen"','Άνοιξε το':'Open','από το εικονίδιο':'from its icon','Εντάξει':'OK',
+'Εγκατάσταση παιχνιδιού':'Install the game','Ο browser σου δεν άφησε την πλήρη οθόνη. Εγκατέστησε το παιχνίδι και θα ανοίγει πάντα σε πλήρη οθόνη και οριζόντια:':"Your browser didn't allow fullscreen. Install the game and it will always open fullscreen and in landscape:",
+'Πάτα το μενού':'Open the','του browser':'browser menu','«Εγκατάσταση εφαρμογής»':'"Install app"','ή':'or','«Προσθήκη στην αρχική οθόνη»':'"Add to Home screen"','Εγκατάσταση':'Install'
+};
+const EN_PAT={
+'Το {0} ανοίγει όταν νικήσεις όλες τις πίστες του {1}.':'{0} unlocks when you beat every level of {1}.',
+'Η πίστα «{0}» είναι κλειδωμένη: νίκησε πρώτα την «{1}».':'"{0}" is locked: beat "{1}" first.',
+'Σχέδιο «{0}»: ξεκλειδώνει όταν νικήσεις την πίστα {1} ({2}).':'Blueprint "{0}": unlocks when you beat level {1} ({2}).',
+'Δύναμη «{0}»: ξεκλειδώνει όταν νικήσεις την πίστα {1} ({2}).':'Power "{0}": unlocks when you beat level {1} ({2}).',
+'{0} ανέβηκε στο επίπεδο {1}!':'{0} reached level {1}!',
+'Ο Ηρακλής επιστρέφει σε {0} δευτερόλεπτα.':'Heracles returns in {0} seconds.',
+'Έφτασες στο κύμα {0} και νίκησες {1} τέρατα.':'You reached wave {0} and defeated {1} monsters.',
+'Άντεξες μέχρι το κύμα {0}.':'You held out until wave {0}.',
+'Κύμα {0} καθαρίστηκε! +{1} χρυσός':'Wave {0} cleared! +{1} gold',
+'Κύμα {0}: {1} τέρατα έρχονται!':'Wave {0}: {1} monsters incoming!',
+'Το πολύ {0} θεοί στον χάρτη':'At most {0} gods on the map',
+'Όριο πρόκλησης: το πολύ {0} θεοί.':'Challenge limit: at most {0} gods.',
+'Ξεκλείδωσες την πίστα {0}: {1}!':'You unlocked level {0}: {1}!',
+'Ξεκλείδωσες το {0}: {1}!':'You unlocked {0}: {1}!',
+'Νέος χάρτης με 6 πίστες και {0}.':'A new map with 6 levels and {0}.'
+};
+const GREEK=/[Ͱ-Ͽἀ-῿]/;
+let txRe=null, txPats=null, txCache=new Map();
+const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function buildTx(){
+  const keys=Object.keys(EN).sort((a,b)=>b.length-a.length).map(reEsc);
+  txRe=new RegExp('(?<![\\p{L}])(?:'+keys.join('|')+')(?![\\p{L}])','gu');
+  txPats=Object.keys(EN_PAT).sort((a,b)=>b.length-a.length).map(k=>{
+    const parts=k.split(/\{(\d)\}/), order=[]; let src='';
+    parts.forEach((p,i)=>{ if(i%2){ order.push(+p); src+= i===parts.length-2 && parts[parts.length-1]==='' ? '([^<>]+)' : '([^<>]+?)'; } else src+=reEsc(p); });
+    return {re:new RegExp(src,'gu'), order, out:EN_PAT[k]};
+  });
+}
+function tx(s){
+  if(LANG!=='en' || typeof s!=='string' || !GREEK.test(s)) return s;
+  let r=txCache.get(s); if(r!==undefined) return r;
+  if(!txRe) buildTx();
+  if(EN[s]!==undefined) r=EN[s];
+  else {
+    r=s;
+    for(const P of txPats) r=r.replace(P.re,(...m)=>P.out.replace(/\{(\d)\}/g,(_,n)=>m[1+P.order.indexOf(+n)]));
+    r=r.replace(txRe,k=>EN[k]);
+  }
+  if(txCache.size>4000) txCache.clear();
+  txCache.set(s,r); return r;
+}
+{ const CP=CanvasRenderingContext2D.prototype, fT=CP.fillText, mT=CP.measureText;
+  CP.fillText=function(s,...a){ return fT.call(this, typeof s==='string'?tx(s):s, ...a); };
+  CP.measureText=function(s){ return mT.call(this, typeof s==='string'?tx(s):s); }; }
+function applyLang(){
+  document.documentElement.lang = LANG==='en' ? 'en' : 'el';
+  ['top','titleUI','dev'].forEach(id=>{
+    const root=$(id); if(!root) return;
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT); let n;
+    while((n=w.nextNode())){ if(n.__gr===undefined) n.__gr=n.nodeValue; n.nodeValue = LANG==='en' ? tx(n.__gr) : n.__gr; }
+    root.querySelectorAll('[title],[aria-label]').forEach(el=>['title','aria-label'].forEach(a=>{ if(!el.hasAttribute(a)) return; const k='__gr_'+a; if(el[k]===undefined) el[k]=el.getAttribute(a); el.setAttribute(a, LANG==='en'?tx(el[k]):el[k]); }));
+  });
+  updateLangBtns();
+}
+function updateLangBtns(){
+  $('langBtn').textContent = LANG==='en' ? 'ΕΛ' : 'EN';
+  $('tLangGr').classList.toggle('sel',LANG==='gr'); $('tLangEn').classList.toggle('sel',LANG==='en');
+}
+function setLang(l){
+  LANG=l; try{ localStorage.setItem('olympus-lang',l); }catch(e){} txCache.clear(); applyLang(); onFsChange();
+  if(state==='play'){ buildButtons(); $('lvlName').textContent=tx(endless?`∞ ${LEVELS[levelIdx].name}`:`${lvlNum(levelIdx)} ${LEVELS[levelIdx].name}`); }
+  else if(state==='world') showWorld(chapter);
+  if(!$('modal').hidden && state==='title') closeModal();
+}
+
 /* ================= BOOT ================= */
-loadMap(0); showWorld();
+loadMap(0); applyLang(); showTitle();
 if(innerHeight>innerWidth && innerWidth<700) msg('Συμβουλή: γύρισε το κινητό οριζόντια για μεγαλύτερο χάρτη.');
 let last=performance.now();
 function loop(now){
